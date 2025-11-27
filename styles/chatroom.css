@@ -1,0 +1,89 @@
+/* 目前沒在用 */
+
+/**
+ * ChatRoom Animations
+ * 路徑: sailo/styles/chatroom.css
+ * 版本: v1.6.0
+ * 
+ * 聊天室相關的 CSS 動畫定義
+ * 
+ * 動畫列表:
+ * 1. slideUp - 從底部滑入 (手機版開啟)
+ * 2. slideLeft - 從右側滑入 (桌面版開啟)
+ * 3. slideDownOut - 縮回底部 (手機版關閉) 🌟 v1.6.0 新增
+ * 4. slideRightOut - 縮回右側 (桌面版關閉) 🌟 v1.6.0 新增
+ */
+
+@layer chatroom {
+  /* ============ 開啟動畫 ============ */
+
+  /* 聊天室動畫 - 從底部滑入 (手機版) */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(66%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 聊天室動畫 - 從右側滑入 (桌面版) */
+  @keyframes slideLeft {
+    from {
+      opacity: 0;
+      transform: translateX(66%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* ============ 關閉動畫 (v1.6.0 新增) ============ */
+
+  /* 聊天室動畫 - 縮回底部 (手機版關閉) */
+  @keyframes slideDownOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(66%);
+    }
+  }
+
+  /* 聊天室動畫 - 縮回右側 (桌面版關閉) */
+  @keyframes slideRightOut {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(66%);
+    }
+  }
+
+  /* ============ 動畫類別 ============ */
+
+  /* 開啟動畫 */
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-slide-left {
+    animation: slideLeft 0.3s ease-out;
+  }
+
+  /* 關閉動畫 (v1.6.0 新增) */
+  .animate-slide-down-out {
+    animation: slideDownOut 0.3s ease-in;
+  }
+
+  .animate-slide-right-out {
+    animation: slideRightOut 0.3s ease-in;
+  }
+}

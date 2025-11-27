@@ -1,0 +1,10 @@
+@layer base {
+  html {
+    font-family: var(--font-body);
+    /* color: var(--color-primary-900); */
+  }
+
+  body {
+    background: #f6f6f6;
+  }
+}

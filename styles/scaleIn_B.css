@@ -1,0 +1,22 @@
+/* 下拉選單縮放動畫 */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: translateX(0) scaleY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scaleY(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: translateX(0) scaleY(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(0) scaleY(0);
+  }
+}

@@ -1,0 +1,10 @@
+/* 隱藏滾動條 (Chrome, Safari) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* 隱藏滾動條 (Firefox, Edge) */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}

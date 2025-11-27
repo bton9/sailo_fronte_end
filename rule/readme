@@ -1,0 +1,78 @@
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+⭐⭐⭐⭐⭐⭐⭐⭐別push到main分支⭐⭐⭐⭐⭐⭐⭐⭐
+
+--- 常用指令 ---
+1. npm run dev (開發模式)
+2. npm run build (打包)
+3. npm start (啟動)
+4. tree page (看目錄結構) (page替換為任何資料夾 EX: tree app)
+5. dir (目錄結構)
+6. pnpm approve-builds (批准builds) ⭐要先安裝pnpm ⭐⭐這個專案沒裝, 用其他資源可能會需要
+7. clear (清除終端機畫面)
+8. npm ls -g (看全域安裝的套件)
+9. npm ls (看專案安裝的套件)
+10. git fetch --tags (取得所有 tags)
+11. git tag (看本地有什麼標籤)
+12. git checkout vX.X.X (切換到v...標籤)
+13. git clone (網址) (複製整個專案)
+14. git branch (看目前分支)
+15. git checkout -b mybranch (新增一個分支, mybranch = 自己取)
+
+--- 通常命名規則 ---
+1. admin (管理員)
+2. site (前台網站)
+3. server (後端) // 大概用不到
+4. shop (商店)
+5. user (使用者)
+6. blog (部落格)
+7. forum (論壇)
+8. login (登入)
+9. register (註冊)
+10. profile (個人資料)
+
+⭐⭐⭐ --- 如何Git --- ⭐⭐⭐
+0. ⭐⭐⭐ 直接把舊的砍掉重新拉下來 ⭐⭐⭐
+1. 新增自己的分支 git checkout -b mybranch (新增一個分支, mybranch = 自己取)
+2. 開發
+
+⭐⭐⭐ --- 版本規則 --- ⭐⭐⭐
+0. ⭐⭐⭐ 開發請依據最新版本開發 ⭐⭐⭐
+1. v0.1 (初始版本)
+2. 新git下來的默認為最新版
+3. 如果要回滾版本, 直接切換到該標籤, 例如: git checkout v0.1
+4. 如果沒問題, 不要使用舊版本, 直接用最新版
+5. 基本上我會把最新版本的標籤放在README.md最上面
+6. CHANGELOG.md 我會記錄每個版本的更新內容, 不確定什麼版本可以看這邊
+
+--- 基本規則 ---
+0. ⭐⭐⭐ 下載/git下來記得 npm install or npm i ⭐⭐⭐
+1. 設定在.vscode/settings.json
+2. 隱私資料夾, 如果不想被git上去, _XXX XXX=資料夾名稱
+    2-1. 例如 _shop
+    2-2. 然後加入到.gitignore
+    2-3. 加底線方便排序, 且跟原有資料區分
+3. 前端放在 app/XXX/page.js
+    3-1. 例如有個(使用者)的前端, app/site/page.js
+4. (單一頁面)前端的css放在 app/XXX/page.module.css
+    4-1. 例如有個(使用者)頁面shop的css, app/site/shop/page.module.css
+5. (全站)前端的css放在 styles/globals.css
+6. push 的時候建一個自己的分支, 名字自己取之後都用那個, 不要直接push到main
+7. 阻止不了有人push到main, 要看清楚
+
+--- 布局規則 ---
+1. 布局放在 app/XXX/layout.js
+    1-1. 例如有個(使用者)的前端, app/site/layout.js
+2. 需要共用結構的地方就能加layout (sidebar、header...)
