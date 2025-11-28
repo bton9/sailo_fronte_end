@@ -61,7 +61,7 @@ export default function PlaceSearchModal({
         setLocations(data.data)
       }
     } catch (error) {
-      console.error('❌ 載入地區列表失敗:', error)
+      console.error('載入地區列表失敗:', error)
     }
   }
 
@@ -84,7 +84,7 @@ export default function PlaceSearchModal({
       const response = await fetch(url)
       const data = await response.json()
 
-      console.log('🔍 搜尋結果:', data)
+      console.log('搜尋結果:', data)
 
       if (data.success && data.data) {
         setPlaces(data.data)
@@ -92,7 +92,7 @@ export default function PlaceSearchModal({
         setPlaces([])
       }
     } catch (error) {
-      console.error('❌ 搜尋失敗:', error)
+      console.error('搜尋失敗:', error)
       alert('搜尋失敗,請稍後再試')
       setPlaces([])
     } finally {
@@ -265,7 +265,7 @@ export default function PlaceSearchModal({
                         </span>
                         {place.rating && (
                           <span className="text-sm text-gray-600">
-                            ⭐ {place.rating.toFixed(1)}
+                            {place.rating.toFixed(1)}
                           </span>
                         )}
                       </div>

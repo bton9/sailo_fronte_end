@@ -55,7 +55,7 @@ export function usePlaceImages(
           setGalleryImages(imagesWithData)
         }
       } catch (err) {
-        console.error('❌ 載入相簿失敗:', err)
+        console.error('載入相簿失敗:', err)
         setGalleryImages([])
       }
     }
@@ -106,7 +106,7 @@ export function usePlaceImages(
         showError('上傳失敗：' + (data.message || '未知錯誤'))
       }
     } catch (err) {
-      console.error('❌ 上傳圖片失敗:', err)
+      console.error('上傳圖片失敗:', err)
       showError('上傳失敗,請稍後再試')
     }
   }

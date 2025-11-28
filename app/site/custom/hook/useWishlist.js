@@ -33,7 +33,7 @@ export function useWishlist(userId, placeId, isOpen) {
       )
       setLists(listsWithStatus)
     } catch (err) {
-      console.error('❌ 載入收藏清單失敗:', err)
+      console.error('載入收藏清單失敗:', err)
       setLists([])
     } finally {
       setLoading(false)

@@ -16,7 +16,7 @@ export default function Card({
   category,
 }) {
   const cardRef = useRef(null)
-  const { user } = useAuth() // ✅ Auth V2
+  const { user } = useAuth() // Auth V2
   const [isHovered, setIsHovered] = useState(false)
   const [imageError, setImageError] = useState(false)
   const [showWishlist, setShowWishlist] = useState(false)
@@ -25,7 +25,7 @@ export default function Card({
   const [showAddToTrip, setShowAddToTrip] = useState(false)
   const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
-  // ✅ 檢查此景點是否在任何收藏清單中
+  // 檢查此景點是否在任何收藏清單中
   const fetchFavoriteStatus = async () => {
     if (!user?.id) return
 
@@ -57,7 +57,7 @@ export default function Card({
 
       setFavorited(isInAnyList)
     } catch (err) {
-      console.error('❌ 檢查收藏狀態失敗:', err)
+      console.error('檢查收藏狀態失敗:', err)
       setFavorited(false)
     }
   }

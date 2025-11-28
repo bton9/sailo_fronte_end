@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { useAuth } from '@/contexts/AuthContext' // ✅ 新增
+import { useAuth } from '@/contexts/AuthContext' // 新增
 import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail'
 import MapSidebar from './Mapsidebarmenu'
 import SoloTravelWishlist from '../addtotrip/SoloTravelWishlist'
@@ -10,9 +10,9 @@ import TravelApp, {
   useNavigation,
 } from '../addtotrip/travelApp'
 
-// ✅ 把主要邏輯抽成內部組件
+//把主要邏輯抽成內部組件
 function MapContent() {
-  const { user } = useAuth() // ✅ 新增：取得使用者資訊
+  const { user } = useAuth() // 新增：取得使用者資訊
   const mapRef = useRef(null)
   const mapContainerRef = useRef(null)
   const leafletRef = useRef(null)
@@ -32,13 +32,13 @@ function MapContent() {
   const [selectedCity, setSelectedCity] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [cities, setCities] = useState([])
-  // ✅ 現在可以安全使用 useNavigation
+  // 現在可以安全使用 useNavigation
   const { navigateToSettings } = useNavigation()
 
   const closeFavModal = () => {
     setFavModalOpen(false)
     setSelectedPlaceForFav(null)
-    // ✅ 重新載入收藏列表
+    // 重新載入收藏列表
     if (user?.id) {
       fetchUserFavorites()
     }
@@ -46,7 +46,7 @@ function MapContent() {
 
   const BACKEND_URL = 'http://localhost:5000'
 
-  // ✅ 新增：載入使用者的收藏列表
+  // 新增：載入使用者的收藏列表
   const fetchUserFavorites = async () => {
     if (!user?.id) {
       setFavorites([])
@@ -79,14 +79,14 @@ function MapContent() {
       }
 
       setFavorites(allFavoritePlaceIds)
-      console.log('✅ 載入收藏列表:', allFavoritePlaceIds)
+      console.log('載入收藏列表:', allFavoritePlaceIds)
     } catch (err) {
-      console.error('❌ 載入收藏列表失敗:', err)
+      console.error('載入收藏列表失敗:', err)
       setFavorites([])
     }
   }
 
-  // ✅ 新增：當使用者登入/登出時載入收藏列表
+  // 新增：當使用者登入/登出時載入收藏列表
   useEffect(() => {
     if (user?.id) {
       fetchUserFavorites()
@@ -365,7 +365,7 @@ function MapContent() {
         isOpen={favModalOpen}
         onClose={closeFavModal}
         placeId={selectedPlaceForFav?.place_id}
-        userId={user?.id} // ✅ 傳遞使用者 ID
+        userId={user?.id} // 傳遞使用者 ID
       />
 
       {/* 傳遞導航函數給 ToggleBar */}
@@ -377,7 +377,7 @@ function MapContent() {
   )
 }
 
-// ✅ 主組件：用 NavigationProvider 包裹
+// 主組件：用 NavigationProvider 包裹
 export default function FullscreenMap() {
   return (
     <NavigationProvider>

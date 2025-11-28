@@ -24,7 +24,7 @@ export default function SoloTravelWishlist({
 
   useEffect(() => {
     if (isOpen && !userId) {
-      console.warn('⚠️ SoloTravelWishlist: userId 未提供')
+      console.warn('SoloTravelWishlist: userId 未提供')
       onClose()
       alert('請先登入才能使用收藏功能')
     }
@@ -63,7 +63,7 @@ export default function SoloTravelWishlist({
   const handleCreate = async (name, description) => {
     const result = await createList(name, description)
     if (result.success) {
-      showToast('🎉 清單建立成功!', 'success')
+      showToast('清單建立成功!', 'success')
       setShowCreateList(false)
       setShowSelectList(true)
     } else {

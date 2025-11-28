@@ -33,12 +33,12 @@ export default function TripDetail({
   const [error, setError] = useState(null)
   const [selectedPlaceId, setSelectedPlaceId] = useState(null)
   const [showPlaceDetail, setShowPlaceDetail] = useState(false)
-  // ✅ 新增：ConfirmModal 狀態
+  // 新增：ConfirmModal 狀態
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     tripItemId: null,
   })
-  // ✅ 新增：Toast 狀態
+  // 新增：Toast 狀態
   const [toast, setToast] = useState({
     show: false,
     message: '',
@@ -51,11 +51,11 @@ export default function TripDetail({
         setLoading(true)
         setError(null)
 
-        console.log('🔍 載入行程詳細:', tripId)
+        console.log('載入行程詳細:', tripId)
         const result = await tripApi.getTripDetail(tripId)
-        console.log('✅ 取得資料:', result)
+        console.log('取得資料:', result)
 
-        // ✅ 正確解析後端回應的資料結構
+        // 正確解析後端回應的資料結構
         if (result.success && result.data) {
           setTrip(result.data.trip)
           setDays(result.data.days || [])
@@ -63,7 +63,7 @@ export default function TripDetail({
           setError('找不到行程資料')
         }
       } catch (err) {
-        console.error('❌ 載入失敗:', err)
+        console.error('載入失敗:', err)
         setError(err.message || '載入行程失敗')
       } finally {
         setLoading(false)
@@ -91,19 +91,19 @@ export default function TripDetail({
     setConfirmModal({ isOpen: false, tripItemId: null })
 
     try {
-      console.log('🗑️ 開始刪除景點 ID:', tripItemId)
+      console.log('開始刪除景點 ID:', tripItemId)
 
-      // ✅ 直接呼叫 API，不需要透過 props
+      // 直接呼叫 API，不需要透過 props
       const deleteResult = await tripApi.removePlaceFromTrip(tripItemId)
 
-      console.log('📦 刪除結果:', deleteResult)
+      console.log('刪除結果:', deleteResult)
 
       // 檢查後端回應
       if (deleteResult.success === false) {
         throw new Error(deleteResult.message || '刪除失敗')
       }
 
-      console.log('✅ 刪除成功，重新載入資料')
+      console.log('刪除成功，重新載入資料')
 
       // 重新載入整個行程資料
       const result = await tripApi.getTripDetail(tripId)
@@ -111,16 +111,16 @@ export default function TripDetail({
       if (result.success && result.data) {
         setTrip(result.data.trip)
         setDays(result.data.days || [])
-        console.log('✅ 資料已更新')
+        console.log('資料已更新')
       }
 
-      // ✅ 顯示 Toast
+      // 顯示 Toast
       setToast({ show: true, message: '景點已移除' })
       setTimeout(() => {
         setToast({ show: false, message: '' })
       }, 3000)
     } catch (err) {
-      console.error('❌ 刪除失敗:', err)
+      console.error('刪除失敗:', err)
       alert('移除失敗: ' + err.message)
     }
   }
@@ -356,7 +356,7 @@ export default function TripDetail({
         />
       )}
 
-      {/* ✅ 確認刪除 Modal（使用 Portal 渲染到 body，顯示在整個網站頁面中間） */}
+      {/* 確認刪除 Modal（使用 Portal 渲染到 body，顯示在整個網站頁面中間） */}
       {confirmModal.isOpen &&
         typeof document !== 'undefined' &&
         createPortal(
@@ -373,7 +373,7 @@ export default function TripDetail({
           document.body
         )}
 
-      {/* ✅ Toast 通知（右上角，參考 theme.css，無圓角） */}
+      {/* Toast 通知（右上角，參考 theme.css，無圓角） */}
       {toast.show && (
         <div className="fixed top-8 right-8 z-[10000] animate-fade-in">
           <div className="bg-primary-500 text-white px-8 py-4 shadow-2xl border-l-4 border-secondary-900 min-w-[300px]">

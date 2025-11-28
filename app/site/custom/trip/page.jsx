@@ -15,7 +15,7 @@ import * as tripApi from '../lib/custom/tripApi'
  * 行程管理主頁面 (Auth V2)
  */
 export default function TripsPage() {
-  const { user } = useAuth() // ✅ Auth V2
+  const { user } = useAuth() //Auth V2
 
   // 當前顯示的標籤頁
   const [activeTab, setActiveTab] = useState('myTrips')
@@ -31,7 +31,7 @@ export default function TripsPage() {
   // 當前查看的行程 ID (進入詳細頁面時使用)
   const [currentTripId, setCurrentTripId] = useState(null)
 
-  // ✅ 新增: 景點搜尋和加入相關 state
+  // 新增: 景點搜尋和加入相關 state
   const [showPlaceSearch, setShowPlaceSearch] = useState(false)
   const [showAddToTrip, setShowAddToTrip] = useState(false)
   const [selectedPlace, setSelectedPlace] = useState(null)
@@ -99,16 +99,16 @@ export default function TripsPage() {
           : null,
       }
 
-      console.log('📤 送出資料:', tripData)
+      console.log('送出資料:', tripData)
 
       const result = await tripApi.createTrip(tripData)
-      console.log('✅ 建立成功:', result)
+      console.log('建立成功:', result)
 
       alert('行程建立成功!')
       setActiveTab('myTrips')
       loadMyTrips()
     } catch (error) {
-      console.error('❌ 建立失敗:', error)
+      console.error('建立失敗:', error)
       alert('建立行程失敗: ' + error.message)
     }
   }
@@ -187,7 +187,7 @@ export default function TripsPage() {
     }
   }
 
-  // ✅ 新增景點到某一天
+  //新增景點到某一天
   const handleAddPlace = async (tripDayId) => {
     setCurrentTripDayId(tripDayId)
     setShowPlaceSearch(true)
@@ -214,7 +214,7 @@ export default function TripsPage() {
     }
   }
 
-  // ✅ 處理從搜尋彈窗選擇景點
+  //處理從搜尋彈窗選擇景點
   const handlePlaceSelect = (placeId, placeName, placeCategory, placeImage) => {
     setSelectedPlace({
       placeId,
@@ -226,7 +226,7 @@ export default function TripsPage() {
     setShowAddToTrip(true)
   }
 
-  // ✅ 處理加入成功後 (目前暫時不需要這個函數,因為側邊欄會自己關閉並刷新)
+  //處理加入成功後 (目前暫時不需要這個函數,因為側邊欄會自己關閉並刷新)
 
   // 如果正在查看行程詳細頁面
   if (currentTripId) {
@@ -243,7 +243,7 @@ export default function TripsPage() {
           onToggleFavorite={handleToggleFavorite}
         />
 
-        {/* ✅ 景點搜尋彈窗 */}
+        {/*景點搜尋彈窗 */}
         <PlaceSearchModal
           isOpen={showPlaceSearch}
           onClose={() => setShowPlaceSearch(false)}
@@ -252,7 +252,7 @@ export default function TripsPage() {
           onPlaceSelect={handlePlaceSelect}
         />
 
-        {/* ✅ 加入行程側邊欄 */}
+        {/* 加入行程側邊欄 */}
         {selectedPlace && (
           <AddToTripDrawer
             isOpen={showAddToTrip}

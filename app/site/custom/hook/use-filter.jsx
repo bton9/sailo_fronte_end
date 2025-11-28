@@ -24,7 +24,7 @@ export function useFilters(allPlaces, setFilteredPlaces, setCurrentPage) {
     setFilteredPlaces(filtered)
     setCurrentPage(1)
 
-    console.log('🔍 篩選結果:', filtered.length, '個景點')
+    console.log('篩選結果:', filtered.length, '個景點')
   }, [
     searchTerm,
     selectedCity,

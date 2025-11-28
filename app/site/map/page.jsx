@@ -15,7 +15,7 @@ export default function App() {
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/places') // ✅ 指向 Express 的正確 port
+        const res = await fetch('http://localhost:5000/api/places') //指向 Express 的正確 port
         const result = await res.json()
         if (result.success) {
           setPlacesFromDB(result.data) // ← 儲存資料到 state
@@ -23,7 +23,7 @@ export default function App() {
           console.error('取得景點失敗:', result.message)
         }
       } catch (err) {
-        console.error('❌ 載入景點失敗:', err)
+        console.error('載入景點失敗:', err)
       }
     }
     fetchPlaces()

@@ -1,5 +1,5 @@
 // app/layout.js (或 .tsx)
-import './globals.css' // 🌟 確保在這裡導入全域 CSS 🌟
+import './globals.css' // 確保在這裡導入全域 CSS
 import { AuthProvider } from '@/contexts/AuthContext'
 import { CartProvider } from '@/contexts/CartContext'
 import { SocketProvider } from '@/contexts/SocketContext'

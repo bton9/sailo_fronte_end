@@ -38,7 +38,7 @@ export default function ItinerarySettings({
   const userId = user?.id
   useEffect(() => {
     if (isEditMode && editingTrip) {
-      console.log('📝 進入編輯模式，載入資料:', editingTrip)
+      console.log('進入編輯模式，載入資料:', editingTrip)
       setItineraryName(editingTrip.trip_name || '')
       setStartDate(editingTrip.start_date?.split('T')[0] || '')
       setEndDate(editingTrip.end_date?.split('T')[0] || '')

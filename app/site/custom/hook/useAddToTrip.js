@@ -89,7 +89,7 @@ export function useAddToTrip({
         setUserTrips([])
       }
     } catch (error) {
-      console.error('❌ 載入行程列表失敗:', error)
+      console.error('載入行程列表失敗:', error)
       showError('載入行程列表失敗,請稍後再試')
       setUserTrips([])
     } finally {
@@ -113,7 +113,7 @@ export function useAddToTrip({
         setSelectedTripDayId('')
       }
     } catch (error) {
-      console.error('❌ 載入日期列表失敗:', error)
+      console.error('載入日期列表失敗:', error)
       setTripDays([])
       setSelectedTripDayId('')
     }
@@ -157,7 +157,7 @@ export function useAddToTrip({
         sort_order: currentItemsCount + 1,
       }
 
-      console.log('📤 送出資料:', placeData)
+      console.log('送出資料:', placeData)
 
       // 呼叫 API
       const result = await tripApi.addPlaceToDay(selectedTripDayId, placeData)
@@ -176,7 +176,7 @@ export function useAddToTrip({
         throw new Error(result.message || '加入失敗')
       }
     } catch (error) {
-      console.error('❌ 加入行程失敗:', error)
+      console.error('加入行程失敗:', error)
       showError('加入行程失敗: ' + error.message)
     } finally {
       setSubmitting(false)

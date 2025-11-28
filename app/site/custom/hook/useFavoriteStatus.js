@@ -35,7 +35,7 @@ export function useFavoriteStatus(placeId, isOpen, userId) {
 
       setIsFavorited(isInAnyList)
     } catch (err) {
-      console.error('❌ 載入收藏狀態失敗:', err)
+      console.error('載入收藏狀態失敗:', err)
       setIsFavorited(false)
     }
   }

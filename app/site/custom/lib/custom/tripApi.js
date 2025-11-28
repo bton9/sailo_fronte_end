@@ -12,7 +12,7 @@ const UPLOAD_BASE_URL = `${BACKEND_URL}/api/trip-upload`
 const handleResponse = async (response) => {
   const data = await response.json()
 
-  // ✅ 若後端回傳「此行程已收藏」，不當成錯誤
+  // 若後端回傳「此行程已收藏」，不當成錯誤
   if (!response.ok) {
     if (data.message && data.message.includes('已收藏')) {
       return data // 不丟出例外，只回傳
@@ -279,13 +279,13 @@ export const updatePlaceOrder = async (tripItemId, sortOrder) => {
 // ==================== 收藏功能 API ====================
 
 /**
- * ✅ 收藏行程 - 修正版
+ * 收藏行程 - 修正版
  * 檢查後端 API 格式,可能需要調整
  */
 export const addFavorite = async (userId, tripId) => {
   try {
-    console.log('🔄 addFavorite 呼叫:', { userId, tripId })
-    console.log('📍 API URL:', FAVORITE_BASE_URL)
+    console.log('addFavorite 呼叫:', { userId, tripId })
+    console.log('API URL:', FAVORITE_BASE_URL)
 
     const response = await fetch(FAVORITE_BASE_URL, {
       method: 'POST',
@@ -298,13 +298,13 @@ export const addFavorite = async (userId, tripId) => {
       }),
     })
 
-    console.log('📦 Response status:', response.status)
+    console.log('Response status:', response.status)
     const result = await handleResponse(response)
-    console.log('✅ addFavorite 成功:', result)
+    console.log('addFavorite 成功:', result)
 
     return result
   } catch (error) {
-    console.error('❌ 收藏行程錯誤:', error)
+    console.error('收藏行程錯誤:', error)
     console.error('錯誤詳情:', {
       message: error.message,
       userId,
@@ -316,35 +316,35 @@ export const addFavorite = async (userId, tripId) => {
 }
 
 /**
- * ✅ 取消收藏 - 修正版
+ * 取消收藏 - 修正版
  * 方案 1: URL 參數 (RESTful 標準)
  * 方案 2: Query 參數
  * 方案 3: Request Body (如果後端支援)
  */
 export const removeFavorite = async (userId, tripId) => {
   try {
-    console.log('🔄 removeFavorite 呼叫:', { userId, tripId })
+    console.log('removeFavorite 呼叫:', { userId, tripId })
 
-    // ✅ 方案 1: 使用 URL 參數 (推薦,符合 RESTful)
+    // 方案 1: 使用 URL 參數 (推薦,符合 RESTful)
     const url = `${FAVORITE_BASE_URL}/${userId}/${tripId}`
-    console.log('📍 DELETE URL:', url)
+    console.log('DELETE URL:', url)
 
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      // ⚠️ DELETE 通常不帶 body
+      //DELETE 通常不帶 body
     })
 
-    console.log('📦 Response status:', response.status)
+    console.log('Response status:', response.status)
     const result = await handleResponse(response)
-    console.log('✅ removeFavorite 成功:', result)
+    console.log('removeFavorite 成功:', result)
 
     return result
 
     /* 
-    // ❌ 方案 2: 使用 Query 參數 (如果後端這樣設計)
+    //方案 2: 使用 Query 參數 (如果後端這樣設計)
     const url = `${FAVORITE_BASE_URL}?user_id=${userId}&trip_id=${tripId}`
     const response = await fetch(url, {
       method: 'DELETE',
@@ -355,7 +355,7 @@ export const removeFavorite = async (userId, tripId) => {
     */
 
     /*
-    // ❌ 方案 3: 使用 Request Body (不標準,但有些 API 這樣設計)
+    //方案 3: 使用 Request Body (不標準,但有些 API 這樣設計)
     const response = await fetch(FAVORITE_BASE_URL, {
       method: 'DELETE',
       headers: {
@@ -365,7 +365,7 @@ export const removeFavorite = async (userId, tripId) => {
     })
     */
   } catch (error) {
-    console.error('❌ 取消收藏錯誤:', error)
+    console.error('取消收藏錯誤:', error)
     console.error('錯誤詳情:', {
       message: error.message,
       userId,

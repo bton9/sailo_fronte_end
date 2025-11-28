@@ -1,7 +1,6 @@
 export default function ErrorState({ error, onRetry, testedEndpoints }) {
   return (
     <div className="text-center py-12 bg-white rounded-lg shadow-md mx-4 lg:mx-0">
-      <div className="text-6xl mb-4">⚠️</div>
       <p className="text-red-600 text-lg font-semibold mb-2">
         載入資料時發生錯誤
       </p>
@@ -48,7 +47,7 @@ export default function ErrorState({ error, onRetry, testedEndpoints }) {
           onClick={onRetry}
           className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
         >
-          🔄 重新載入
+          重新載入
         </button>
       )}
     </div>

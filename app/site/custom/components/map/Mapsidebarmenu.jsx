@@ -1,7 +1,7 @@
-import React from 'react' // ✅ 新增這一行
+import React from 'react' // 新增這一行
 import { Search, MapPin, Heart, Star, Sun, Moon, X } from 'lucide-react'
-import { useRouter } from 'next/navigation' // ✅ 新增：用於頁面導航
-import { useAuth } from '@/contexts/AuthContext' // ✅ 新增：取得使用者資訊
+import { useRouter } from 'next/navigation' // 新增：用於頁面導航
+import { useAuth } from '@/contexts/AuthContext' // 新增：取得使用者資訊
 import { Landmark, Utensils, Hotel } from 'lucide-react'
 
 export default function MapSidebar({
@@ -30,12 +30,12 @@ export default function MapSidebar({
   ],
   onClearFilters,
 }) {
-  // ✅ 新增：用於滾動到指定景點的 ref
+  // 新增：用於滾動到指定景點的 ref
   const placeRefs = React.useRef({})
-  const router = useRouter() // ✅ 新增：路由器實例
-  const { user } = useAuth() // ✅ 新增：取得使用者資訊
+  const router = useRouter() // 新增：路由器實例
+  const { user } = useAuth() // 新增：取得使用者資訊
 
-  // ✅ 新增：當 highlightedPlaceId 改變時，滾動到該景點
+  // 新增：當 highlightedPlaceId 改變時，滾動到該景點
   React.useEffect(() => {
     if (highlightedPlaceId && placeRefs.current[highlightedPlaceId]) {
       placeRefs.current[highlightedPlaceId].scrollIntoView({
@@ -45,7 +45,7 @@ export default function MapSidebar({
     }
   }, [highlightedPlaceId])
 
-  // ✅ 圖片處理邏輯（參考 Card 組件）
+  //圖片處理邏輯（參考 Card 組件）
   const getImageUrl = (place) => {
     if (!place.cover_image) return `${backendUrl}/uploads/default.jpg`
     if (place.cover_image.startsWith('http')) return place.cover_image
@@ -54,18 +54,18 @@ export default function MapSidebar({
     return `${backendUrl}/uploads/${place.cover_image}`
   }
 
-  // ✅ 新增：處理取得位置按鈕點擊
+  //新增：處理取得位置按鈕點擊
   const handleGetLocationClick = () => {
     // 先執行原有的取得位置邏輯
     if (onGetUserLocation) {
       onGetUserLocation()
     }
 
-    // 手機版：收合側邊欄
+    //手機版：收合側邊欄
     if (window.innerWidth < 768) {
       onToggle()
     } else {
-      // 桌面版：導航回 mapPage
+      //桌面版：導航回 mapPage
       router.push('/site/custom/mapPage')
     }
   }
@@ -78,7 +78,7 @@ export default function MapSidebar({
 
   return (
     <>
-      {/* ✅ 深色模式按鈕 - 移到標題下方 */}
+      {/* 深色模式按鈕 - 移到標題下方 */}
       <div className="fixed right-4 top-20 md:top-1 text-white rounded-full bg-secondary-900/80 mt-3 flex items-center justify-center z-50">
         <button
           onClick={onDarkModeToggle}
@@ -111,7 +111,7 @@ export default function MapSidebar({
           <div className="h-full flex flex-col">
             {/* Header */}
             <div className="bg-white text-secondary-900 px-4 md:px-5 pt-4 md:pt-6 relative">
-              {/* ✅ 關閉按鈕 - 右上角 */}
+              {/* 關閉按鈕 - 右上角 */}
               <button
                 onClick={onToggle}
                 className="absolute right-3 top-3 p-2 hover:bg-white/20 rounded-full transition-colors"
@@ -253,7 +253,7 @@ export default function MapSidebar({
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
-                          // ✅ 檢查是否登入
+                          // 檢查是否登入
                           if (!user) {
                             alert('請先登入才能收藏景點')
                             return

@@ -30,7 +30,7 @@ export function usePlaceDetail(placeId, isOpen) {
           setPlace(null)
         }
       } catch (err) {
-        console.error('❌ 載入景點資料失敗:', err)
+        console.error('載入景點資料失敗:', err)
         setPlace(null)
       } finally {
         setLoading(false)

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'  // ✅ 新增
-import { useSearchParams } from 'next/navigation'  // ✅ 確認有這個
+import { useState, useEffect } from 'react'  //新增
+import { useSearchParams } from 'next/navigation'  //確認有這個
 import AuthGuard from '@/components/auth/AuthGuard'
 import SearchFilterNavbar from './components/map/SearchFilterNavbar'
 import LoadingSpinner from './components/location/loadingSpinner'
@@ -30,20 +30,20 @@ function App() {
   // ============ 使用 AuthContext Hook ============
   const { user, logout } = useAuth()
   
-  // ✅ 新增：ToggleBar 開關狀態和當前查看的行程 ID
+  //新增：ToggleBar 開關狀態和當前查看的行程 ID
   const [isToggleBarOpen, setIsToggleBarOpen] = useState(false)
   const [targetTripId, setTargetTripId] = useState(null)
 
-  // ✅ 新增：監聽 sessionStorage，自動打開 ToggleBar
+  //新增：監聽 sessionStorage，自動打開 ToggleBar
   useEffect(() => {
     const openTripId = sessionStorage.getItem('openTripId')
     
     if (openTripId) {
-      console.log('🔍 偵測到 sessionStorage 中的 tripId:', openTripId)
+      console.log('偵測到 sessionStorage 中的 tripId:', openTripId)
       setTargetTripId(Number(openTripId))
       setIsToggleBarOpen(true)
       
-      // ✅ 用完立即清除
+      //用完立即清除
       sessionStorage.removeItem('openTripId')
     }
   }, [])  // 只在元件載入時執行一次
@@ -64,7 +64,7 @@ function App() {
   }
 
   // ============ 景點數據管理（使用 SWR 版本）============
-   // ✅ 修改：處理 ToggleBar 開關，關閉時清除 targetTripId
+   //修改：處理 ToggleBar 開關，關閉時清除 targetTripId
   const handleToggleBar = () => {
     if (isToggleBarOpen) {
       // 關閉時清除狀態
@@ -189,12 +189,12 @@ function App() {
           </div>
         </main>
 
-        {/* ✅ 傳遞完整參數給 ToggleBar */}
+        {/* 傳遞完整參數給 ToggleBar */}
         <ToggleBar
           userId={user?.id || 1}
-          isOpen={isToggleBarOpen}  // ✅ 新增：控制開關
-          onToggle={handleToggleBar}  // ✅ 新增：切換函式
-          initialTripId={targetTripId}  // ✅ 新增：初始要顯示的行程 ID
+          isOpen={isToggleBarOpen}  // 新增：控制開關
+          onToggle={handleToggleBar}  // 新增：切換函式
+          initialTripId={targetTripId}  // 新增：初始要顯示的行程 ID
           onNavigateToSettings={navigateToSettings}
         />
 
