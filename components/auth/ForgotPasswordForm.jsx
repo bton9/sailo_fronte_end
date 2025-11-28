@@ -84,7 +84,7 @@ export default function ForgotPasswordForm({ onBack }) {
         setError(data.message || '發送失敗，請稍後再試')
       }
     } catch (error) {
-      console.error('❌ 忘記密碼錯誤:', error)
+      console.error(' 忘記密碼錯誤:', error)
       setError(error.message || '網路錯誤，請稍後再試')
     } finally {
       setIsLoading(false)

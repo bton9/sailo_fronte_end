@@ -121,7 +121,7 @@ export function CartProvider({ children }) {
         throw new Error(response.message || '載入購物車失敗')
       }
     } catch (err) {
-      console.error('❌ CartContext: 載入購物車失敗:', err)
+      console.error(' CartContext: 載入購物車失敗:', err)
       setError(err.message)
       setCartItems([])
       setSummary({
@@ -164,7 +164,7 @@ export function CartProvider({ children }) {
           throw new Error(response.message || '加入購物車失敗')
         }
       } catch (err) {
-        console.error('❌ 加入購物車失敗:', err)
+        console.error(' 加入購物車失敗:', err)
         setError(err.message)
         return { success: false, message: err.message }
       } finally {
@@ -193,7 +193,7 @@ export function CartProvider({ children }) {
           throw new Error(response.message || '更新失敗')
         }
       } catch (err) {
-        console.error('❌ 更新數量失敗:', err)
+        console.error(' 更新數量失敗:', err)
         setError(err.message)
         return { success: false, message: err.message }
       } finally {
@@ -222,7 +222,7 @@ export function CartProvider({ children }) {
           throw new Error(response.message || '刪除失敗')
         }
       } catch (err) {
-        console.error('❌ 刪除商品失敗:', err)
+        console.error(' 刪除商品失敗:', err)
         setError(err.message)
         return { success: false, message: err.message }
       } finally {
@@ -261,7 +261,7 @@ export function CartProvider({ children }) {
         throw new Error(response.message || '清空購物車失敗')
       }
     } catch (err) {
-      console.error('❌ 清空購物車失敗:', err)
+      console.error(' 清空購物車失敗:', err)
       setError(err.message)
       return { success: false, message: err.message }
     } finally {

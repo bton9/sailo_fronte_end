@@ -30,7 +30,7 @@ async function apiRequest(endpoint, options = {}) {
 
     return data
   } catch (error) {
-    console.error('❌ API Error:', error)
+    console.error(' API Error:', error)
     throw error
   }
 }
@@ -199,7 +199,7 @@ export const userAPI = {
 
       return data
     } catch (error) {
-      console.error('❌ 上傳頭像錯誤:', error)
+      console.error(' 上傳頭像錯誤:', error)
       throw error
     }
   },

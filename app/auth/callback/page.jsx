@@ -122,7 +122,7 @@ export default function AuthCallbackPage() {
         router.push(redirectTo)
       }, 1000)
     } catch (error) {
-      console.error('❌ Google 登入回調錯誤:', error)
+      console.error(' Google 登入回調錯誤:', error)
       setStatus('error')
       setMessage('登入處理失敗，請稍後再試')
     }
@@ -176,7 +176,7 @@ export default function AuthCallbackPage() {
             {/* 錯誤圖示 */}
             <div className="flex justify-center">
               <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center">
-                <span className="text-5xl">❌</span>
+                <span className="text-5xl"></span>
               </div>
             </div>
 

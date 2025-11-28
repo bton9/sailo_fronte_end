@@ -22,21 +22,20 @@ const NextArrow = () => (
 
 /**
  * SwiperProduct 組件
- * 
+ *
  * 使用方式：
  * 1. 傳入商品列表：<SwiperProduct products={products} />
  * 2. 自動獲取推薦商品：<SwiperProduct autoFetch limit={3} />
- * 
+ *
  * @param {Array} products - 商品列表（選填，如果不提供則自動獲取）
  * @param {boolean} autoFetch - 是否自動獲取推薦商品（預設 false）
  * @param {number} limit - 顯示商品數量（預設 12）
  * @param {string} title - 標題（預設「你可能會喜歡的商品」）
  */
-export default function SwiperProduct({ 
-  products: externalProducts, 
+export default function SwiperProduct({
+  products: externalProducts,
   autoFetch = false,
   limit = 12,
-
 }) {
   const [internalProducts, setInternalProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -83,7 +82,7 @@ export default function SwiperProduct({
           setInternalProducts([])
         }
       } catch (error) {
-        console.error('❌ [SwiperProduct] 獲取推薦商品失敗:', error)
+        console.error(' [SwiperProduct] 獲取推薦商品失敗:', error)
         setInternalProducts([])
       } finally {
         setIsLoading(false)
@@ -110,7 +109,6 @@ export default function SwiperProduct({
 
   return (
     <div className="container mx-auto py-5 relative">
-
       <PrevArrow />
       <NextArrow />
 

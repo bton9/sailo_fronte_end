@@ -144,7 +144,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }) {
         setGeneralError(result.message || '註冊失敗，請稍後再試')
       }
     } catch (error) {
-      console.error('❌ 註冊錯誤:', error)
+      console.error(' 註冊錯誤:', error)
       setGeneralError('網路錯誤，請稍後再試')
     } finally {
       setIsLoading(false)

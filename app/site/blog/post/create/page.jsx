@@ -69,7 +69,7 @@ export default function CreatePostPage() {
 
         // ✅ 檢查 id 是否存在
         if (!user.id) {
-          console.error('❌ user 物件沒有 id 屬性:', user)
+          console.error(' user 物件沒有 id 屬性:', user)
           alert('使用者資料異常，請重新登入')
           router.push('/login')
           return
@@ -242,7 +242,7 @@ export default function CreatePostPage() {
               const result = await deletePhoto(photoId)
               console.log('✅ 刪除成功:', result)
             } catch (error) {
-              console.error(`❌ 刪除圖片 ${photoId} 失敗:`, error)
+              console.error(` 刪除圖片 ${photoId} 失敗:`, error)
             }
           }
         } else {

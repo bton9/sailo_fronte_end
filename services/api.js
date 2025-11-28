@@ -59,7 +59,7 @@ async function apiRequest(endpoint, options = {}) {
     if (!contentType || !contentType.includes('application/json')) {
       // 如果不是 JSON，可能是 HTML 錯誤頁面
       const text = await response.text()
-      console.error('❌ API 返回非 JSON 內容:', text.substring(0, 200))
+      console.error(' API 返回非 JSON 內容:', text.substring(0, 200))
       throw new Error(`API 錯誤 (${response.status}): 端點不存在或伺服器錯誤`)
     }
 
@@ -71,7 +71,7 @@ async function apiRequest(endpoint, options = {}) {
 
     return data
   } catch (error) {
-    console.error('❌ API Error:', error)
+    console.error(' API Error:', error)
     throw error
   }
 }
@@ -102,7 +102,7 @@ async function refreshToken() {
       return false
     }
   } catch (error) {
-    console.error('❌ Token refresh error:', error)
+    console.error(' Token refresh error:', error)
     return false
   }
 }
@@ -340,7 +340,7 @@ export const userAPI = {
 
       return data
     } catch (error) {
-      console.error('❌ Upload avatar error:', error)
+      console.error(' Upload avatar error:', error)
       throw error
     }
   },

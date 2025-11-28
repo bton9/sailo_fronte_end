@@ -108,7 +108,7 @@ function ProductDetailContent({ productId }) {
           setRelatedProducts([])
         }
       } catch (error) {
-        console.error('❌ 獲取推薦商品失敗:', error)
+        console.error(' 獲取推薦商品失敗:', error)
         setRelatedProducts([])
       }
     }
@@ -161,7 +161,6 @@ function ProductDetailContent({ productId }) {
             <RIC_fi.FiChevronLeft className="h-4 w-4 mr-2" />
             返回商城
           </Button>
-          
         </div>
       </div>
 

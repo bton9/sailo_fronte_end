@@ -278,9 +278,9 @@ export default function TripWeatherCard({ city }) {
   useEffect(() => {
     const fetchWeather = async () => {
       console.log('🔍 fetchWeather called with city:', city)
-      
+
       if (!city || !city.trim()) {
-        console.log('❌ No city provided')
+        console.log(' No city provided')
         setLoading(false)
         return
       }
@@ -306,8 +306,10 @@ export default function TripWeatherCard({ city }) {
 
         if (!response.ok) {
           const errorData = await response.json()
-          console.error('❌ API Error:', errorData)
-          throw new Error(`無法取得天氣資料: ${errorData.message || response.statusText}`)
+          console.error(' API Error:', errorData)
+          throw new Error(
+            `無法取得天氣資料: ${errorData.message || response.statusText}`
+          )
         }
 
         const data = await response.json()
@@ -332,7 +334,7 @@ export default function TripWeatherCard({ city }) {
 
         console.log('✅ Weather event dispatched')
       } catch (err) {
-        console.error('❌ Weather fetch error:', err)
+        console.error(' Weather fetch error:', err)
         setError(err.message || '無法取得天氣資料')
       } finally {
         setLoading(false)

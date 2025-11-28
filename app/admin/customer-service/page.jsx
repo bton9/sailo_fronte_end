@@ -101,7 +101,7 @@ export default function CustomerServicePage() {
         setRooms(data.rooms)
       }
     } catch (error) {
-      console.error('❌ 載入聊天室失敗:', error)
+      console.error(' 載入聊天室失敗:', error)
     } finally {
       setIsLoading(false)
     }
@@ -126,7 +126,7 @@ export default function CustomerServicePage() {
         console.log('✅ 統計資訊已更新:', data.stats)
       }
     } catch (error) {
-      console.error('❌ 載入統計資訊失敗:', error)
+      console.error(' 載入統計資訊失敗:', error)
     }
   }
 
@@ -151,7 +151,7 @@ export default function CustomerServicePage() {
         console.log('✅ 客服評分已更新:', data.rating)
       }
     } catch (error) {
-      console.error('❌ 載入客服評分失敗:', error)
+      console.error(' 載入客服評分失敗:', error)
     }
   }
 
@@ -205,7 +205,7 @@ export default function CustomerServicePage() {
         alert(data.message || '接單失敗')
       }
     } catch (error) {
-      console.error('❌ 接單失敗:', error)
+      console.error(' 接單失敗:', error)
       alert('接單失敗，請稍後再試')
     }
   }
@@ -249,7 +249,7 @@ export default function CustomerServicePage() {
         alert(data.message || '關閉失敗')
       }
     } catch (error) {
-      console.error('❌ 關閉聊天室失敗:', error)
+      console.error(' 關閉聊天室失敗:', error)
       alert('關閉失敗，請稍後再試')
     }
   }

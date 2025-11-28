@@ -355,10 +355,10 @@ const ToggleBar = ({
         setSchedules(tripsWithFavorites)
         setFavorites(favoriteIds)
       } else {
-        console.error('❌ 載入失敗:', response)
+        console.error(' 載入失敗:', response)
       }
     } catch (error) {
-      console.error('❌ 載入行程失敗:', error)
+      console.error(' 載入行程失敗:', error)
     } finally {
       setLoading(false)
     }
@@ -491,7 +491,7 @@ const ToggleBar = ({
         }
       }
     } catch (error) {
-      console.error('❌ 收藏操作失敗:', error)
+      console.error(' 收藏操作失敗:', error)
 
       if (error.message && error.message.includes('已收藏')) {
         setFavorites((prev) => new Set([...prev, schedule.trip_id]))
@@ -566,7 +566,7 @@ const ToggleBar = ({
 
     if (!placeId) {
       showSuccess('景點 ID 不能為空')
-      console.error('❌ placeId 為空:', placeId)
+      console.error(' placeId 為空:', placeId)
       return
     }
 
@@ -587,7 +587,7 @@ const ToggleBar = ({
       Object.entries(placeData).forEach(([key, value]) => {
         console.log(`  - ${key}:`, value, `(type: ${typeof value})`)
         if (value === undefined) {
-          console.error(`❌ 警告: ${key} 的值是 undefined!`)
+          console.error(` 警告: ${key} 的值是 undefined!`)
         }
       })
 
@@ -609,7 +609,7 @@ const ToggleBar = ({
         throw new Error(response.message || '新增景點失敗')
       }
     } catch (error) {
-      console.error('❌ 新增景點失敗:')
+      console.error(' 新增景點失敗:')
       console.error('  - error:', error)
       console.error('  - error.message:', error.message)
       console.error('  - error.stack:', error.stack)

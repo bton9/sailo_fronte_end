@@ -52,7 +52,7 @@ export function AuthProvider({ children }) {
         setIsAuthenticated(true)
       }
     } catch (error) {
-      console.error('❌ 載入使用者資料失敗:', error)
+      console.error(' 載入使用者資料失敗:', error)
       // 清除無效資料
       localStorage.removeItem('authToken')
       localStorage.removeItem('user')
@@ -78,7 +78,7 @@ export function AuthProvider({ children }) {
       // 檢查回應中的 valid 欄位
       return data.valid === true
     } catch (error) {
-      console.error('❌ Token 驗證失敗:', error)
+      console.error(' Token 驗證失敗:', error)
       // 發生錯誤時視為無效 Token
       return false
     }
@@ -140,7 +140,7 @@ export function AuthProvider({ children }) {
         }
       } catch (error) {
         // 網路錯誤或其他異常
-        console.error('❌ 登入錯誤:', error)
+        console.error(' 登入錯誤:', error)
         return {
           success: false,
           message: error.message || '網路錯誤，請稍後再試',
@@ -188,7 +188,7 @@ export function AuthProvider({ children }) {
       }
     } catch (error) {
       // 網路錯誤或其他異常
-      console.error('❌ 註冊錯誤:', error)
+      console.error(' 註冊錯誤:', error)
       return {
         success: false,
         message: error.message || '網路錯誤，請稍後再試',
@@ -215,7 +215,7 @@ export function AuthProvider({ children }) {
       }
     } catch (error) {
       // 即使 API 呼叫失敗，仍要繼續登出流程
-      console.error('❌ 登出 API 呼叫失敗:', error)
+      console.error(' 登出 API 呼叫失敗:', error)
     } finally {
       // 無論 API 是否成功，都要清除本地資料
       // finally 確保這段程式碼一定會執行

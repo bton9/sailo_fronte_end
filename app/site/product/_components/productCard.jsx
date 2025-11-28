@@ -59,7 +59,7 @@ const ProductCard = ({
           }
         }
       } catch (error) {
-        console.error('❌ 檢查收藏狀態失敗:', error)
+        console.error(' 檢查收藏狀態失敗:', error)
       } finally {
         setIsCheckingFavorite(false)
       }
@@ -86,7 +86,7 @@ const ProductCard = ({
     console.log('👤 從 Context 取得 userId:', userId)
 
     if (!userId) {
-      console.error('❌ user 物件中沒有 user_id 或 id')
+      console.error(' user 物件中沒有 user_id 或 id')
       alert('無法取得使用者 ID，請重新登入')
       return
     }
@@ -134,9 +134,8 @@ const ProductCard = ({
       if (onFavoriteToggle) {
         onFavoriteToggle(id, result.isFavorite)
       }
-
     } catch (error) {
-      console.error('❌ 收藏操作失敗:', error)
+      console.error(' 收藏操作失敗:', error)
       // 恢復原狀態
       setIsFavorite(!newFavoriteState)
       alert(`收藏操作失敗：${error.message}`)
@@ -155,7 +154,7 @@ const ProductCard = ({
   }
 
   return (
-    <Card 
+    <Card
       className="group border-0 bg-transparent overflow-hidden cursor-pointer"
       onClick={handleCardClick}
     >

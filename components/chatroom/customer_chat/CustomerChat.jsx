@@ -125,7 +125,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
       const minutes = date.getMinutes().toString().padStart(2, '0')
       return `${hours}:${minutes}`
     } catch (error) {
-      console.error('❌ 時間格式化錯誤:', error, dateString)
+      console.error(' 時間格式化錯誤:', error, dateString)
       return ''
     }
   }
@@ -167,7 +167,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         }
       }
     } catch (error) {
-      console.error('❌ 建立 AI 聊天室失敗:', error)
+      console.error(' 建立 AI 聊天室失敗:', error)
     } finally {
       setIsLoading(false)
     }
@@ -222,7 +222,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
           setTimeout(scrollToBottom, 100)
         }
       } catch (error) {
-        console.error('❌ 載入 AI 訊息失敗:', error)
+        console.error(' 載入 AI 訊息失敗:', error)
       }
     },
     [user]
@@ -278,7 +278,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         throw new Error(data.message)
       }
     } catch (error) {
-      console.error('❌ 轉接人工客服失敗:', error)
+      console.error(' 轉接人工客服失敗:', error)
       alert('轉接失敗,請稍後再試')
     } finally {
       setIsSending(false)
@@ -363,7 +363,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
           throw new Error(data.message)
         }
       } catch (error) {
-        console.error('❌ 發送 AI 訊息失敗:', error)
+        console.error(' 發送 AI 訊息失敗:', error)
 
         // 顯示錯誤訊息
         setMessages((prev) => [
@@ -409,7 +409,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         await loadMessages(data.room.id)
       }
     } catch (error) {
-      console.error('❌ 建立聊天室失敗:', error)
+      console.error(' 建立聊天室失敗:', error)
     } finally {
       setIsLoading(false)
     }
@@ -466,7 +466,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
           }
         }
       } catch (error) {
-        console.error('❌ 載入訊息失敗:', error)
+        console.error(' 載入訊息失敗:', error)
       }
     },
     [scrollToBottom, socket, user]
@@ -590,7 +590,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
           setMessages((prev) => [...prev, userMsg])
 
           if (!aiRoom) {
-            console.error('❌ AI 聊天室不存在')
+            console.error(' AI 聊天室不存在')
             throw new Error('AI 聊天室不存在')
           }
 
@@ -690,7 +690,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
           }
         }
       } catch (error) {
-        console.error('❌ 發送訊息失敗:', error)
+        console.error(' 發送訊息失敗:', error)
 
         // 恢復輸入框內容
         setInputMessage(userMessageText)
@@ -780,7 +780,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         }
       }
     } catch (error) {
-      console.error('❌ 載入歷史訊息失敗:', error)
+      console.error(' 載入歷史訊息失敗:', error)
     }
   }, [])
 
@@ -814,7 +814,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
           throw new Error(data.message || '提交評分失敗')
         }
       } catch (error) {
-        console.error('❌ 提交評分失敗:', error)
+        console.error(' 提交評分失敗:', error)
         throw error
       }
     },

@@ -30,10 +30,9 @@ export default function OrderStatus({ status }) {
     cancelled: {
       label: '已取消',
       color: 'bg-red-100 text-red-700 border-red-200',
-      icon: '❌',
+      icon: '',
     },
   }
 
   const config = statusConfig[status] || statusConfig.ordered
-
 }

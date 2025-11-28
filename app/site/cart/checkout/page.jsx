@@ -128,7 +128,7 @@ export default function CheckoutPage() {
         setSubmitting(false)
       }
     } catch (error) {
-      console.error('❌ 建立訂單錯誤:', error)
+      console.error(' 建立訂單錯誤:', error)
       alert(error.message || '建立訂單失敗,請稍後再試')
       setSubmitting(false)
     }

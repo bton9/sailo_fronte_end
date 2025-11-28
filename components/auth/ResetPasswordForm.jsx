@@ -128,7 +128,7 @@ export default function ResetPasswordForm({ token, onSuccess }) {
         setGeneralError(data.message || '重置失敗，請稍後再試')
       }
     } catch (error) {
-      console.error('❌ 重置密碼錯誤:', error)
+      console.error(' 重置密碼錯誤:', error)
       setGeneralError(error.message || '網路錯誤，請稍後再試')
     } finally {
       setIsLoading(false)

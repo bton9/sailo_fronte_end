@@ -23,7 +23,7 @@ import TabNavigation from '../../components/shared/TabNavigation'
 import SortBar from '../../components/shared/SortBar'
 import PostCard from '../../components/post/PostCard'
 import FloatingPostButton from '../../components/layout/FloatingPostButton'
-import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail'  // ✅ 加入這行
+import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' // ✅ 加入這行
 import * as FaIcons from 'react-icons/fa6'
 
 export default function ProfilePage() {
@@ -176,74 +176,75 @@ export default function ProfilePage() {
 
   // 載入文章
   // 載入文章
-useEffect(() => {
-  const loadPosts = async () => {
-    if (!profileUser) return
+  useEffect(() => {
+    const loadPosts = async () => {
+      if (!profileUser) return
 
-    try {
-      // ✅ 第一頁顯示 loading，後續頁顯示 loadingMore
-      if (page === 1) {
-        setLoading(true)
-        setPosts([])  // ✅ 清空舊資料
-      } else {
-        setLoadingMore(true)
-      }
+      try {
+        // ✅ 第一頁顯示 loading，後續頁顯示 loadingMore
+        if (page === 1) {
+          setLoading(true)
+          setPosts([]) // ✅ 清空舊資料
+        } else {
+          setLoadingMore(true)
+        }
 
-      // ✅ 使用統一的參數建立函式
-      const params = buildPostsParams()
+        // ✅ 使用統一的參數建立函式
+        const params = buildPostsParams()
 
-      let result
-      if (currentView === 'bookmarks') {
-        result = await getUserBookmarks(userId, params)
-      } else if (currentView === 'liked') {
-        result = await getUserLikedPosts(userId, params)
-      } else {
-        result = await getUserPosts(userId, params)
-      }
+        let result
+        if (currentView === 'bookmarks') {
+          result = await getUserBookmarks(userId, params)
+        } else if (currentView === 'liked') {
+          result = await getUserLikedPosts(userId, params)
+        } else {
+          result = await getUserPosts(userId, params)
+        }
 
-      // ✅ 第一頁直接設定，後續頁追加
-      if (page === 1) {
-        setPosts(result.data.posts)
-      } else {
-        setPosts(prev => [...prev, ...result.data.posts])
+        // ✅ 第一頁直接設定，後續頁追加
+        if (page === 1) {
+          setPosts(result.data.posts)
+        } else {
+          setPosts((prev) => [...prev, ...result.data.posts])
+        }
+
+        setPagination(result.data.pagination)
+
+        // ✅ 檢查是否還有更多資料
+        setHasMore(
+          result.data.pagination.page < result.data.pagination.totalPages
+        )
+      } catch (error) {
+        console.error('載入文章失敗:', error)
+        if (page === 1) {
+          setPosts([])
+        }
+      } finally {
+        setLoading(false)
+        setLoadingMore(false)
       }
-      
-      setPagination(result.data.pagination)
-      
-      // ✅ 檢查是否還有更多資料
-      setHasMore(result.data.pagination.page < result.data.pagination.totalPages)
-      
-    } catch (error) {
-      console.error('載入文章失敗:', error)
-      if (page === 1) {
-        setPosts([])
-      }
-    } finally {
-      setLoading(false)
-      setLoadingMore(false)
     }
-  }
 
-  loadPosts()
-}, [profileUser, filters, page, currentView, userId, sortBy])
+    loadPosts()
+  }, [profileUser, filters, page, currentView, userId, sortBy])
 
-// ✅ 新增：滾動載入更多
-useEffect(() => {
-  const handleScroll = () => {
-    if (loadingMore || !hasMore || loading) return
+  // ✅ 新增：滾動載入更多
+  useEffect(() => {
+    const handleScroll = () => {
+      if (loadingMore || !hasMore || loading) return
 
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-    const windowHeight = window.innerHeight
-    const documentHeight = document.documentElement.scrollHeight
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
 
-    if (scrollTop + windowHeight >= documentHeight - 300) {
-      setPage(prev => prev + 1)
+      if (scrollTop + windowHeight >= documentHeight - 300) {
+        setPage((prev) => prev + 1)
+      }
     }
-  }
 
-  window.addEventListener('scroll', handleScroll)
-  return () => window.removeEventListener('scroll', handleScroll)
-}, [loadingMore, hasMore, loading])
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [loadingMore, hasMore, loading])
 
   // 處理篩選變更
   const handleFilterChange = (newFilters) => {
@@ -254,7 +255,6 @@ useEffect(() => {
     setPage(1)
     setHasMore(true)
   }
-
 
   // 切換檢視模式 (Tab切換)
   const handleTabChange = (view) => {
@@ -477,50 +477,50 @@ useEffect(() => {
   }
 
   const handleItineraryClick = async (tripId) => {
-      try {
-        // ✅ 先找到這個行程的文章，確認是否為作者
-        const targetPost = posts.find(p => p.trip_id === tripId)
-        
-        if (!targetPost) {
-          console.error('❌ 找不到關聯的文章')
-          alert('找不到關聯的行程')
-          return
-        }
-  
-        const isOwnTrip = user?.id === targetPost.author?.user_id
-  
-        if (!isOwnTrip) {
-          // ✅ 不是自己的行程，先複製
-          console.log('🔄 複製別人的行程:', tripId)
-          
-          // 呼叫 Blog 的複製行程 API
-          const copyResult = await copyItinerary(tripId)
-          
-          if (copyResult.success) {
-            const newTripId = copyResult.data.trip_id
-            console.log('✅ 行程複製成功，新行程 ID:', newTripId)
-            alert(`已將行程複製到您的行程列表！`)
-            
-            // ✅ 改用 sessionStorage 傳遞
-            sessionStorage.setItem('openTripId', newTripId)
-            router.push('/site/custom')
-          } else {
-            throw new Error(copyResult.message || '複製失敗')
-          }
-        } else {
-          // ✅ 是自己的行程，直接跳轉編輯
-          console.log('✏️ 編輯自己的行程:', tripId)
-          // ✅ 改用 sessionStorage 傳遞
-          sessionStorage.setItem('openTripId', tripId)
-          router.push('/site/custom')
-        }
-      } catch (error) {
-        console.error('❌ 行程操作失敗:', error)
-        alert(`操作失敗: ${error.message}`)
-      }
-    }
+    try {
+      // ✅ 先找到這個行程的文章，確認是否為作者
+      const targetPost = posts.find((p) => p.trip_id === tripId)
 
-    // ✅ 加入這個函式 (在 handleItineraryClick 後面)
+      if (!targetPost) {
+        console.error(' 找不到關聯的文章')
+        alert('找不到關聯的行程')
+        return
+      }
+
+      const isOwnTrip = user?.id === targetPost.author?.user_id
+
+      if (!isOwnTrip) {
+        // ✅ 不是自己的行程，先複製
+        console.log('🔄 複製別人的行程:', tripId)
+
+        // 呼叫 Blog 的複製行程 API
+        const copyResult = await copyItinerary(tripId)
+
+        if (copyResult.success) {
+          const newTripId = copyResult.data.trip_id
+          console.log('✅ 行程複製成功，新行程 ID:', newTripId)
+          alert(`已將行程複製到您的行程列表！`)
+
+          // ✅ 改用 sessionStorage 傳遞
+          sessionStorage.setItem('openTripId', newTripId)
+          router.push('/site/custom')
+        } else {
+          throw new Error(copyResult.message || '複製失敗')
+        }
+      } else {
+        // ✅ 是自己的行程，直接跳轉編輯
+        console.log('✏️ 編輯自己的行程:', tripId)
+        // ✅ 改用 sessionStorage 傳遞
+        sessionStorage.setItem('openTripId', tripId)
+        router.push('/site/custom')
+      }
+    } catch (error) {
+      console.error(' 行程操作失敗:', error)
+      alert(`操作失敗: ${error.message}`)
+    }
+  }
+
+  // ✅ 加入這個函式 (在 handleItineraryClick 後面)
   const handlePlaceCardClick = (placeId) => {
     console.log('🎯 開啟景點 Modal:', placeId)
     setSelectedPlaceId(placeId)
@@ -557,28 +557,28 @@ useEffect(() => {
       <div className="max-w-6xl mx-auto my-8 px-6">
         <BackButton />
 
-         <div className="lg:hidden">
-    <UserProfileWidget
-      currentUser={user}
-      profileUser={profileUser}
-      stats={stats}
-      isFollowing={isFollowing}
-      currentView={currentView}
-      onViewChange={handleTabChange}
-      onFollowClick={handleFollowClick}
-      onAvatarClick={handleAvatarClick}
-      onUsernameClick={handleUsernameClick}
-      onSearchSubmit={handleSearchSubmit}
-      onItineraryClick={handleItineraryClick}
-      onPlaceCardClick={handlePlaceCardClick}  // ✅ 加入這行
-    />
-  </div>
+        <div className="lg:hidden">
+          <UserProfileWidget
+            currentUser={user}
+            profileUser={profileUser}
+            stats={stats}
+            isFollowing={isFollowing}
+            currentView={currentView}
+            onViewChange={handleTabChange}
+            onFollowClick={handleFollowClick}
+            onAvatarClick={handleAvatarClick}
+            onUsernameClick={handleUsernameClick}
+            onSearchSubmit={handleSearchSubmit}
+            onItineraryClick={handleItineraryClick}
+            onPlaceCardClick={handlePlaceCardClick} // ✅ 加入這行
+          />
+        </div>
 
         {/* 文章列表 */}
         <div className="grid lg:grid-cols-[1fr_300px] gap-8">
           <main className="flex flex-col gap-6">
-          {/* ✅ 手機版 ProfileWidget */}
- 
+            {/* ✅ 手機版 ProfileWidget */}
+
             {/* Profile Tabs - 個人頁模式 */}
             <TabNavigation
               tabs={profileTabs}

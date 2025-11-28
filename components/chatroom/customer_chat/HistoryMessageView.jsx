@@ -56,7 +56,7 @@ export default function HistoryMessageView({
       const minutes = date.getMinutes().toString().padStart(2, '0')
       return `${hours}:${minutes}`
     } catch (error) {
-      console.error('❌ 時間格式化錯誤:', error)
+      console.error(' 時間格式化錯誤:', error)
       return ''
     }
   }

@@ -57,7 +57,7 @@ export default function ChatHistory({ isOpen = false, onClose, onSelectRoom }) {
         setHistory(data.history)
       }
     } catch (error) {
-      console.error('❌ 載入歷史記錄失敗:', error)
+      console.error(' 載入歷史記錄失敗:', error)
     } finally {
       setIsLoading(false)
     }

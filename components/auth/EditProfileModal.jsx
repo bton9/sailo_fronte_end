@@ -141,7 +141,7 @@ export default function EditProfileModal({
         setTwoFactorEnabled(data.enabled)
       }
     } catch (error) {
-      console.error('❌ 檢查 2FA 狀態失敗:', error)
+      console.error(' 檢查 2FA 狀態失敗:', error)
     }
   }
 
@@ -335,7 +335,7 @@ export default function EditProfileModal({
         setError(data.message || '更新失敗，請稍後再試')
       }
     } catch (error) {
-      console.error('❌ 更新暱稱失敗:', error)
+      console.error(' 更新暱稱失敗:', error)
       setError('網路錯誤，請稍後再試')
     } finally {
       setIsLoading(false)
@@ -392,7 +392,7 @@ export default function EditProfileModal({
         setError(data.message || '更新失敗，請稍後再試')
       }
     } catch (error) {
-      console.error('❌ 更新個人資料失敗:', error)
+      console.error(' 更新個人資料失敗:', error)
       setError('網路錯誤，請稍後再試')
     } finally {
       setIsLoading(false)
@@ -470,7 +470,7 @@ export default function EditProfileModal({
         setError(data.message || '更新失敗，請稍後再試')
       }
     } catch (error) {
-      console.error('❌ 更新密碼失敗:', error)
+      console.error(' 更新密碼失敗:', error)
       setError(error.message || '網路錯誤，請稍後再試')
     } finally {
       setIsLoading(false)
@@ -536,7 +536,7 @@ export default function EditProfileModal({
         setError(data.message || '啟用失敗')
       }
     } catch (error) {
-      console.error('❌ 啟用 2FA 失敗:', error)
+      console.error(' 啟用 2FA 失敗:', error)
       setError(error.message || '網路錯誤，請稍後再試')
     } finally {
       setIsLoading(false)
@@ -573,7 +573,7 @@ export default function EditProfileModal({
         setError(data.message || '驗證失敗')
       }
     } catch (error) {
-      console.error('❌ 驗證 2FA 失敗:', error)
+      console.error(' 驗證 2FA 失敗:', error)
       setError(error.message || '網路錯誤，請稍後再試')
     } finally {
       setIsLoading(false)
@@ -611,7 +611,7 @@ export default function EditProfileModal({
         setError(data.message || '停用失敗')
       }
     } catch (error) {
-      console.error('❌ 停用 2FA 失敗:', error)
+      console.error(' 停用 2FA 失敗:', error)
       setError(error.message || '網路錯誤，請稍後再試')
     } finally {
       setIsLoading(false)
@@ -746,7 +746,7 @@ export default function EditProfileModal({
                           className="w-full h-full object-cover"
                           onError={(e) => {
                             // 如果圖片載入失敗，顯示表情符號作為最終後備
-                            console.error('❌ 頭像載入失敗:', e.target.src)
+                            console.error(' 頭像載入失敗:', e.target.src)
                             e.target.style.display = 'none'
                             e.target.nextSibling.style.display = 'flex'
                           }}

@@ -78,7 +78,7 @@ export function AuthProvider({ children }) {
         setIsAuthenticated(false)
       }
     } catch (error) {
-      console.error('❌ 載入使用者資料失敗:', error)
+      console.error(' 載入使用者資料失敗:', error)
       setUser(null)
       setIsAuthenticated(false)
     } finally {
@@ -124,7 +124,7 @@ export function AuthProvider({ children }) {
         }
       }
     } catch (error) {
-      console.error('❌ 登入錯誤:', error)
+      console.error(' 登入錯誤:', error)
       return {
         success: false,
         message: error.message || '網路錯誤，請稍後再試',
@@ -154,7 +154,7 @@ export function AuthProvider({ children }) {
         }
       }
     } catch (error) {
-      console.error('❌ 註冊錯誤:', error)
+      console.error(' 註冊錯誤:', error)
       return {
         success: false,
         message: error.message || '網路錯誤，請稍後再試',
@@ -176,7 +176,7 @@ export function AuthProvider({ children }) {
       await authAPI.logout()
       console.log('✅ 登出成功')
     } catch (error) {
-      console.error('❌ 登出 API 呼叫失敗:', error)
+      console.error(' 登出 API 呼叫失敗:', error)
     } finally {
       // 無論 API 是否成功，都重置前端狀態
       setUser(null)
@@ -218,7 +218,7 @@ export function AuthProvider({ children }) {
       console.log('✅ Token 已自動刷新')
       return true
     } catch (error) {
-      console.error('❌ Token 刷新失敗:', error)
+      console.error(' Token 刷新失敗:', error)
       // Token 刷新失敗，登出使用者
       setUser(null)
       setIsAuthenticated(false)
@@ -283,7 +283,7 @@ export function AuthProvider({ children }) {
           await refreshToken()
           return 'token_in_cookie'
         } catch (error) {
-          console.error('❌ 取得 Access Token 失敗:', error)
+          console.error(' 取得 Access Token 失敗:', error)
           return null
         }
       },

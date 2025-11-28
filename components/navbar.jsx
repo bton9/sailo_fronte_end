@@ -20,7 +20,7 @@ const menuItems = [
 export default function Navbar() {
   const { user, logout, showLoginModal, setShowLoginModal } = useAuth()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  // const [showLoginModal, setShowLoginModal] = useState(false) // ❌ 移除本地狀態,改用全域
+  // const [showLoginModal, setShowLoginModal] = useState(false) //  移除本地狀態,改用全域
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   /**

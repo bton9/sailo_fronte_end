@@ -68,7 +68,7 @@ export default function AdminDashboard({ stats, onRefresh }) {
       await onRefresh()
       setLastUpdateTime(new Date())
     } catch (error) {
-      console.error('❌ 刷新統計資訊失敗:', error)
+      console.error(' 刷新統計資訊失敗:', error)
     } finally {
       setIsRefreshing(false)
     }

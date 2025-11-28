@@ -21,7 +21,6 @@ import { isValidEmail } from '@/utils/validation'
 import { AiOutlineGoogle } from 'react-icons/ai'
 import { Eye, EyeOff } from 'lucide-react'
 
-
 export default function LoginForm({
   onSuccess,
   onSwitchToRegister,
@@ -125,7 +124,7 @@ export default function LoginForm({
         setGeneralError(result.message || '登入失敗,請檢查帳號密碼')
       }
     } catch (error) {
-      console.error('❌ 登入錯誤:', error)
+      console.error(' 登入錯誤:', error)
       setGeneralError('網路錯誤,請稍後再試')
     } finally {
       setIsLoading(false)
@@ -358,7 +357,7 @@ export default function LoginForm({
       // 後端會在 OAuth 完成後導回此路徑
       window.location.href = `${API_BASE_URL}/api/v2/auth/google?redirect=${redirectParam}`
     } catch (error) {
-      console.error('❌ Google 登入錯誤:', error)
+      console.error(' Google 登入錯誤:', error)
       setGeneralError('Google 登入發生錯誤，請稍後再試')
     }
   }

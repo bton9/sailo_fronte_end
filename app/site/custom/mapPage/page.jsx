@@ -22,10 +22,10 @@ export default function MapPage() {
           setPlacesFromDB(result.data)
           console.log('✅ 載入景點成功:', result.data.length, '個景點')
         } else {
-          console.error('❌ 取得景點失敗:', result.message)
+          console.error(' 取得景點失敗:', result.message)
         }
       } catch (err) {
-        console.error('❌ 載入景點失敗:', err)
+        console.error(' 載入景點失敗:', err)
       } finally {
         setIsLoading(false)
       }
@@ -47,8 +47,8 @@ export default function MapPage() {
         <FullscreenMap initialPlaces={placesFromDB} />
         {/* 返回首頁按鈕 */}
         <div className="fixed bottom-10 left-10 z-50">
-          <MapTransition 
-            targetUrl="/site/custom" 
+          <MapTransition
+            targetUrl="/site/custom"
             className="shadow-lg"
             icon={AiOutlineProduct}
           />

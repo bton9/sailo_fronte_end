@@ -57,7 +57,7 @@ export default function indexCard({
 
       setFavorited(isInAnyList)
     } catch (err) {
-      console.error('❌ 檢查收藏狀態失敗:', err)
+      console.error(' 檢查收藏狀態失敗:', err)
       setFavorited(false)
     }
   }
@@ -108,7 +108,7 @@ export default function indexCard({
     const y = e.clientY - rect.top
     const rotateX = ((y - rect.height / 2) / rect.height) * -10 // 減少旋轉角度
     const rotateY = ((x - rect.width / 2) / rect.width) * 10
-    
+
     // 使用 requestAnimationFrame 優化效能
     requestAnimationFrame(() => {
       if (card) {

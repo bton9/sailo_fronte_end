@@ -50,7 +50,7 @@ export default function OrdersPage() {
           setOrders([])
         }
       } catch (error) {
-        console.error('❌ 載入訂單失敗:', error)
+        console.error(' 載入訂單失敗:', error)
         setOrders([])
         alert('載入訂單失敗: ' + error.message)
       } finally {

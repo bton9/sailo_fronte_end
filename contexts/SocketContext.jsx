@@ -104,7 +104,7 @@ export function SocketProvider({ children }) {
 
       // 連線失敗
       newSocket.on('connect_error', (error) => {
-        console.error('❌ Socket 連線失敗:', error.message)
+        console.error(' Socket 連線失敗:', error.message)
         setIsConnected(false)
         setIsConnecting(false)
       })
@@ -127,7 +127,7 @@ export function SocketProvider({ children }) {
 
       // 認證錯誤
       newSocket.on('error', (error) => {
-        console.error('❌ Socket 錯誤:', error)
+        console.error(' Socket 錯誤:', error)
       })
 
       // 收到伺服器確認連線訊息
@@ -141,7 +141,7 @@ export function SocketProvider({ children }) {
       socketRef.current = newSocket
       setSocket(newSocket)
     } catch (error) {
-      console.error('❌ 建立 Socket 連線時發生錯誤:', error)
+      console.error(' 建立 Socket 連線時發生錯誤:', error)
       setIsConnecting(false)
     }
   }, [isAuthenticated]) // 🔑 移除 getAccessToken 和 isConnecting 依賴

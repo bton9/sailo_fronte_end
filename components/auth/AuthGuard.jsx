@@ -37,7 +37,7 @@ export default function AuthGuard({
   // ============ 狀態管理 ============
   const { isAuthenticated, isLoading, showLoginModal, setShowLoginModal } =
     useAuth()
-  // const [showLoginModal, setShowLoginModal] = useState(false) // ❌ 移除本地狀態,改用全域
+  // const [showLoginModal, setShowLoginModal] = useState(false) //  移除本地狀態,改用全域
   const [countdown, setCountdown] = useState(delaySeconds) // 倒數秒數
   const [showCountdown, setShowCountdown] = useState(false) // 是否顯示倒數提示條
 

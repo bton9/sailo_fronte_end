@@ -51,7 +51,7 @@ export default function RatingModal({
       await onSubmit(rating, comment)
       onClose()
     } catch (error) {
-      console.error('❌ 提交評分失敗:', error)
+      console.error(' 提交評分失敗:', error)
       alert('評分提交失敗，請稍後再試')
     } finally {
       setIsSubmitting(false)

@@ -153,7 +153,7 @@ export default function VerifyOTPForm({ email, onSuccess, onBack }) {
         inputRefs.current[0]?.focus()
       }
     } catch (error) {
-      console.error('❌ 驗證 OTP 錯誤:', error)
+      console.error(' 驗證 OTP 錯誤:', error)
       setError(error.message || '網路錯誤，請稍後再試')
       setOtp(['', '', '', '', '', ''])
       inputRefs.current[0]?.focus()
@@ -181,7 +181,7 @@ export default function VerifyOTPForm({ email, onSuccess, onBack }) {
         setError(data.message || '發送失敗，請稍後再試')
       }
     } catch (error) {
-      console.error('❌ 重新發送 OTP 錯誤:', error)
+      console.error(' 重新發送 OTP 錯誤:', error)
       setError(error.message || '網路錯誤，請稍後再試')
     } finally {
       setIsLoading(false)

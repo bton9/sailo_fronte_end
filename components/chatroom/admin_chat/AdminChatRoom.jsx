@@ -106,7 +106,7 @@ export default function AdminChatRoom({ room, onClose, onRoomUpdate }) {
         }
       }
     } catch (error) {
-      console.error('❌ 載入訊息失敗:', error)
+      console.error(' 載入訊息失敗:', error)
     }
   }
 

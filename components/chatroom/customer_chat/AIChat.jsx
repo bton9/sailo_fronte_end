@@ -117,7 +117,7 @@ export default function AIChat({ isOpen = false, onClose, onTransferToHuman }) {
         }
       }
     } catch (error) {
-      console.error('❌ 建立 AI 聊天室失敗:', error)
+      console.error(' 建立 AI 聊天室失敗:', error)
     } finally {
       setIsLoading(false)
     }
@@ -158,7 +158,7 @@ export default function AIChat({ isOpen = false, onClose, onTransferToHuman }) {
         setMessages(formattedMessages)
       }
     } catch (error) {
-      console.error('❌ 載入訊息失敗:', error)
+      console.error(' 載入訊息失敗:', error)
     }
   }
 
@@ -247,7 +247,7 @@ export default function AIChat({ isOpen = false, onClose, onTransferToHuman }) {
         throw new Error(data.message)
       }
     } catch (error) {
-      console.error('❌ 發送訊息失敗:', error)
+      console.error(' 發送訊息失敗:', error)
 
       // 顯示錯誤訊息
       setMessages((prev) => [
@@ -305,7 +305,7 @@ export default function AIChat({ isOpen = false, onClose, onTransferToHuman }) {
         throw new Error(data.message)
       }
     } catch (error) {
-      console.error('❌ 轉接失敗:', error)
+      console.error(' 轉接失敗:', error)
       alert('轉接失敗,請稍後再試')
     } finally {
       setIsSending(false)

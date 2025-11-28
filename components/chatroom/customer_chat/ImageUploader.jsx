@@ -173,7 +173,7 @@ export default function ImageUploader({ roomId, onClose, onImageUploaded }) {
 
       reader.readAsDataURL(selectedFile)
     } catch (error) {
-      console.error('❌ 上傳圖片失敗:', error)
+      console.error(' 上傳圖片失敗:', error)
       setError('上傳失敗,請稍後再試')
     } finally {
       setIsUploading(false)

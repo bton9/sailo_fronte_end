@@ -44,7 +44,7 @@ export function useProductActions(product) {
         console.log('👤 [useProductActions] 取得的 userId:', userId)
 
         if (!userId) {
-          console.error('❌ [useProductActions] user 物件中沒有 user_id 或 id')
+          console.error(' [useProductActions] user 物件中沒有 user_id 或 id')
           setIsCheckingFavorite(false)
           return
         }
@@ -66,7 +66,7 @@ export function useProductActions(product) {
           )
         }
       } catch (error) {
-        console.error('❌ [useProductActions] 檢查收藏狀態失敗:', error)
+        console.error(' [useProductActions] 檢查收藏狀態失敗:', error)
       } finally {
         setIsCheckingFavorite(false)
       }
@@ -106,7 +106,7 @@ export function useProductActions(product) {
       console.log('👤 [useProductActions] 取得的 userId:', userId)
 
       if (!userId) {
-        console.error('❌ [useProductActions] user 物件中沒有 user_id 或 id')
+        console.error(' [useProductActions] user 物件中沒有 user_id 或 id')
         showToast({
           title: '錯誤',
           description: '無法取得使用者 ID，請重新登入',
@@ -151,7 +151,7 @@ export function useProductActions(product) {
         throw new Error(result.error || '操作失敗')
       }
     } catch (error) {
-      console.error('❌ [useProductActions] 收藏操作失敗:', error)
+      console.error(' [useProductActions] 收藏操作失敗:', error)
       showToast({
         title: '操作失敗',
         description: error.message || '網路錯誤，請稍後再試',
@@ -206,7 +206,7 @@ export function useProductActions(product) {
         throw new Error(result.message || '加入購物車失敗')
       }
     } catch (error) {
-      console.error('❌ [useProductActions] 加入購物車失敗:', error)
+      console.error(' [useProductActions] 加入購物車失敗:', error)
       showToast({
         title: '加入購物車失敗',
         description: error.message || '請稍後再試',
