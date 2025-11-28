@@ -13,7 +13,7 @@ export default function TripWeatherCard({ city }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  // ⚠️ IMPORTANT: Replace with your actual API key
+  //  IMPORTANT: Replace with your actual API key
   const API_KEY = '1c163c5d5df7a9530b14864ffccb2230'
   const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather'
 

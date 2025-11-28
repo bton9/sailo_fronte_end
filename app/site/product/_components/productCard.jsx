@@ -76,7 +76,7 @@ const ProductCard = ({
 
     // 檢查是否登入
     if (!isAuthenticated || !user) {
-      console.log('⚠️ 使用者未登入，開啟登入視窗')
+      console.log(' 使用者未登入，開啟登入視窗')
       setShowLoginModal(true)
       return
     }

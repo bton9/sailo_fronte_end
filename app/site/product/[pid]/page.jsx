@@ -71,7 +71,7 @@ function ProductDetailContent({ productId }) {
     // 獲取推薦商品 (使用同類別商品)
     const fetchRelatedProducts = async () => {
       if (!product?.product_id || !product?.category_id) {
-        console.log('⚠️ 沒有商品資訊,無法獲取推薦商品')
+        console.log(' 沒有商品資訊,無法獲取推薦商品')
         return
       }
 
@@ -104,7 +104,7 @@ function ProductDetailContent({ productId }) {
           console.log(' 過濾後的推薦商品數量:', products.length)
           setRelatedProducts(products)
         } else {
-          console.warn('⚠️ API 回應不成功:', response.status)
+          console.warn(' API 回應不成功:', response.status)
           setRelatedProducts([])
         }
       } catch (error) {

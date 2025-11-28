@@ -90,7 +90,7 @@ const SideMenu = () => {
           console.log(' [Sidebar] 開啟登入視窗')
           return true
         } else {
-          console.log('⚠️ [Sidebar] 登入視窗已開啟，跳過重複開啟')
+          console.log(' [Sidebar] 登入視窗已開啟，跳過重複開啟')
           return currentShowModal
         }
       })

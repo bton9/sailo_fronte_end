@@ -211,7 +211,7 @@ export default function AdminDashboard({ stats, onRefresh }) {
               {/* 趨勢指標 */}
               {card.trend === 'high' && (
                 <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1">
-                  ⚠️ 需注意
+                  需注意
                 </span>
               )}
             </div>
@@ -246,7 +246,7 @@ export default function AdminDashboard({ stats, onRefresh }) {
         <span>📊 資料來源: MySQL 即時查詢</span>
         {currentStats.waiting > 5 && (
           <span className="text-yellow-600 font-semibold">
-            ⚠️ 等待中聊天室較多，請注意處理
+            等待中聊天室較多，請注意處理
           </span>
         )}
       </div>

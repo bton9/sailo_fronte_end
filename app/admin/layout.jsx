@@ -46,7 +46,7 @@ export default function AdminLayout({ children }) {
 
     // 已登入但不是管理員
     if (user && user.access !== 'admin') {
-      console.warn('⚠️ 非管理員嘗試訪問管理頁面:', user.email)
+      console.warn(' 非管理員嘗試訪問管理頁面:', user.email)
       alert('您沒有權限訪問此頁面')
       router.push('/')
     }

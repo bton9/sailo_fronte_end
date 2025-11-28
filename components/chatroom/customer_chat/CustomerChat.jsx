@@ -117,7 +117,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
 
       // 檢查是否為有效日期
       if (isNaN(date.getTime())) {
-        console.warn('⚠️ 無效的日期格式:', dateString)
+        console.warn(' 無效的日期格式:', dateString)
         return ''
       }
 

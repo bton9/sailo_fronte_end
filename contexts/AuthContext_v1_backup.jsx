@@ -266,7 +266,7 @@ export function AuthProvider({ children }) {
       async () => {
         const isValid = await verifyToken(token)
         if (!isValid) {
-          console.warn('⚠️ Token 已失效，自動登出')
+          console.warn(' Token 已失效，自動登出')
           logout()
         }
       },

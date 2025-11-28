@@ -78,7 +78,7 @@ export default function SwiperProduct({
           )
           setInternalProducts(randomProducts)
         } else {
-          console.warn('⚠️ [SwiperProduct] API 回應不成功:', response.status)
+          console.warn(' [SwiperProduct] API 回應不成功:', response.status)
           setInternalProducts([])
         }
       } catch (error) {

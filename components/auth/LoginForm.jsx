@@ -145,7 +145,7 @@ export default function LoginForm({
       {/* 全域錯誤訊息 */}
       {generalError && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg flex items-center gap-2 mb-4">
-          <span className="text-xl">⚠️</span>
+          <span className="text-xl"></span>
           <span className="text-sm">{generalError}</span>
         </div>
       )}

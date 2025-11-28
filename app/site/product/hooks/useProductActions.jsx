@@ -34,7 +34,7 @@ export function useProductActions(product) {
 
       try {
         if (!isAuthenticated || !user || !product?.product_id) {
-          console.log('⚠️ [useProductActions] 未登入或缺少資料，跳過檢查')
+          console.log(' [useProductActions] 未登入或缺少資料，跳過檢查')
           setIsCheckingFavorite(false)
           return
         }
@@ -91,7 +91,7 @@ export function useProductActions(product) {
 
       // 檢查是否登入
       if (!isAuthenticated || !user) {
-        console.log('⚠️ [useProductActions] 使用者未登入')
+        console.log(' [useProductActions] 使用者未登入')
         showToast({
           title: '請先登入',
           description: '登入後才能使用收藏功能',
@@ -177,7 +177,7 @@ export function useProductActions(product) {
 
     //  UPDATED: 檢查登入狀態
     if (!isAuthenticated || !user) {
-      console.log('⚠️ [useProductActions] 使用者未登入')
+      console.log(' [useProductActions] 使用者未登入')
       showToast({
         title: '請先登入',
         description: '登入後即可加入購物車',

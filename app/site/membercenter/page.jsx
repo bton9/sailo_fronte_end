@@ -171,7 +171,7 @@ export default function ProfilePage() {
   useEffect(() => {
     // 如果未登入，設定延遲跳轉
     if (!isAuthenticated) {
-      console.log(`⚠️ 未登入，${REDIRECT_DELAY / 1000} 秒後跳轉至首頁`)
+      console.log(` 未登入，${REDIRECT_DELAY / 1000} 秒後跳轉至首頁`)
 
       const redirectTimer = setTimeout(() => {
         console.log('⏰ 執行跳轉至首頁')

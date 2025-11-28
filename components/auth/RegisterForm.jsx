@@ -180,7 +180,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }) {
       {/* 全域錯誤訊息 */}
       {generalError && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 flex items-center gap-2 mb-3">
-          <span className="text-xl">⚠️</span>
+          <span className="text-xl"></span>
           <span className="text-sm">{generalError}</span>
         </div>
       )}

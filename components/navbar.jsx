@@ -44,7 +44,7 @@ export default function Navbar() {
           console.log(' [Navbar] 開啟登入視窗')
           return true
         } else {
-          console.log('⚠️ [Navbar] 登入視窗已開啟，跳過重複開啟')
+          console.log(' [Navbar] 登入視窗已開啟，跳過重複開啟')
           return currentShowModal
         }
       })

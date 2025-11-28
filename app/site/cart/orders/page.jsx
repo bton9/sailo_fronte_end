@@ -46,7 +46,7 @@ export default function OrdersPage() {
           console.log(' Orders loaded:', ordersData)
           setOrders(ordersData)
         } else {
-          console.warn('⚠️ API returned success: false')
+          console.warn(' API returned success: false')
           setOrders([])
         }
       } catch (error) {

@@ -246,7 +246,7 @@ export default function CreatePostPage() {
             }
           }
         } else {
-          console.log('⚠️ 沒有要刪除的圖片')
+          console.log(' 沒有要刪除的圖片')
         }
 
         //  2. 新增新上傳的圖片

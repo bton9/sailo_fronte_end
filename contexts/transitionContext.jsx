@@ -199,7 +199,7 @@ export function PageTransitionWrapper({ children, dependencies = [] }) {
   useEffect(() => {
     if (isTransitioning) {
       timeoutRef.current = setTimeout(() => {
-        console.warn('⚠️ 轉場超時，強制完成')
+        console.warn(' 轉場超時，強制完成')
         if (!hasCompletedRef.current) {
           completeTransition()
           hasCompletedRef.current = true

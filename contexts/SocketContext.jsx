@@ -63,13 +63,13 @@ export function SocketProvider({ children }) {
   const connect = useCallback(async () => {
     // 若已連線或正在連線,不重複連線
     if (socketRef.current?.connected || isConnecting) {
-      console.log('⚠️ Socket 已連線或正在連線中')
+      console.log(' Socket 已連線或正在連線中')
       return
     }
 
     // 必須在登入狀態下才能連線
     if (!isAuthenticated) {
-      console.log('⚠️ 使用者未登入,無法建立 Socket 連線')
+      console.log(' 使用者未登入,無法建立 Socket 連線')
       return
     }
 
@@ -116,7 +116,7 @@ export function SocketProvider({ children }) {
 
         // 若是因為 Token 過期斷線,嘗試重新取得 Token 並重連
         if (reason === 'io server disconnect') {
-          console.log('⚠️ 伺服器主動斷線 (可能是 Token 過期),嘗試重新連線...')
+          console.log(' 伺服器主動斷線 (可能是 Token 過期),嘗試重新連線...')
           setTimeout(() => {
             if (isAuthenticated) {
               connect() // 重新連線
