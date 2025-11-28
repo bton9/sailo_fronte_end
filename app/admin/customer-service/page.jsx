@@ -57,7 +57,7 @@ export default function CustomerServicePage() {
     avg_rating: 0,
     total_ratings: 0,
   }) // 🆕 客服評分統計
-  // ✅ 新增：ConfirmModal 狀態
+  //  新增：ConfirmModal 狀態
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     roomId: null,
@@ -123,7 +123,7 @@ export default function CustomerServicePage() {
 
       if (data.success) {
         setStats(data.stats)
-        console.log('✅ 統計資訊已更新:', data.stats)
+        console.log(' 統計資訊已更新:', data.stats)
       }
     } catch (error) {
       console.error(' 載入統計資訊失敗:', error)
@@ -148,7 +148,7 @@ export default function CustomerServicePage() {
 
       if (data.success) {
         setAgentRating(data.rating)
-        console.log('✅ 客服評分已更新:', data.rating)
+        console.log(' 客服評分已更新:', data.rating)
       }
     } catch (error) {
       console.error(' 載入客服評分失敗:', error)
@@ -197,7 +197,7 @@ export default function CustomerServicePage() {
       const data = await response.json()
 
       if (data.success) {
-        console.log('✅ 接單成功:', roomId)
+        console.log(' 接單成功:', roomId)
         loadRooms()
         loadStats() // 🆕 更新統計資訊
         setSelectedRoom(data.room)
@@ -239,7 +239,7 @@ export default function CustomerServicePage() {
       const data = await response.json()
 
       if (data.success) {
-        console.log('✅ 關閉成功:', roomId)
+        console.log(' 關閉成功:', roomId)
         loadRooms()
         loadStats() // 🆕 更新統計資訊
         if (selectedRoom?.id === roomId) {
@@ -356,7 +356,7 @@ export default function CustomerServicePage() {
           </div>
         </div>
 
-        {/* ✅ 確認關閉聊天室 Modal */}
+        {/*  確認關閉聊天室 Modal */}
         <ConfirmModal
           isOpen={confirmModal.isOpen}
           onClose={() => setConfirmModal({ isOpen: false, roomId: null })}

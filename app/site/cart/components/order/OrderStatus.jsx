@@ -10,7 +10,7 @@ export default function OrderStatus({ status }) {
     ordered: {
       label: '已下單',
       color: 'bg-green-200 text-green-700 border-green-300',
-      icon: '✅',
+      icon: '',
     },
     processing: {
       label: '處理中',

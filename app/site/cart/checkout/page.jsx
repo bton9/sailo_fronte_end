@@ -110,7 +110,7 @@ export default function CheckoutPage() {
 
       const response = await orderAPI.createOrder(orderData)
 
-      console.log('✅ 訂單回應:', response)
+      console.log(' 訂單回應:', response)
 
       if (response.success) {
         const { orderId } = response.data

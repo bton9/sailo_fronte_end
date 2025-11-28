@@ -275,7 +275,7 @@ const ToggleBar = ({
     confirmText: '確定',
     cancelText: '取消',
   })
-  // ✅ 新增：Toast 狀態
+  //  新增：Toast 狀態
   const [toast, setToast] = useState({
     show: false,
     message: '',
@@ -336,7 +336,7 @@ const ToggleBar = ({
       console.log('📦 API 回應:', response)
 
       if (response.success && response.data) {
-        console.log('✅ 載入成功:', response.data.length, '個行程')
+        console.log(' 載入成功:', response.data.length, '個行程')
 
         const favResponse = await getUserFavorites(userId)
         console.log('💝 收藏 API 回應:', favResponse)
@@ -453,7 +453,7 @@ const ToggleBar = ({
             )
           )
 
-          // ✅ 顯示 Toast
+          //  顯示 Toast
           setToast({ show: true, message: '已取消收藏' })
           setTimeout(() => {
             setToast({ show: false, message: '' })
@@ -812,7 +812,7 @@ const ToggleBar = ({
         cancelText={confirmModal.cancelText}
       />
 
-      {/* ✅ Toast 通知（右上角，參考 theme.css，無圓角） */}
+      {/*  Toast 通知（右上角，參考 theme.css，無圓角） */}
       {toast.show && (
         <div className="fixed top-8 right-8 z-[10000] animate-fade-in">
           <div className="bg-primary-500 text-white px-8 py-4 shadow-2xl border-l-4 border-secondary-900 min-w-[300px]">

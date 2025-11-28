@@ -11,7 +11,7 @@ import {
   toggleBookmark,
   toggleFollow,
   deletePost,
-  copyItinerary, // ✅ 新增
+  copyItinerary, //  新增
 } from '@/lib/blogApi'
 import { useAuth } from '@/contexts/AuthContext'
 import * as FaIcons from 'react-icons/fa6'
@@ -19,10 +19,10 @@ import UserProfileWidget from './components/layout/UserProfileWidget'
 import FilterSidebar from './components/layout/FilterSidebar'
 import TabNavigation from './components/shared/TabNavigation'
 import SortBar from './components/shared/SortBar'
-import NotificationModal from './components/shared/NotificationModal' // ✅
+import NotificationModal from './components/shared/NotificationModal' //
 import PostCard from './components/post/PostCard'
 import FloatingPostButton from './components/layout/FloatingPostButton'
-import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' // ✅ 加入這行
+import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  加入這行
 import ConfirmModal from '@/components/confirmModal'
 
 export default function BlogListPage() {
@@ -45,11 +45,11 @@ export default function BlogListPage() {
   const [activeTab, setActiveTab] = useState('home')
   const [sortBy, setSortBy] = useState('newest')
 
-  // ✅ 加入這兩行（在其他 useState 後面）
+  //  加入這兩行（在其他 useState 後面）
   const [selectedPlaceId, setSelectedPlaceId] = useState(null)
   const [showPlaceModal, setShowPlaceModal] = useState(false)
 
-  // ✅ Modal 狀態
+  //  Modal 狀態
   const [confirmModal, setConfirmModal] = useState({
     show: false,
     type: null,
@@ -60,7 +60,7 @@ export default function BlogListPage() {
     confirmButtonStyle: 'bg-point-500 hover:bg-point-400',
   })
 
-  // ✅ 通知 Modal 狀態
+  //  通知 Modal 狀態
   const [notificationModal, setNotificationModal] = useState({
     show: false,
     type: 'success',
@@ -103,7 +103,7 @@ export default function BlogListPage() {
     { value: 'bookmarks', label: '最多收藏' },
   ]
 
-  // ✅ 新增: 統一建立 API 參數的輔助函式
+  //  新增: 統一建立 API 參數的輔助函式
   const buildPostsParams = () => {
     const params = {
       page,
@@ -111,7 +111,7 @@ export default function BlogListPage() {
       sort: sortBy,
     }
 
-    // ✅ 只在 category 有效時才加入
+    //  只在 category 有效時才加入
     if (
       filters.category &&
       filters.category !== '' &&
@@ -120,12 +120,12 @@ export default function BlogListPage() {
       params.category = filters.category
     }
 
-    // ✅ 只在有標籤時才加入
+    //  只在有標籤時才加入
     if (filters.tags && filters.tags.length > 0) {
       params.tags = filters.tags
     }
 
-    // ✅ 只在追蹤 tab 時才加入
+    //  只在追蹤 tab 時才加入
     if (activeTab === 'following') {
       params.following = true
     }
@@ -172,7 +172,7 @@ export default function BlogListPage() {
                     label: tag.tagname,
                   })),
                   onTagClick: (tagName) => {
-                    // ✅ 使用 router.push 修改 URL 參數
+                    //  使用 router.push 修改 URL 參數
                     router.push(`/site/blog?q=${encodeURIComponent(tagName)}`)
                   },
                 }
@@ -197,21 +197,21 @@ export default function BlogListPage() {
     }
 
     fetchTags()
-  }, [user, router]) // ✅ 加入 router 依賴
+  }, [user, router]) //  加入 router 依賴
 
   // 載入文章（包含搜尋）
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        // ✅ 第一頁顯示 loading，後續頁顯示 loadingMore
+        //  第一頁顯示 loading，後續頁顯示 loadingMore
         if (page === 1) {
           setLoading(true)
-          setPosts([]) // ✅ 清空舊資料
+          setPosts([]) //  清空舊資料
         } else {
           setLoadingMore(true)
         }
 
-        // ✅ 如果有搜尋關鍵字，使用 search API
+        //  如果有搜尋關鍵字，使用 search API
         if (searchKeyword) {
           const result = await search(searchKeyword, 'posts', {
             page,
@@ -229,7 +229,7 @@ export default function BlogListPage() {
               result.data.posts.pagination.totalPages
           )
         } else {
-          // ✅ 使用統一的參數建立函式
+          //  使用統一的參數建立函式
           const params = buildPostsParams()
           const result = await getPosts(params)
 
@@ -257,7 +257,7 @@ export default function BlogListPage() {
     fetchPosts()
   }, [filters, page, activeTab, sortBy, searchKeyword])
 
-  // ✅ 新增：滾動載入更多
+  //  新增：滾動載入更多
   useEffect(() => {
     const handleScroll = () => {
       if (loadingMore || !hasMore || loading) return
@@ -310,8 +310,8 @@ export default function BlogListPage() {
   // 清除搜尋
   const handleClearSearch = () => {
     router.push('/site/blog')
-    setPage(1) // ✅ 新增
-    setHasMore(true) // ✅ 新增
+    setPage(1) //  新增
+    setHasMore(true) //  新增
   }
 
   // Tab 切換
@@ -342,7 +342,7 @@ export default function BlogListPage() {
     router.push(`/site/blog/post/${postId}`)
   }
 
-  // ✅ 修正: handleLike
+  //  修正: handleLike
   const handleLike = async (postId) => {
     if (!user?.id) {
       setNotificationModal({
@@ -360,7 +360,7 @@ export default function BlogListPage() {
       setPage(1)
       setHasMore(true)
 
-      // ✅ 使用統一的參數建立函式
+      //  使用統一的參數建立函式
       if (searchKeyword) {
         const result = await search(searchKeyword, 'posts', { page, limit: 10 })
         setPosts(result.data.posts.data)
@@ -384,7 +384,7 @@ export default function BlogListPage() {
     router.push(`/site/blog/post/${postId}#comments`)
   }
 
-  // ✅ 修正: handleBookmark
+  //  修正: handleBookmark
   const handleBookmark = async (postId) => {
     if (!user?.id) {
       setNotificationModal({
@@ -402,7 +402,7 @@ export default function BlogListPage() {
       setPage(1)
       setHasMore(true)
 
-      // ✅ 使用統一的參數建立函式
+      //  使用統一的參數建立函式
       if (searchKeyword) {
         const result = await search(searchKeyword, 'posts', { page, limit: 10 })
         setPosts(result.data.posts.data)
@@ -422,7 +422,7 @@ export default function BlogListPage() {
     }
   }
 
-  // ✅ 修改：handleShare
+  //  修改：handleShare
   const handleShare = async (postId) => {
     const postUrl = `${window.location.origin}/site/blog/post/${postId}`
 
@@ -468,7 +468,7 @@ export default function BlogListPage() {
     }
   }
 
-  // ✅ 修正: handleMenuClick
+  //  修正: handleMenuClick
   const handleMenuClick = async (postId, action) => {
     try {
       switch (action) {
@@ -521,7 +521,7 @@ export default function BlogListPage() {
     router.push(`/site/blog/profile/${userId}`)
   }
 
-  // ✅ 修正: handleFollow
+  //  修正: handleFollow
   const handleFollow = async (userId) => {
     if (!user?.id) {
       setNotificationModal({
@@ -539,7 +539,7 @@ export default function BlogListPage() {
       setPage(1)
       setHasMore(true)
 
-      // ✅ 使用統一的參數建立函式
+      //  使用統一的參數建立函式
       if (searchKeyword) {
         const result = await search(searchKeyword, 'posts', { page, limit: 10 })
         setPosts(result.data.posts.data)
@@ -559,10 +559,10 @@ export default function BlogListPage() {
     }
   }
 
-  // ✅ 修改：handleItineraryClick
+  //  修改：handleItineraryClick
   const handleItineraryClick = async (tripId) => {
     try {
-      // ✅ 先找到這個行程的文章，確認是否為作者
+      //  先找到這個行程的文章，確認是否為作者
       const targetPost = posts.find((p) => p.trip_id === tripId)
 
       if (!targetPost) {
@@ -589,9 +589,9 @@ export default function BlogListPage() {
           confirmButtonStyle: 'bg-point-500 hover:bg-point-400',
         })
       } else {
-        // ✅ 是自己的行程，直接跳轉編輯
+        //  是自己的行程，直接跳轉編輯
         console.log('✏️ 編輯自己的行程:', tripId)
-        // ✅ 改用 sessionStorage 傳遞
+        //  改用 sessionStorage 傳遞
         sessionStorage.setItem('openTripId', tripId)
         router.push('/site/custom')
       }
@@ -606,7 +606,7 @@ export default function BlogListPage() {
     }
   }
 
-  // ✅ 修改：handleConfirmModalAction
+  //  修改：handleConfirmModalAction
   const handleConfirmModalAction = async () => {
     const { type, data } = confirmModal
 
@@ -631,7 +631,7 @@ export default function BlogListPage() {
             setPosts(postsResult.data.posts)
           }
 
-          // ✅ 顯示刪除成功 Modal
+          //  顯示刪除成功 Modal
           setNotificationModal({
             show: true,
             type: 'success',
@@ -647,9 +647,9 @@ export default function BlogListPage() {
 
           if (copyResult.success) {
             const newTripId = copyResult.data.trip_id
-            console.log('✅ 行程複製成功，新行程 ID:', newTripId)
+            console.log(' 行程複製成功，新行程 ID:', newTripId)
 
-            // ✅ 顯示成功 Modal（特殊樣式）
+            //  顯示成功 Modal（特殊樣式）
             setConfirmModal({
               show: true,
               type: 'copySuccess',
@@ -665,7 +665,7 @@ export default function BlogListPage() {
           break
 
         case 'copySuccess':
-          // ✅ 複製成功後點確認跳轉
+          //  複製成功後點確認跳轉
           sessionStorage.setItem('openTripId', data)
           router.push('/site/custom')
           break
@@ -695,7 +695,7 @@ export default function BlogListPage() {
       <div className="max-w-6xl mx-auto my-8 px-6 grid lg:grid-cols-[1fr_300px] gap-8">
         {/* 主要內容 */}
         <main className="flex flex-col gap-6">
-          {/* ✅ 手機版 ProfileWidget */}
+          {/*  手機版 ProfileWidget */}
           <div className="lg:hidden">
             <UserProfileWidget
               currentUser={user}
@@ -707,7 +707,7 @@ export default function BlogListPage() {
               onSearchSubmit={handleSearchSubmit}
             />
           </div>
-          {/* ✅ 搜尋結果提示 */}
+          {/*  搜尋結果提示 */}
           {searchKeyword && (
             <div className="bg-primary/10 border-2 border-primary rounded-lg p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -772,13 +772,13 @@ export default function BlogListPage() {
                       onAvatarClick={handleAvatarClick}
                       onUsernameClick={handleUsernameClick}
                       onItineraryClick={handleItineraryClick}
-                      onPlaceCardClick={handlePlaceCardClick} // ✅ 新增這行
+                      onPlaceCardClick={handlePlaceCardClick} //  新增這行
                     />
                   )
                 })}
               </div>
 
-              {/* ✅ 新增：載入更多提示 */}
+              {/*  新增：載入更多提示 */}
               {loadingMore && (
                 <div className="text-center py-6">
                   <FaIcons.FaSpinner className="inline-block animate-spin text-2xl text-primary mb-2" />
@@ -786,7 +786,7 @@ export default function BlogListPage() {
                 </div>
               )}
 
-              {/* ✅ 新增：沒有更多資料提示 */}
+              {/*  新增：沒有更多資料提示 */}
               {!loading && !loadingMore && posts.length > 0 && !hasMore && (
                 <div className="text-center py-6 text-sm text-gray-500">
                   已顯示全部 {pagination?.total || posts.length} 篇文章
@@ -831,7 +831,7 @@ export default function BlogListPage() {
       {/* 浮動發文按鈕 */}
       <FloatingPostButton />
 
-      {/* ✅ 加入景點 Modal */}
+      {/*  加入景點 Modal */}
       {showPlaceModal && selectedPlaceId && (
         <PlaceDetail
           placeId={selectedPlaceId}
@@ -843,7 +843,7 @@ export default function BlogListPage() {
         />
       )}
 
-      {/* ✅ 確認 Modal */}
+      {/*  確認 Modal */}
       {confirmModal.show && confirmModal.type !== 'copySuccess' && (
         <ConfirmModal
           isOpen={confirmModal.show}
@@ -856,7 +856,7 @@ export default function BlogListPage() {
         />
       )}
 
-      {/* ✅ 複製行程成功 Modal */}
+      {/*  複製行程成功 Modal */}
       {confirmModal.type === 'copySuccess' && confirmModal.show && (
         <div
           className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
@@ -889,7 +889,7 @@ export default function BlogListPage() {
         </div>
       )}
 
-      {/* ✅ 通知 Modal */}
+      {/*  通知 Modal */}
       <NotificationModal
         isOpen={notificationModal.show}
         onClose={() =>

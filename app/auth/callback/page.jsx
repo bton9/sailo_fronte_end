@@ -9,10 +9,10 @@
  * 4. 導向到原本的頁面或預設頁面
  *
  * Auth V2 安全性改進：
- * - ✅ Tokens 儲存在 httpOnly cookies（無法被 JavaScript 存取）
- * - ✅ 不使用 localStorage 儲存敏感資料
- * - ✅ 前端透過 credentials: 'include' 自動傳送 cookies
- * - ✅ 防止 XSS 攻擊竊取 tokens
+ * -  Tokens 儲存在 httpOnly cookies（無法被 JavaScript 存取）
+ * -  不使用 localStorage 儲存敏感資料
+ * -  前端透過 credentials: 'include' 自動傳送 cookies
+ * -  防止 XSS 攻擊竊取 tokens
  *
  * 流程：
  * 1. Google 授權成功後，後端設定 httpOnly cookies
@@ -156,7 +156,7 @@ export default function AuthCallbackPage() {
             {/* 成功圖示 */}
             <div className="flex justify-center">
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center animate-bounce">
-                <span className="text-5xl">✅</span>
+                <span className="text-5xl"></span>
               </div>
             </div>
 

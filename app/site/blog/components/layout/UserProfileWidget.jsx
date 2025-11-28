@@ -27,7 +27,7 @@ export default function UserProfileWidget({
   const isOthersProfile =
     profileUser && (!currentUser || profileUser.id !== currentUser.id)
 
-  // ✅ 加入除錯日誌
+  //  加入除錯日誌
   console.log('🔍 UserProfileWidget Debug:', {
     currentUser,
     profileUser,
@@ -47,7 +47,7 @@ export default function UserProfileWidget({
   const showViewButtons = (isLoggedIn && isHomePage) || isOwnProfile
   const showFollowButton = isOthersProfile
 
-  // ✅ 加入除錯日誌
+  //  加入除錯日誌
   console.log('🔍 Display Logic:', {
     showStats,
     showViewButtons,
@@ -165,7 +165,7 @@ export default function UserProfileWidget({
           <div
             className="flex-1 text-center cursor-pointer hover:text-primary transition-colors"
             onClick={() => {
-              // ✅ 如果已經在追蹤頁面，觸發事件
+              //  如果已經在追蹤頁面，觸發事件
               if (window.location.pathname.includes('/following')) {
                 window.dispatchEvent(
                   new CustomEvent('switchFollowTab', {
@@ -173,7 +173,7 @@ export default function UserProfileWidget({
                   })
                 )
               } else {
-                // ✅ 不在追蹤頁面，跳轉並設定 sessionStorage
+                //  不在追蹤頁面，跳轉並設定 sessionStorage
                 sessionStorage.setItem('followingPageTab', 'followers')
                 router.push(`/site/blog/profile/${displayUser.id}/following`)
               }
@@ -191,7 +191,7 @@ export default function UserProfileWidget({
           <div
             className="flex-1 text-center cursor-pointer hover:text-primary transition-colors"
             onClick={() => {
-              // ✅ 如果已經在追蹤頁面，觸發事件
+              //  如果已經在追蹤頁面，觸發事件
               if (window.location.pathname.includes('/following')) {
                 window.dispatchEvent(
                   new CustomEvent('switchFollowTab', {
@@ -199,7 +199,7 @@ export default function UserProfileWidget({
                   })
                 )
               } else {
-                // ✅ 不在追蹤頁面，跳轉並設定 sessionStorage
+                //  不在追蹤頁面，跳轉並設定 sessionStorage
                 sessionStorage.setItem('followingPageTab', 'following')
                 router.push(`/site/blog/profile/${displayUser.id}/following`)
               }

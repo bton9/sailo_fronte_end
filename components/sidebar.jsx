@@ -87,7 +87,7 @@ const SideMenu = () => {
     } else {
       setShowLoginModal((currentShowModal) => {
         if (!currentShowModal) {
-          console.log('✅ [Sidebar] 開啟登入視窗')
+          console.log(' [Sidebar] 開啟登入視窗')
           return true
         } else {
           console.log('⚠️ [Sidebar] 登入視窗已開啟，跳過重複開啟')
@@ -146,7 +146,7 @@ const SideMenu = () => {
           <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             className="flex items-center justify-center w-10 h-10 text-stone-600"
-            aria-label={isMobileOpen ? "關閉選單" : "開啟選單"}
+            aria-label={isMobileOpen ? '關閉選單' : '開啟選單'}
           >
             {isMobileOpen ? (
               <RIC_fi.FiX className="w-6 h-6" />

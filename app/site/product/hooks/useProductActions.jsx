@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '../_components/toastProvider'
 
-// ✅ UPDATED: 新增 CartContext import
+//  UPDATED: 新增 CartContext import
 import { useCart } from '@/contexts/CartContext'
 
 export function useProductActions(product) {
@@ -13,7 +13,7 @@ export function useProductActions(product) {
 
   const { showToast } = useToast()
 
-  // ✅ UPDATED: 新增 CartContext hooks
+  //  UPDATED: 新增 CartContext hooks
   const { addToCart: addToCartDB, loading: cartLoading } = useCart()
 
   const [isWishlisted, setIsWishlisted] = useState(false)
@@ -62,7 +62,7 @@ export function useProductActions(product) {
         if (result.success) {
           setIsWishlisted(result.isFavorite)
           console.log(
-            `✅ [useProductActions] 收藏狀態: ${result.isFavorite ? '已收藏' : '未收藏'}`
+            ` [useProductActions] 收藏狀態: ${result.isFavorite ? '已收藏' : '未收藏'}`
           )
         }
       } catch (error) {
@@ -139,7 +139,7 @@ export function useProductActions(product) {
       if (result.success) {
         setIsWishlisted(result.isFavorite)
         console.log(
-          '✅ [useProductActions] 收藏操作成功! 新狀態:',
+          ' [useProductActions] 收藏操作成功! 新狀態:',
           result.isFavorite
         )
 
@@ -175,7 +175,7 @@ export function useProductActions(product) {
       return
     }
 
-    // ✅ UPDATED: 檢查登入狀態
+    //  UPDATED: 檢查登入狀態
     if (!isAuthenticated || !user) {
       console.log('⚠️ [useProductActions] 使用者未登入')
       showToast({
@@ -188,7 +188,7 @@ export function useProductActions(product) {
     }
 
     try {
-      // ✅ UPDATED: 使用 CartContext 加入購物車（儲存到資料庫）
+      //  UPDATED: 使用 CartContext 加入購物車（儲存到資料庫）
       console.log('📤 [useProductActions] 呼叫 CartContext.addToCart')
       const result = await addToCartDB(product.product_id, parseInt(quantity))
 
@@ -269,7 +269,7 @@ export function useProductActions(product) {
     isSharing,
     isCheckingFavorite,
     isTogglingFavorite,
-    cartLoading, // ✅ UPDATED: 新增此項，讓元件知道購物車載入狀態
+    cartLoading, //  UPDATED: 新增此項，讓元件知道購物車載入狀態
     handleWishlist,
     handleAddToCart,
     handleShare,

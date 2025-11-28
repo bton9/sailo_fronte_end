@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react' // ✅ 新增 useEffect
-import { useRouter } from 'next/navigation' // ✅ 新增
+import { useState, useEffect } from 'react' //  新增 useEffect
+import { useRouter } from 'next/navigation' //  新增
 import * as FaIcons from 'react-icons/fa6'
 import CategorySelector from '../form/CategorySelector'
 import ImageUpload from '../form/ImageUpload'
 import TagInput from '../form/TagInput'
-import ItineraryCard from './ItineraryCard' // ✅ 導入行程卡片
+import ItineraryCard from './ItineraryCard' //  導入行程卡片
 
 /**
  * PostForm - 文章表單元件
@@ -16,15 +16,15 @@ export default function PostForm({
   existingTags = [],
   suggestedTags = [],
   userItineraries = [],
-  userPlaces = [], // ✅ 新增：景點列表
-  locations = [], // ✅ 新增：地區列表
-  currentUserId = null, // ✅ 新增
-  onPlaceCardClick = null, // ✅ 新增
+  userPlaces = [], //  新增：景點列表
+  locations = [], //  新增：地區列表
+  currentUserId = null, //  新增
+  onPlaceCardClick = null, //  新增
   onSubmit = () => {},
   onCancel = () => {},
   isSubmitting = false,
 }) {
-  const router = useRouter() // ✅ 新增
+  const router = useRouter() //  新增
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     content: initialData?.content || '',
@@ -35,8 +35,8 @@ export default function PostForm({
             typeof tag === 'string' ? tag : tag.tagname || tag.name || ''
           )
           .filter(Boolean)
-      : [], // ✅ 統一轉換成字串陣列
-    // ✅ 修改：改用 contentType 和 hasContent
+      : [], //  統一轉換成字串陣列
+    //  修改：改用 contentType 和 hasContent
     contentType: initialData?.trip_id
       ? 'itinerary'
       : initialData?.place_id
@@ -45,7 +45,7 @@ export default function PostForm({
     hasContent: !!(initialData?.trip_id || initialData?.place_id),
 
     selectedItineraryId: initialData?.trip_id || null,
-    selectedPlaceId: initialData?.place_id || null, // ✅ 新增
+    selectedPlaceId: initialData?.place_id || null, //  新增
     imageFiles: [], // 改成陣列：新上傳的檔案
     existingImageUrls: initialData?.image_urls || [], // 編輯模式保留的舊圖片 URL
   })
@@ -56,7 +56,7 @@ export default function PostForm({
     initialData?.content?.length || 0
   )
 
-  // ✅ 新增：景點搜尋相關狀態
+  //  新增：景點搜尋相關狀態
   const [placeSearchKeyword, setPlaceSearchKeyword] = useState('')
   const [placeCategory, setPlaceCategory] = useState('')
   const [placeLocationId, setPlaceLocationId] = useState('')
@@ -126,7 +126,7 @@ export default function PostForm({
     })
   }
 
-  // ✅ 新增：切換內容類型（行程 / 景點）
+  //  新增：切換內容類型（行程 / 景點）
   const handleContentTypeChange = (type) => {
     setFormData({
       ...formData,
@@ -134,7 +134,7 @@ export default function PostForm({
     })
   }
 
-  // ✅ 新增：切換是否有關聯內容
+  //  新增：切換是否有關聯內容
   const handleToggleContent = (e) => {
     const checked = e.target.checked
     setFormData({
@@ -151,7 +151,7 @@ export default function PostForm({
     })
   }
 
-  // ✅ 新增：選擇景點
+  //  新增：選擇景點
   const handlePlaceSelect = (placeId) => {
     setFormData({
       ...formData,
@@ -159,7 +159,7 @@ export default function PostForm({
     })
   }
 
-  // ✅ 修改：處理景點卡片點擊
+  //  修改：處理景點卡片點擊
   const handlePlaceCardClickInternal = (placeId) => {
     console.log('🎯 PostForm 點擊景點卡片:', placeId)
     if (onPlaceCardClick) {
@@ -169,7 +169,7 @@ export default function PostForm({
     }
   }
 
-  // ✅ 新增：處理行程卡片點擊（跳轉編輯）
+  //  新增：處理行程卡片點擊（跳轉編輯）
   const handleItineraryCardClick = (tripId) => {
     console.log('🎯 PostForm 點擊行程卡片，跳轉編輯:', tripId)
 
@@ -178,7 +178,7 @@ export default function PostForm({
     router.push('/site/custom')
   }
 
-  // ✅ 新增：景點搜尋過濾
+  //  新增：景點搜尋過濾
   useEffect(() => {
     if (!userPlaces || userPlaces.length === 0) {
       setFilteredPlaces([])
@@ -216,7 +216,7 @@ export default function PostForm({
     ? userItineraries.find((i) => i.trip_id === formData.selectedItineraryId)
     : null
 
-  // ✅ 新增：取得選中的景點
+  //  新增：取得選中的景點
   const selectedPlace = formData.selectedPlaceId
     ? userPlaces?.find((p) => p.place_id === formData.selectedPlaceId)
     : null
@@ -250,7 +250,7 @@ export default function PostForm({
       content: formData.content.trim(),
       category: formData.category,
       tags: formData.tags,
-      // ✅ 修改：根據 contentType 提交對應的 ID
+      //  修改：根據 contentType 提交對應的 ID
       trip_id:
         formData.hasContent && formData.contentType === 'itinerary'
           ? formData.selectedItineraryId
@@ -292,7 +292,7 @@ export default function PostForm({
         </div>
       </div>
 
-      {/* ✅ 修改：關聯內容（行程或景點） */}
+      {/*  修改：關聯內容（行程或景點） */}
       {(userItineraries.length > 0 || userPlaces.length > 0) && (
         <div className="mb-6">
           <div className="bg-primary/5 p-4 rounded-lg border-2 border-primary">
@@ -317,7 +317,7 @@ export default function PostForm({
 
             {formData.hasContent && (
               <div className="mt-4 pt-4 border-t border-border space-y-4">
-                {/* ✅ 切換按鈕（行程 / 景點） */}
+                {/*  切換按鈕（行程 / 景點） */}
                 <div className="flex gap-2 bg-white rounded-lg p-1 border border-gray-300">
                   <button
                     type="button"
@@ -347,7 +347,7 @@ export default function PostForm({
                   </button>
                 </div>
 
-                {/* ✅ 行程選擇區塊 */}
+                {/*  行程選擇區塊 */}
                 {formData.contentType === 'itinerary' && (
                   <div>
                     <label className="block text-sm font-semibold text-primary mb-2">
@@ -388,7 +388,7 @@ export default function PostForm({
                   </div>
                 )}
 
-                {/* ✅ 新增：景點選擇區塊 */}
+                {/*  新增：景點選擇區塊 */}
                 {formData.contentType === 'place' && (
                   <div className="space-y-4">
                     {/* 搜尋和篩選 */}
@@ -493,7 +493,7 @@ export default function PostForm({
                       <div className="mt-4">
                         <ItineraryCard
                           place={selectedPlace}
-                          onClick={handlePlaceCardClickInternal} // ✅ 修改
+                          onClick={handlePlaceCardClickInternal} //  修改
                           showCopyButton={false}
                         />
                       </div>

@@ -172,7 +172,7 @@ export default function AdminDashboard() {
       color: 'bg-blue-500',
       href: '/admin/customer-service',
       badge: stats.pendingSupport > 0 ? stats.pendingSupport : null,
-      status: 'active', // ✅ 已啟用客服系統
+      status: 'active', //  已啟用客服系統
     },
     {
       id: 'product-management',

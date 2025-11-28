@@ -14,7 +14,7 @@ export default function OrderCard({ order }) {
     ordered: 'bg-green-200 text-green-700',
     processing: 'bg-blue-100 text-blue-700',
     shipped: 'bg-purple-100 text-purple-700',
-    delivered: 'bg-green-100 text-green-600', // ✅ FIXED: 'completed' not 'delivered'
+    delivered: 'bg-green-100 text-green-600', //  FIXED: 'completed' not 'delivered'
     cancelled: 'bg-red-100 text-red-700',
   }
 
@@ -22,7 +22,7 @@ export default function OrderCard({ order }) {
     ordered: '已下單',
     processing: '處理中',
     shipped: '配送中',
-    delivered: '已送達', // ✅ FIXED
+    delivered: '已送達', //  FIXED
     cancelled: '已取消',
   }
 

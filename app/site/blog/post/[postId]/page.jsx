@@ -13,13 +13,13 @@ import {
   toggleBookmark,
   toggleFollow,
   deletePost,
-  copyItinerary, // ✅ 新增
+  copyItinerary, //  新增
 } from '@/lib/blogApi'
 import { useAuth } from '@/contexts/AuthContext'
 import BackButton from '../../components/layout/BackButton'
 import PostDetail from '../../components/post/PostDetail'
 import CommentsSection from '../../components/comment/CommentsSection'
-import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' // ✅ 加入這行
+import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  加入這行
 
 export default function PostDetailPage() {
   const { user } = useAuth() // 🔐 使用 AuthContext
@@ -34,7 +34,7 @@ export default function PostDetailPage() {
   const [loading, setLoading] = useState(true)
   const [commentsLoading, setCommentsLoading] = useState(true)
 
-  // ✅ 加入這兩個狀態
+  //  加入這兩個狀態
   const [selectedPlaceId, setSelectedPlaceId] = useState(null)
   const [showPlaceModal, setShowPlaceModal] = useState(false)
 
@@ -66,7 +66,7 @@ export default function PostDetailPage() {
   // 重新載入文章
   const reloadPost = async () => {
     try {
-      const postResult = await getPostById(postId, { incrementView: false }) // ✅ 不增加
+      const postResult = await getPostById(postId, { incrementView: false }) //  不增加
       setPost(postResult.data.post)
     } catch (error) {
       console.error('重新載入文章失敗:', error)
@@ -197,7 +197,7 @@ export default function PostDetailPage() {
 
   const handleItineraryClick = async (tripId) => {
     try {
-      // ✅ 在詳情頁，直接使用當前 post
+      //  在詳情頁，直接使用當前 post
       if (!post) {
         console.error(' 找不到文章資料')
         alert('找不到關聯的行程')
@@ -207,27 +207,27 @@ export default function PostDetailPage() {
       const isOwnTrip = user?.id === post.author?.user_id
 
       if (!isOwnTrip) {
-        // ✅ 不是自己的行程，先複製
+        //  不是自己的行程，先複製
         console.log('🔄 複製別人的行程:', tripId)
 
         const copyResult = await copyItinerary(tripId)
 
         if (copyResult.success) {
           const newTripId = copyResult.data.trip_id
-          console.log('✅ 行程複製成功，新行程 ID:', newTripId)
+          console.log(' 行程複製成功，新行程 ID:', newTripId)
           alert(`已將行程複製到您的行程列表！`)
 
-          // ✅ 改用 sessionStorage 傳遞
+          //  改用 sessionStorage 傳遞
           sessionStorage.setItem('openTripId', newTripId)
           router.push('/site/custom')
         } else {
           throw new Error(copyResult.message || '複製失敗')
         }
       } else {
-        // ✅ 是自己的行程，直接跳轉編輯
+        //  是自己的行程，直接跳轉編輯
         console.log('✏️ 編輯自己的行程:', tripId)
 
-        // ✅ 改用 sessionStorage 傳遞
+        //  改用 sessionStorage 傳遞
         sessionStorage.setItem('openTripId', tripId)
         router.push('/site/custom')
       }
@@ -241,7 +241,7 @@ export default function PostDetailPage() {
     router.push(`/site/blog?tags=${encodeURIComponent(tag)}`)
   }
 
-  // ✅ 加入這個函式
+  //  加入這個函式
   const handlePlaceCardClick = (placeId) => {
     console.log('🎯 開啟景點 Modal:', placeId)
     setSelectedPlaceId(placeId)
@@ -332,7 +332,7 @@ export default function PostDetailPage() {
         onUsernameClick={handleUsernameClick}
         onItineraryClick={handleItineraryClick}
         onTagClick={handleTagClick}
-        onPlaceCardClick={handlePlaceCardClick} // ✅ 加入這行
+        onPlaceCardClick={handlePlaceCardClick} //  加入這行
       />
 
       {/* 留言區 */}
@@ -348,7 +348,7 @@ export default function PostDetailPage() {
         onAvatarClick={handleAvatarClick}
         onUsernameClick={handleUsernameClick}
       />
-      {/* ✅ 加入景點 Modal */}
+      {/*  加入景點 Modal */}
       {showPlaceModal && selectedPlaceId && (
         <PlaceDetail
           placeId={selectedPlaceId}

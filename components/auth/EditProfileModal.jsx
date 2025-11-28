@@ -317,13 +317,13 @@ export default function EditProfileModal({
       // 呼叫後端 API 更新暱稱
       const data = await userAPI.updateNickname(nicknameForm.nickname)
 
-      console.log('✅ API 回應:', data) // 除錯用
+      console.log(' API 回應:', data) // 除錯用
 
       if (data.success) {
         // 更新本地使用者資料
         updateUser({ nickname: nicknameForm.nickname })
         setSuccess('暱稱更新成功！')
-        console.log('✅ 成功訊息已設定:', '暱稱更新成功！') // 除錯用
+        console.log(' 成功訊息已設定:', '暱稱更新成功！') // 除錯用
 
         // 2秒後返回選單（不清除成功訊息，讓使用者看到）
         setTimeout(() => {
@@ -374,13 +374,13 @@ export default function EditProfileModal({
       // 呼叫後端 API 更新個人資料
       const data = await userAPI.updateProfile(profileForm)
 
-      console.log('✅ API 回應:', data) // 除錯用
+      console.log(' API 回應:', data) // 除錯用
 
       if (data.success) {
         // 更新本地使用者資料
         updateUser(profileForm)
         setSuccess('個人資料更新成功！')
-        console.log('✅ 成功訊息已設定:', '個人資料更新成功！') // 除錯用
+        console.log(' 成功訊息已設定:', '個人資料更新成功！') // 除錯用
 
         // 2秒後返回選單（不清除成功訊息，讓使用者看到）
         setTimeout(() => {
@@ -447,11 +447,11 @@ export default function EditProfileModal({
       // 呼叫後端 API 更新密碼
       const data = await userAPI.updatePassword(passwordForm)
 
-      console.log('✅ API 回應:', data) // 除錯用
+      console.log(' API 回應:', data) // 除錯用
 
       if (data.success) {
         setSuccess('密碼更新成功！')
-        console.log('✅ 成功訊息已設定:', '密碼更新成功！') // 除錯用
+        console.log(' 成功訊息已設定:', '密碼更新成功！') // 除錯用
 
         // 清空密碼表單
         setPasswordForm({
@@ -1685,7 +1685,7 @@ export default function EditProfileModal({
         isOpen={isAvatarModalOpen}
         onClose={() => setIsAvatarModalOpen(false)}
         onSuccess={(newAvatarUrl) => {
-          console.log('✅ 頭像更新成功:', newAvatarUrl)
+          console.log(' 頭像更新成功:', newAvatarUrl)
         }}
         currentAvatar={user?.avatar}
       />

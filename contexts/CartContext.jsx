@@ -6,7 +6,7 @@
  * 1. 不需要傳 userId 到 API（後端從 JWT 自動取得）
  * 2. 等待 AuthContext 完全載入
  * 3. 適配後端 snake_case 欄位
- * ✅ FIXED: Export both 'items' and 'cartItems' for compatibility
+ *  FIXED: Export both 'items' and 'cartItems' for compatibility
  */
 
 'use client'
@@ -114,7 +114,7 @@ export function CartProvider({ children }) {
         })
 
         console.log(
-          '✅ CartContext: 購物車載入成功，商品數:',
+          ' CartContext: 購物車載入成功，商品數:',
           transformedItems.length
         )
       } else {
@@ -280,7 +280,7 @@ export function CartProvider({ children }) {
     loadCart()
   }, [loadCart, authLoading, isAuthenticated, user])
 
-  // ✅ FIXED: Export both naming conventions for compatibility
+  //  FIXED: Export both naming conventions for compatibility
   const value = {
     items: cartItems, // For components using 'items'
     cartItems, // For components using 'cartItems'

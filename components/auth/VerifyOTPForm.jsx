@@ -144,7 +144,7 @@ export default function VerifyOTPForm({ email, onSuccess, onBack }) {
 
       if (data.success && data.verified) {
         // 驗證成功 - 切換到重設密碼頁面
-        console.log('✅ OTP 驗證成功')
+        console.log(' OTP 驗證成功')
         onSuccess && onSuccess(email, otpString)
       } else {
         // 驗證失敗

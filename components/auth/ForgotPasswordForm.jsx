@@ -98,7 +98,7 @@ export default function ForgotPasswordForm({ onBack }) {
         {/* 成功圖示 */}
         <div className="flex justify-center">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-            <span className="text-5xl">✅</span>
+            <span className="text-5xl"></span>
           </div>
         </div>
 

@@ -79,7 +79,7 @@ export default function ForgotPasswordFormOTP({ onSwitchToVerifyOTP, onBack }) {
 
       if (data.success) {
         // 發送成功 - 切換到 OTP 驗證頁面
-        console.log('✅ OTP 已發送到:', email)
+        console.log(' OTP 已發送到:', email)
         onSwitchToVerifyOTP && onSwitchToVerifyOTP(email)
       } else {
         // 發送失敗

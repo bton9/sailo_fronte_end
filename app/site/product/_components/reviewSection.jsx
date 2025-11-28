@@ -80,7 +80,7 @@ export default function ReviewSection({
       reviewData.comment
     )
 
-    // ✅ 評論成功後,立即重新檢查權限
+    //  評論成功後,立即重新檢查權限
     if (success) {
       await checkReviewPermission()
     }
@@ -122,7 +122,7 @@ export default function ReviewSection({
     if (success) {
       setIsEditDialogOpen(false)
       setEditingReview(null)
-      // ✅ 更新成功後重新檢查權限
+      //  更新成功後重新檢查權限
       await checkReviewPermission()
     }
   }
@@ -149,7 +149,7 @@ export default function ReviewSection({
     if (success) {
       setIsDeleteDialogOpen(false)
       setDeletingReviewId(null)
-      // ✅ 刪除成功後重新檢查權限
+      //  刪除成功後重新檢查權限
       await checkReviewPermission()
     }
   }
@@ -174,7 +174,7 @@ export default function ReviewSection({
   // ============ 評論表單顯示邏輯 ============
 
   /**
-   * ✅ 修正後的顯示邏輯
+   *  修正後的顯示邏輯
    *
    * 優先順序:
    * 1. 未登入 → 顯示登入提示
@@ -188,7 +188,7 @@ export default function ReviewSection({
       return <LoginPrompt onLoginClick={handleLoginClick} />
     }
 
-    // 2. ✅ 已評論過 → 顯示編輯提示 (優先檢查)
+    // 2.  已評論過 → 顯示編輯提示 (優先檢查)
     if (canReview?.hasReviewed && canReview?.review) {
       return (
         <ReviewedPrompt
@@ -199,7 +199,7 @@ export default function ReviewSection({
     }
 
     // 3. 檢查是否可以評論
-    // ✅ 只有在「未評論」且「無權限」時才顯示無權限提示
+    //  只有在「未評論」且「無權限」時才顯示無權限提示
     if (canReview?.canReview === false && !canReview?.hasReviewed) {
       return (
         <NoPermissionPrompt reason={canReview?.reason || '無法評論此商品'} />
@@ -251,7 +251,7 @@ export default function ReviewSection({
         )}
       </div>
 
-      {/* ✅ 評論表單區域 - 根據狀態動態顯示 */}
+      {/*  評論表單區域 - 根據狀態動態顯示 */}
       <div className="mt-8 mb-8">{renderReviewFormSection()}</div>
 
       {/* 編輯評論 Dialog */}

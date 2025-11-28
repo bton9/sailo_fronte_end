@@ -49,7 +49,7 @@ export default function ProfilePage() {
     })
 
     if (tab === 'password') {
-      console.log('✅ [MemberCenter] 偵測到 tab=password，開啟密碼修改彈窗')
+      console.log(' [MemberCenter] 偵測到 tab=password，開啟密碼修改彈窗')
       // 打開編輯彈窗並設定為密碼修改模式
       setEditModalMode('password')
       setIsEditModalOpen(true)
@@ -453,7 +453,7 @@ export default function ProfilePage() {
         onSuccess={() => {
           setIsEditModalOpen(false)
           setEditModalMode('menu') // 🆕 成功後重置為 menu 模式
-          console.log('✅ 個人資料更新成功')
+          console.log(' 個人資料更新成功')
         }}
       />
       {/* 登出確認視窗 */}

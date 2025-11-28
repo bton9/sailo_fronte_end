@@ -260,7 +260,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
           {
             id: `system-transfer-${Date.now()}`,
             type: 'system',
-            message: '✅ 已為您轉接真人客服,客服人員將盡快為您服務。',
+            message: ' 已為您轉接真人客服,客服人員將盡快為您服務。',
             sender_id: 'system',
             created_at: new Date().toISOString(),
           },
@@ -269,7 +269,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         // 加入人工客服聊天室 (WebSocket)
         if (socket && isConnected) {
           socket.emit('join_room', { roomId: data.customerServiceRoom.id })
-          console.log('✅ 已加入人工客服聊天室:', data.customerServiceRoom.id)
+          console.log(' 已加入人工客服聊天室:', data.customerServiceRoom.id)
         }
 
         // 載入人工客服訊息 (包含轉接上下文)
@@ -328,7 +328,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
 
           // 🆕 處理特殊指令：導航到密碼修改頁面
           if (data.message.specialAction === 'NAVIGATE_CHANGE_PASSWORD') {
-            console.log('✅ [CustomerChat] 偵測到密碼修改指令，準備跳轉...')
+            console.log(' [CustomerChat] 偵測到密碼修改指令，準備跳轉...')
 
             // 延遲 1.5 秒後跳轉，讓使用者看到 AI 的回應
             setTimeout(() => {
@@ -684,7 +684,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
               messageType: 'text',
             })
 
-            console.log('✅ 訊息已發送 (人工模式):', userMessageText)
+            console.log(' 訊息已發送 (人工模式):', userMessageText)
           } else {
             throw new Error('WebSocket 未連接或聊天室不存在')
           }
@@ -805,7 +805,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         const data = await response.json()
 
         if (data.success) {
-          console.log('✅ 評分提交成功')
+          console.log(' 評分提交成功')
           //   alert('感謝您的評分！')
           setShowRatingModal(false)
           setRatingRoomId(null)

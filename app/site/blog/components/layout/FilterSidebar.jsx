@@ -11,17 +11,17 @@ export default function FilterSidebar({
 }) {
   const [filters, setFilters] = useState(initialFilters)
 
-  // ✅ 修正:過濾無效的值
+  //  修正:過濾無效的值
   const updateFilter = (key, value) => {
     const newFilters = { ...filters }
-    
-    // ✅ 如果是 category 且值為空字串或 'all',移除這個欄位
+
+    //  如果是 category 且值為空字串或 'all',移除這個欄位
     if (key === 'category' && (!value || value === '' || value === 'all')) {
       delete newFilters[key]
     } else {
       newFilters[key] = value
     }
-    
+
     setFilters(newFilters)
     onFilterChange?.(newFilters)
   }
@@ -61,40 +61,48 @@ export default function FilterSidebar({
               {field.options.map((option) => {
                 const isSelected = filters[field.name] === option.value
                 return (
-<button
-  key={option.value}
-  type="button"
-  onClick={() => updateFilter(field.name, option.value)}
-  className={`px-4 py-2.5 border-2 rounded-lg text-sm text-left flex items-center gap-2 transition-all ${
-    isSelected
-      ? 'border-primary-500 bg-primary-500 text-white'
-      : 'border-primary-500 border-secondary-600 bg-transparent text-secondary-600 hover:bg-primary-500/30'
-  }`}
-  disabled={isLoading}
->
-  {option.icon && <option.icon size={16} />}
-  {option.label}
-</button>                )
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => updateFilter(field.name, option.value)}
+                    className={`px-4 py-2.5 border-2 rounded-lg text-sm text-left flex items-center gap-2 transition-all ${
+                      isSelected
+                        ? 'border-primary-500 bg-primary-500 text-white'
+                        : 'border-primary-500 border-secondary-600 bg-transparent text-secondary-600 hover:bg-primary-500/30'
+                    }`}
+                    disabled={isLoading}
+                  >
+                    {option.icon && <option.icon size={16} />}
+                    {option.label}
+                  </button>
+                )
               })}
             </div>
           )}
 
-          {/* ✅ 標籤按鈕（用於搜尋或篩選） */}
+          {/*  標籤按鈕（用於搜尋或篩選） */}
           {field.type === 'tagButtons' && (
             <div className="flex flex-wrap gap-2">
               {field.options.map((option) => {
-                const optionValue = typeof option === 'string' ? option : option.value || option.tagname
-                const optionLabel = typeof option === 'string' ? option : option.label || option.tagname
-                
-                // ✅ 檢查是否選中（支援篩選模式）
-                const isSelected = filters.tags && filters.tags.includes(optionValue)
-                
+                const optionValue =
+                  typeof option === 'string'
+                    ? option
+                    : option.value || option.tagname
+                const optionLabel =
+                  typeof option === 'string'
+                    ? option
+                    : option.label || option.tagname
+
+                //  檢查是否選中（支援篩選模式）
+                const isSelected =
+                  filters.tags && filters.tags.includes(optionValue)
+
                 return (
                   <button
                     key={optionValue}
                     type="button"
                     onClick={() => {
-                      // ✅ 觸發標籤點擊事件
+                      //  觸發標籤點擊事件
                       if (field.onTagClick) {
                         field.onTagClick(optionValue)
                       }

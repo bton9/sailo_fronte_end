@@ -228,7 +228,7 @@ export default function AIChat({ isOpen = false, onClose, onTransferToHuman }) {
         })
 
         if (data.message.specialAction === 'NAVIGATE_CHANGE_PASSWORD') {
-          console.log('✅ [AIChat] 偵測到密碼修改指令，準備跳轉...')
+          console.log(' [AIChat] 偵測到密碼修改指令，準備跳轉...')
 
           // 延遲 1.5 秒後跳轉，讓使用者看到 AI 的回應
           setTimeout(() => {

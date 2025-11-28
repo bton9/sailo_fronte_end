@@ -34,7 +34,7 @@ export default function CommentsSection({
   onUsernameClick = () => {},
 }) {
   const commentInputRef = useRef(null)
-  // ✅ 新增：ConfirmModal 狀態
+  //  新增：ConfirmModal 狀態
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     commentId: null,
@@ -145,7 +145,7 @@ export default function CommentsSection({
         )}
       </section>
 
-      {/* ✅ 確認刪除留言 Modal */}
+      {/*  確認刪除留言 Modal */}
       <ConfirmModal
         isOpen={confirmModal.isOpen}
         onClose={() => setConfirmModal({ isOpen: false, commentId: null })}

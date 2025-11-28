@@ -5,7 +5,7 @@ import { Button } from './button'
 import { Card } from './card'
 import { useToast } from './toastProvider'
 
-// ✅ UPDATED: 新增 CartContext 和 AuthContext (取代 cartUtils)
+//  UPDATED: 新增 CartContext 和 AuthContext (取代 cartUtils)
 import { useCart } from '@/contexts/CartContext'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -35,23 +35,23 @@ export default function ProductInfo({
 }) {
   const { showToast } = useToast()
 
-  // ✅ UPDATED: 新增 CartContext hooks (用於資料庫操作)
+  //  UPDATED: 新增 CartContext hooks (用於資料庫操作)
   const { addToCart, loading } = useCart()
 
-  // ✅ UPDATED: 新增 AuthContext hook (用於檢查登入狀態)
+  //  UPDATED: 新增 AuthContext hook (用於檢查登入狀態)
   const { isAuthenticated } = useAuth()
 
   // 控制購物車側邊欄的狀態
   const [isCartOpen, setIsCartOpen] = useState(false)
 
-  // ✅ UPDATED: 新增 isAdding 狀態 (用於顯示載入動畫)
+  //  UPDATED: 新增 isAdding 狀態 (用於顯示載入動畫)
   const [isAdding, setIsAdding] = useState(false)
 
-  // ✅ UPDATED: 完全重寫此函式以使用 CartContext + 資料庫
+  //  UPDATED: 完全重寫此函式以使用 CartContext + 資料庫
   // 舊版: 使用 localStorage 的 addToCart(product, quantity)
   // 新版: 使用 CartContext 的 async addToCart(productId, quantity)
   const handleAddToCart = async () => {
-    // ✅ UPDATED: 新增登入檢查
+    //  UPDATED: 新增登入檢查
     if (!isAuthenticated) {
       showToast({
         title: '請先登入',
@@ -61,7 +61,7 @@ export default function ProductInfo({
       return
     }
 
-    // ✅ UPDATED: 新增商品資料檢查，支援多種 ID 欄位名稱
+    //  UPDATED: 新增商品資料檢查，支援多種 ID 欄位名稱
     const productId = product?.product_id || product?.id
     if (!productId) {
       showToast({
@@ -72,11 +72,11 @@ export default function ProductInfo({
       return
     }
 
-    // ✅ UPDATED: 使用 try-catch 處理 async 操作
+    //  UPDATED: 使用 try-catch 處理 async 操作
     try {
-      setIsAdding(true) // ✅ UPDATED: 顯示載入狀態
+      setIsAdding(true) //  UPDATED: 顯示載入狀態
 
-      // ✅ UPDATED: 呼叫 CartContext.addToCart (儲存到資料庫)
+      //  UPDATED: 呼叫 CartContext.addToCart (儲存到資料庫)
       // 舊版: const result = addToCart(product, parseInt(quantity))
       // 新版: const result = await addToCart(productId, parseInt(quantity))
       const result = await addToCart(productId, parseInt(quantity))
@@ -91,9 +91,8 @@ export default function ProductInfo({
 
         // 打開側邊購物車 (保持原有邏輯)
         setIsCartOpen(true)
-
       } else {
-        // ✅ UPDATED: 新增錯誤訊息處理
+        //  UPDATED: 新增錯誤訊息處理
         showToast({
           title: '加入失敗',
           description: result.message || '無法加入購物車，請稍後再試',
@@ -101,7 +100,7 @@ export default function ProductInfo({
         })
       }
     } catch (error) {
-      // ✅ UPDATED: 新增 catch 錯誤處理
+      //  UPDATED: 新增 catch 錯誤處理
       console.error('加入購物車失敗:', error)
       showToast({
         title: '加入失敗',
@@ -109,14 +108,14 @@ export default function ProductInfo({
         type: 'error',
       })
     } finally {
-      // ✅ UPDATED: 確保載入狀態會被重置
+      //  UPDATED: 確保載入狀態會被重置
       setIsAdding(false)
     }
   }
 
-  // ✅ UPDATED: 新增登入檢查
+  //  UPDATED: 新增登入檢查
   const handleBuyNow = () => {
-    // ✅ UPDATED: 檢查登入狀態 (新增)
+    //  UPDATED: 檢查登入狀態 (新增)
     if (!isAuthenticated) {
       showToast({
         title: '請先登入',
@@ -255,13 +254,13 @@ export default function ProductInfo({
 
         {/* 操作按鈕 */}
         <div className="space-y-3 pt-4">
-          {/* ✅ UPDATED: 按鈕新增 isAdding 和 loading 狀態 */}
+          {/*  UPDATED: 按鈕新增 isAdding 和 loading 狀態 */}
           <Button
             onClick={handleAddToCart}
-            disabled={product.stock_quantity <= 0 || isAdding || loading} // ✅ UPDATED: 新增 isAdding 和 loading 判斷
+            disabled={product.stock_quantity <= 0 || isAdding || loading} //  UPDATED: 新增 isAdding 和 loading 判斷
             className="w-full bg-primary border text-primary-foreground hover:bg-primary/90 font-elegant uppercase tracking-wider py-6"
           >
-            {/* ✅ UPDATED: 新增載入狀態顯示 */}
+            {/*  UPDATED: 新增載入狀態顯示 */}
             {isAdding ? (
               <>
                 <RIC_fi.FiLoader className="h-5 w-5 mr-2 animate-spin" />
@@ -275,12 +274,12 @@ export default function ProductInfo({
             )}
           </Button>
 
-          {/* ✅ UPDATED: 新增 loading 狀態判斷 */}
+          {/*  UPDATED: 新增 loading 狀態判斷 */}
           <Button
             onClick={handleBuyNow}
             variant="outline"
             className="w-full font-elegant uppercase tracking-wider py-6"
-            disabled={product.stock_quantity <= 0 || loading} // ✅ UPDATED: 新增 loading 判斷
+            disabled={product.stock_quantity <= 0 || loading} //  UPDATED: 新增 loading 判斷
           >
             立即購買
           </Button>
@@ -312,7 +311,7 @@ export default function ProductInfo({
         </Card>
       </div>
 
-      {/* ✅ UNCHANGED: 購物車側邊欄 (但內部 sideCart.jsx 已更新為使用 CartContext) */}
+      {/*  UNCHANGED: 購物車側邊欄 (但內部 sideCart.jsx 已更新為使用 CartContext) */}
       <SideCart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   )

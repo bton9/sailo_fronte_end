@@ -20,7 +20,7 @@ export default function MapPage() {
 
         if (result.success) {
           setPlacesFromDB(result.data)
-          console.log('✅ 載入景點成功:', result.data.length, '個景點')
+          console.log(' 載入景點成功:', result.data.length, '個景點')
         } else {
           console.error(' 取得景點失敗:', result.message)
         }

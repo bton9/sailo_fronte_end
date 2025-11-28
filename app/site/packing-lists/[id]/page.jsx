@@ -33,20 +33,20 @@ export default function PackingListDetailPage({ city }) {
   const [loading, setLoading] = useState(true)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
-  // ✅ NEW: State for AddItemModal
+  //  NEW: State for AddItemModal
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false)
   const [currentCategoryId, setCurrentCategoryId] = useState(null)
   const [currentCategoryName, setCurrentCategoryName] = useState('')
 
-  // ✅ NEW: State for EditItemModal
+  //  NEW: State for EditItemModal
   const [isEditItemModalOpen, setIsEditItemModalOpen] = useState(false)
   const [currentItemId, setCurrentItemId] = useState(null)
   const [currentItemName, setCurrentItemName] = useState('')
 
-  // ✅ NEW: State for AddCategoryModal
+  //  NEW: State for AddCategoryModal
   const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false)
 
-  // ✅ NEW: State for Confirm Modals
+  //  NEW: State for Confirm Modals
   const [isDeleteItemModalOpen, setIsDeleteItemModalOpen] = useState(false)
   const [isDeleteCategoryModalOpen, setIsDeleteCategoryModalOpen] =
     useState(false)
@@ -140,7 +140,7 @@ export default function PackingListDetailPage({ city }) {
     )
   }
 
-  // ✅ NEW: Open add item modal
+  //  NEW: Open add item modal
   const openAddItemModal = (categoryId) => {
     const category = categories.find((c) => c.id === categoryId)
     setCurrentCategoryId(categoryId)
@@ -148,7 +148,7 @@ export default function PackingListDetailPage({ city }) {
     setIsAddItemModalOpen(true)
   }
 
-  // ✅ NEW: Handle add item submission
+  //  NEW: Handle add item submission
   const handleAddItem = (itemName) => {
     setCategories(
       categories.map((category) => {
@@ -169,7 +169,7 @@ export default function PackingListDetailPage({ city }) {
     setIsAddItemModalOpen(false)
   }
 
-  // ✅ NEW: Open edit item modal
+  //  NEW: Open edit item modal
   const openEditItemModal = (categoryId, itemId) => {
     const category = categories.find((c) => c.id === categoryId)
     const item = category?.items.find((i) => i.id === itemId)
@@ -183,7 +183,7 @@ export default function PackingListDetailPage({ city }) {
     }
   }
 
-  // ✅ NEW: Handle edit item submission
+  //  NEW: Handle edit item submission
   const handleEditItem = (newName) => {
     setCategories(
       categories.map((category) => {
@@ -254,12 +254,12 @@ export default function PackingListDetailPage({ city }) {
     }
   }
 
-  // ✅ NEW: Open add category modal
+  //  NEW: Open add category modal
   const openAddCategoryModal = () => {
     setIsAddCategoryModalOpen(true)
   }
 
-  // ✅ NEW: Handle add category submission
+  //  NEW: Handle add category submission
   const handleAddCategory = (categoryName) => {
     const newCategory = {
       id: Date.now(),
@@ -534,7 +534,7 @@ export default function PackingListDetailPage({ city }) {
           editData={listData}
         />
 
-        {/* ✅ NEW: Add Item Modal */}
+        {/*  NEW: Add Item Modal */}
         <AddItemModal
           isOpen={isAddItemModalOpen}
           onClose={() => setIsAddItemModalOpen(false)}
@@ -542,7 +542,7 @@ export default function PackingListDetailPage({ city }) {
           categoryName={currentCategoryName}
         />
 
-        {/* ✅ NEW: Edit Item Modal */}
+        {/*  NEW: Edit Item Modal */}
         <EditItemModal
           isOpen={isEditItemModalOpen}
           onClose={() => setIsEditItemModalOpen(false)}
@@ -551,14 +551,14 @@ export default function PackingListDetailPage({ city }) {
           categoryName={currentCategoryName}
         />
 
-        {/* ✅ NEW: Add Category Modal */}
+        {/*  NEW: Add Category Modal */}
         <AddCategoryModal
           isOpen={isAddCategoryModalOpen}
           onClose={() => setIsAddCategoryModalOpen(false)}
           onSubmit={handleAddCategory}
         />
 
-        {/* ✅ NEW: Delete Item Confirm Modal */}
+        {/*  NEW: Delete Item Confirm Modal */}
         <ConfirmModal
           isOpen={isDeleteItemModalOpen}
           onClose={() => {
@@ -573,7 +573,7 @@ export default function PackingListDetailPage({ city }) {
           confirmButtonStyle="bg-red-500 hover:bg-red-600"
         />
 
-        {/* ✅ NEW: Delete Category Confirm Modal */}
+        {/*  NEW: Delete Category Confirm Modal */}
         <ConfirmModal
           isOpen={isDeleteCategoryModalOpen}
           onClose={() => {

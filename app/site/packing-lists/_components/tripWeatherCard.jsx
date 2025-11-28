@@ -313,7 +313,7 @@ export default function TripWeatherCard({ city }) {
         }
 
         const data = await response.json()
-        console.log('✅ Weather data received:', data)
+        console.log(' Weather data received:', data)
 
         const weatherInfo = {
           city: data.name,
@@ -323,16 +323,16 @@ export default function TripWeatherCard({ city }) {
         }
 
         setWeather(weatherInfo)
-        console.log('✅ Weather state updated:', weatherInfo)
+        console.log(' Weather state updated:', weatherInfo)
 
-        // ✅ Emit event with weather data
+        //  Emit event with weather data
         window.dispatchEvent(
           new CustomEvent('weatherUpdated', {
             detail: weatherInfo,
           })
         )
 
-        console.log('✅ Weather event dispatched')
+        console.log(' Weather event dispatched')
       } catch (err) {
         console.error(' Weather fetch error:', err)
         setError(err.message || '無法取得天氣資料')

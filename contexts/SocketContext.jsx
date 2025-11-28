@@ -97,7 +97,7 @@ export function SocketProvider({ children }) {
 
       // 連線成功
       newSocket.on('connect', () => {
-        console.log('✅ Socket 連線成功:', newSocket.id)
+        console.log(' Socket 連線成功:', newSocket.id)
         setIsConnected(true)
         setIsConnecting(false)
       })
@@ -132,7 +132,7 @@ export function SocketProvider({ children }) {
 
       // 收到伺服器確認連線訊息
       newSocket.on('connected', (data) => {
-        console.log('✅ 收到伺服器連線確認:', data)
+        console.log(' 收到伺服器連線確認:', data)
       })
 
       // ============================================

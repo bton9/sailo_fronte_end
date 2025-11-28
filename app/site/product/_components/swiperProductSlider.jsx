@@ -61,7 +61,7 @@ export default function SwiperProduct({
 
         if (response.ok) {
           const data = await response.json()
-          console.log('✅ [SwiperProduct] 獲取商品成功:', data)
+          console.log(' [SwiperProduct] 獲取商品成功:', data)
 
           // 解析商品列表
           let fetchedProducts = Array.isArray(data)
@@ -73,7 +73,7 @@ export default function SwiperProduct({
           const randomProducts = shuffled.slice(0, 12)
 
           console.log(
-            '✅ [SwiperProduct] 隨機選取的推薦商品數量:',
+            ' [SwiperProduct] 隨機選取的推薦商品數量:',
             randomProducts.length
           )
           setInternalProducts(randomProducts)

@@ -30,7 +30,7 @@ import {
 export default function PostActionBar({
   postId,
   stats = {
-    likes: 0, // ✅ 統一用複數形式
+    likes: 0, //  統一用複數形式
     comments: 0,
     bookmarks: 0,
   },
@@ -121,7 +121,7 @@ export default function PostActionBar({
         ) : (
           <FaBookmarkRegular />
         )}
-        {/* ✅ 顯示收藏數 */}
+        {/*  顯示收藏數 */}
         <span>{stats?.bookmarks || 0}</span>
       </button>
 

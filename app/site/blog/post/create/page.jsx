@@ -12,47 +12,47 @@ import {
   deletePhoto, // ← 新增
   getAllTags,
   getUserItineraries,
-  getPlaces, // ✅ 新增
+  getPlaces, //  新增
 } from '@/lib/blogApi'
 import { useAuth } from '@/contexts/AuthContext'
 import BackButton from '../../components/layout/BackButton'
 import PostForm from '../../components/post/PostForm'
 import * as FaIcons from 'react-icons/fa6'
-import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' // ✅ 新增
+import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  新增
 
 export default function CreatePostPage() {
   const { user } = useAuth() // 🔐 使用 AuthContext
   const router = useRouter()
   const searchParams = useSearchParams()
-  const editPostId = searchParams.get('edit') // ✅ 取得編輯的文章 ID
+  const editPostId = searchParams.get('edit') //  取得編輯的文章 ID
 
   const [existingTags, setExistingTags] = useState([])
   const [suggestedTags, setSuggestedTags] = useState([])
   const [userItineraries, setUserItineraries] = useState([])
-  const [userPlaces, setUserPlaces] = useState([]) // ✅ 新增：景點列表
-  const [locations, setLocations] = useState([]) // ✅ 新增：地區列表
+  const [userPlaces, setUserPlaces] = useState([]) //  新增：景點列表
+  const [locations, setLocations] = useState([]) //  新增：地區列表
   const [isSubmitting, setIsSubmitting] = useState(false)
-  // ✅ 新增：景點 Modal 相關狀態
+  //  新增：景點 Modal 相關狀態
   const [selectedPlaceId, setSelectedPlaceId] = useState(null)
   const [showPlaceModal, setShowPlaceModal] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [initialData, setInitialData] = useState(null) // ✅ 編輯模式的初始資料
+  const [initialData, setInitialData] = useState(null) //  編輯模式的初始資料
   const [uploadProgress, setUploadProgress] = useState(null) // 上傳進度
-  // ✅ 新增：成功提示 Modal 狀態
+  //  新增：成功提示 Modal 狀態
   const [successModal, setSuccessModal] = useState({
     isOpen: false,
     message: '',
     postId: null,
   })
 
-  // ✅ 判斷是否為編輯模式
+  //  判斷是否為編輯模式
   const isEditMode = !!editPostId
 
   // 初始化
   useEffect(() => {
     const initialize = async () => {
       try {
-        // ✅ 調試日誌
+        //  調試日誌
         console.log('🔍 CreatePost - user 物件:', user)
         console.log('🔍 CreatePost - user.id:', user?.id)
         console.log(
@@ -67,7 +67,7 @@ export default function CreatePostPage() {
           return
         }
 
-        // ✅ 檢查 id 是否存在
+        //  檢查 id 是否存在
         if (!user.id) {
           console.error(' user 物件沒有 id 屬性:', user)
           alert('使用者資料異常，請重新登入')
@@ -75,13 +75,13 @@ export default function CreatePostPage() {
           return
         }
 
-        // ✅ 2. 如果是編輯模式,載入文章資料
+        //  2. 如果是編輯模式,載入文章資料
         if (isEditMode) {
           try {
             const postResult = await getPostById(editPostId)
             const post = postResult.data.post
 
-            // ✅ 檢查是否為文章作者
+            //  檢查是否為文章作者
             if (post.author?.user_id !== user.id) {
               alert('您沒有權限編輯此文章')
               router.push('/site/blog')
@@ -91,13 +91,13 @@ export default function CreatePostPage() {
             const photosResult = await getPostPhotos(post.post_id)
             const photosWithIds = photosResult.data.photos || []
 
-            // ✅ 設定初始資料
+            //  設定初始資料
             setInitialData({
               title: post.title,
               content: post.content,
               category: post.category,
               trip_id: post.itinerary?.trip_id || null,
-              // ✅ 新增這行
+              //  新增這行
               place_id: post.place?.place_id || null,
               tags: post.tags
                 ? post.tags
@@ -107,7 +107,7 @@ export default function CreatePostPage() {
                         : tag.tagname || tag.name || ''
                     )
                     .filter(Boolean)
-                : [], // ✅ 統一轉換成字串陣列
+                : [], //  統一轉換成字串陣列
               image_urls: post.photos || [], // 用於顯示
               photos_with_ids: photosWithIds, // 完整的圖片資料（含 photo_id）
             })
@@ -123,7 +123,7 @@ export default function CreatePostPage() {
         const tagsResult = await getAllTags(50)
         setExistingTags(tagsResult.data.tags || [])
 
-        // ✅ 4. 設定推薦標籤（取前 6 個最熱門的）
+        //  4. 設定推薦標籤（取前 6 個最熱門的）
         const topTags = (tagsResult.data.tags || [])
           .slice(0, 6)
           .map((tag) => tag.tagname)
@@ -137,7 +137,7 @@ export default function CreatePostPage() {
           console.log('載入行程失敗（可能使用者沒有行程）:', error)
           setUserItineraries([])
         }
-        // ✅ 5. 載入景點列表
+        //  5. 載入景點列表
         try {
           const placesResult = await getPlaces()
           setUserPlaces(placesResult.data || [])
@@ -146,7 +146,7 @@ export default function CreatePostPage() {
           setUserPlaces([])
         }
 
-        // ✅ 6. 載入地區列表
+        //  6. 載入地區列表
         try {
           const API_URL =
             process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
@@ -175,7 +175,7 @@ export default function CreatePostPage() {
     }
   }
 
-  // ✅ 新增：處理景點卡片點擊
+  //  新增：處理景點卡片點擊
   const handlePlaceCardClick = (placeId) => {
     console.log('🎯 開啟景點 Modal:', placeId)
     setSelectedPlaceId(placeId)
@@ -223,7 +223,7 @@ export default function CreatePostPage() {
         content: formData.content,
         category: formData.category,
         trip_id: formData.trip_id,
-        place_id: formData.place_id, // ✅ 新增
+        place_id: formData.place_id, //  新增
         tags: formData.tags,
       }
 
@@ -234,13 +234,13 @@ export default function CreatePostPage() {
         console.log('🗑️ 編輯模式：準備刪除圖片')
         console.log('🗑️ formData.deletedPhotoIds:', formData.deletedPhotoIds)
 
-        // ✅ 1. 刪除被移除的圖片（直接使用 formData）
+        //  1. 刪除被移除的圖片（直接使用 formData）
         if (formData.deletedPhotoIds && formData.deletedPhotoIds.length > 0) {
           for (const photoId of formData.deletedPhotoIds) {
             console.log('🗑️ 正在刪除圖片:', photoId)
             try {
               const result = await deletePhoto(photoId)
-              console.log('✅ 刪除成功:', result)
+              console.log(' 刪除成功:', result)
             } catch (error) {
               console.error(` 刪除圖片 ${photoId} 失敗:`, error)
             }
@@ -249,7 +249,7 @@ export default function CreatePostPage() {
           console.log('⚠️ 沒有要刪除的圖片')
         }
 
-        // ✅ 2. 新增新上傳的圖片
+        //  2. 新增新上傳的圖片
         const newImageUrls = allImageUrls.filter(
           (url) => !formData.existingImageUrls.includes(url)
         )
@@ -259,7 +259,7 @@ export default function CreatePostPage() {
           }
         }
 
-        // ✅ 改為顯示 ConfirmModal
+        //  改為顯示 ConfirmModal
         setSuccessModal({
           isOpen: true,
           message: '文章更新成功！',
@@ -277,7 +277,7 @@ export default function CreatePostPage() {
           }
         }
 
-        // ✅ 改為顯示 ConfirmModal
+        //  改為顯示 ConfirmModal
         setSuccessModal({
           isOpen: true,
           message: '文章發布成功！',
@@ -312,7 +312,7 @@ export default function CreatePostPage() {
       <div className="max-w-4xl mx-auto my-8 px-6">
         <BackButton />
 
-        {/* ✅ 頁面標題:根據模式顯示不同內容 */}
+        {/*  頁面標題:根據模式顯示不同內容 */}
         <div className="bg-white/60 p-8 shadow-md border-l-[3px] border-primary mb-6">
           <h1 className="text-3xl font-bold text-primary mb-2">
             <FaIcons.FaPenToSquare className="inline mr-2" />
@@ -325,23 +325,23 @@ export default function CreatePostPage() {
           </p>
         </div>
 
-        {/* ✅ 文章表單:編輯模式時傳入 initialData */}
+        {/*  文章表單:編輯模式時傳入 initialData */}
         <PostForm
           initialData={initialData}
           existingTags={existingTags}
           suggestedTags={suggestedTags}
           userItineraries={userItineraries}
-          userPlaces={userPlaces} // ✅ 新增
-          locations={locations} // ✅ 新增
-          currentUserId={user?.id} // ✅ 新增
-          onPlaceCardClick={handlePlaceCardClick} // ✅ 新增
+          userPlaces={userPlaces} //  新增
+          locations={locations} //  新增
+          currentUserId={user?.id} //  新增
+          onPlaceCardClick={handlePlaceCardClick} //  新增
           onSubmit={handleSubmit}
           onCancel={handleCancel}
           isSubmitting={isSubmitting}
         />
       </div>
 
-      {/* ✅ 新增：景點 Modal */}
+      {/*  新增：景點 Modal */}
       {showPlaceModal && selectedPlaceId && (
         <PlaceDetail
           placeId={selectedPlaceId}
@@ -353,7 +353,7 @@ export default function CreatePostPage() {
         />
       )}
 
-      {/* ✅ 上傳進度 Modal */}
+      {/*  上傳進度 Modal */}
       {uploadProgress && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md w-full mx-4">
@@ -394,7 +394,7 @@ export default function CreatePostPage() {
         </div>
       )}
 
-      {/* ✅ 成功提示 Modal（自定義，只有確認按鈕） */}
+      {/*  成功提示 Modal（自定義，只有確認按鈕） */}
       {successModal.isOpen && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
           {/* 半透明背景遮罩 */}

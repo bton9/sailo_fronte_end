@@ -36,14 +36,14 @@ export default function OrdersPage() {
         console.log('📦 Orders API Response:', response)
 
         if (response.success) {
-          // ✅ FIXED: Backend returns { success: true, data: { orders: [...], total: n } }
+          //  FIXED: Backend returns { success: true, data: { orders: [...], total: n } }
           const ordersData = Array.isArray(response.data?.orders)
             ? response.data.orders
             : Array.isArray(response.data)
               ? response.data
               : []
 
-          console.log('✅ Orders loaded:', ordersData)
+          console.log(' Orders loaded:', ordersData)
           setOrders(ordersData)
         } else {
           console.warn('⚠️ API returned success: false')

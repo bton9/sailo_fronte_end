@@ -128,7 +128,7 @@ const ProductCard = ({
 
       // 使用 API 返回的實際狀態
       setIsFavorite(result.isFavorite)
-      console.log('✅ 收藏操作成功! 新狀態:', result.isFavorite)
+      console.log(' 收藏操作成功! 新狀態:', result.isFavorite)
 
       // 呼叫父組件的回調函式（如果有的話）
       if (onFavoriteToggle) {

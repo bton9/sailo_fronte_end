@@ -59,7 +59,7 @@ export default function AuthGuard({
 
     // 如果已登入或正在載入，重置所有狀態
     if (isAuthenticated || isLoading) {
-      console.log('✅ [AuthGuard] 已登入或載入中，重置所有狀態')
+      console.log(' [AuthGuard] 已登入或載入中，重置所有狀態')
       // 只在需要時才更新狀態，避免不必要的渲染
       if (showLoginModal) {
         setShowLoginModal(false)
@@ -153,7 +153,7 @@ export default function AuthGuard({
       // 標記為已手動開啟，防止倒數結束後再次開啟
       hasManuallyOpenedRef.current = true
 
-      console.log('✅ [AuthGuard] 已處理外部開啟，防止重複彈出', {
+      console.log(' [AuthGuard] 已處理外部開啟，防止重複彈出', {
         hasManuallyOpened: hasManuallyOpenedRef.current,
       })
     }
@@ -217,7 +217,7 @@ export default function AuthGuard({
                     hasManuallyOpenedRef.current = true // 設定手動開啟標記
                     hasInitializedRef.current = true // 確保已標記為已初始化
 
-                    console.log('✅ [AuthGuard] 設定完成', {
+                    console.log(' [AuthGuard] 設定完成', {
                       after: {
                         hasManuallyOpened: hasManuallyOpenedRef.current,
                         hasInitialized: hasInitializedRef.current,

@@ -41,7 +41,7 @@ export default function Navbar() {
       // 🔧 使用函數式更新，檢查視窗是否已開啟
       setShowLoginModal((currentShowModal) => {
         if (!currentShowModal) {
-          console.log('✅ [Navbar] 開啟登入視窗')
+          console.log(' [Navbar] 開啟登入視窗')
           return true
         } else {
           console.log('⚠️ [Navbar] 登入視窗已開啟，跳過重複開啟')

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { useRouter } from 'next/navigation' // ✅ 確保有 useRouter
+import { useRouter } from 'next/navigation' //  確保有 useRouter
 import * as FaIcons from 'react-icons/fa6'
 import PostActionBar from './PostActionBar'
 import ItineraryCard from './ItineraryCard'
@@ -21,9 +21,9 @@ export default function PostDetail({
   onAvatarClick = () => {},
   onUsernameClick = () => {},
   onItineraryClick = () => {},
-  onPlaceCardClick = () => {},  // ✅ 加入這行
+  onPlaceCardClick = () => {}, //  加入這行
 }) {
-  const router = useRouter() // ✅ 加入 router
+  const router = useRouter() //  加入 router
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0) // 當前圖片索引
@@ -63,23 +63,23 @@ export default function PostDetail({
   // 是否為作者本人
   const isAuthor = currentUserId === post.author?.user_id
 
-  // ✅ 修改：處理行程卡片點擊
+  //  修改：處理行程卡片點擊
   const handleItineraryCardClick = (tripId) => {
     console.log('🎯 PostDetail 行程卡片點擊:', tripId)
     // 直接觸發父元件的 onItineraryClick（它會處理複製和跳轉）
     onItineraryClick(tripId)
   }
 
-  // ✅ 修改：處理行程卡片的複製按鈕
+  //  修改：處理行程卡片的複製按鈕
   const handleItineraryCopy = (tripId) => {
     console.log('🎯 PostDetail 複製按鈕點擊:', tripId)
     // 直接觸發父元件的 onItineraryClick（它會處理複製和跳轉）
     onItineraryClick(tripId)
   }
 
-  // ✅ 加入這個新函式（放在 handleItineraryCopy 後面）
+  //  加入這個新函式（放在 handleItineraryCopy 後面）
   const handlePlaceCardClickInternal = (placeId) => {
-   console.log('🎯 PostDetail 點擊景點卡片:', placeId)
+    console.log('🎯 PostDetail 點擊景點卡片:', placeId)
     if (onPlaceCardClick) {
       onPlaceCardClick(placeId)
     }
@@ -165,28 +165,30 @@ export default function PostDetail({
   return (
     <>
       <article className="bg-white/60 p-8 shadow-md border-l-[3px] border-primary mb-6">
-      {/* 文章分類 */}
-{post.category && (
-  <div className="flex items-center gap-2 text-gray-400 text-sm mb-4 pb-4">
-    {post.category === 'travel' && <FaIcons.FaPlane />}
-    {post.category === 'food' && <FaIcons.FaUtensils />}
-    {post.category === 'life' && <FaIcons.FaMugHot />}
-    {post.category === 'photo' && <FaIcons.FaCamera />}
-    <span>
-      {post.category === 'travel' ? '旅遊紀錄' :
-       post.category === 'food' ? '美食推薦' :
-       post.category === 'life' ? '生活分享' :
-       post.category === 'photo' ? '攝影作品' :
-       post.category}
-    </span>
-  </div>
-)}
+        {/* 文章分類 */}
+        {post.category && (
+          <div className="flex items-center gap-2 text-gray-400 text-sm mb-4 pb-4">
+            {post.category === 'travel' && <FaIcons.FaPlane />}
+            {post.category === 'food' && <FaIcons.FaUtensils />}
+            {post.category === 'life' && <FaIcons.FaMugHot />}
+            {post.category === 'photo' && <FaIcons.FaCamera />}
+            <span>
+              {post.category === 'travel'
+                ? '旅遊紀錄'
+                : post.category === 'food'
+                  ? '美食推薦'
+                  : post.category === 'life'
+                    ? '生活分享'
+                    : post.category === 'photo'
+                      ? '攝影作品'
+                      : post.category}
+            </span>
+          </div>
+        )}
         {/* 文章頭部 */}
         <div className="flex items-center gap-4 mb-6 pb-4 border-b border-border">
           <img
-            src={
-              post.author?.avatar
-            }
+            src={post.author?.avatar}
             alt={post.author?.display_name || '使用者'}
             className="w-12 h-12 rounded-full object-cover cursor-pointer border-2 border-primary hover:opacity-80 transition-opacity"
             onClick={() => onAvatarClick(post.author?.user_id)}
@@ -202,17 +204,18 @@ export default function PostDetail({
             <div className="text-sm text-gray-500 mt-0.5">
               <FaIcons.FaClock className="inline mr-1" />
               {formatDate(post.created_at)} 發布
-              {/* ✅ 如果有編輯過，顯示編輯時間 */}
-              {post.updated_at && 
- post.updated_at !== post.created_at && 
- new Date(post.updated_at) - new Date(post.created_at) > 60000 && (  // 超過 1 分鐘才算編輯
-  <>
-    <span className="mx-2">•</span>
-    <span className="text-xs">
-      (於 {formatDate(post.updated_at)} 編輯)
-    </span>
-  </>
-)}
+              {/*  如果有編輯過，顯示編輯時間 */}
+              {post.updated_at &&
+                post.updated_at !== post.created_at &&
+                new Date(post.updated_at) - new Date(post.created_at) >
+                  60000 && ( // 超過 1 分鐘才算編輯
+                  <>
+                    <span className="mx-2">•</span>
+                    <span className="text-xs">
+                      (於 {formatDate(post.updated_at)} 編輯)
+                    </span>
+                  </>
+                )}
               <span className="mx-2">•</span>
               <FaIcons.FaEye className="inline mr-1" />
               {post.view_count?.toLocaleString() || 0} 次瀏覽
@@ -226,7 +229,7 @@ export default function PostDetail({
               className={`px-4 py-2 border-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap ${
                 post.user_interaction?.is_following_author
                   ? 'bg-point-500 text-white '
-                    : 'border-secondary-600 bg-transparent hover:bg-point-500 hover:text-white '
+                  : 'border-secondary-600 bg-transparent hover:bg-point-500 hover:text-white '
               }`}
             >
               {post.user_interaction?.is_following_author ? (
@@ -287,7 +290,7 @@ export default function PostDetail({
                 <button
                   key={tagKey}
                   onClick={() => {
-                    // ✅ 使用 router.push 跳轉到搜尋頁面
+                    //  使用 router.push 跳轉到搜尋頁面
                     router.push(`/site/blog?q=${encodeURIComponent(tagText)}`)
                   }}
                   className="px-3 py-1.5 bg-transparent text-primary rounded-full text-sm cursor-pointer border border-primary hover:bg-primary/10 transition-all"
@@ -379,26 +382,26 @@ export default function PostDetail({
             <ItineraryCard
               itinerary={{
                 ...post.itinerary,
-                user_id: post.author?.user_id  // ✅ 新增：補上行程擁有者的 user_id
+                user_id: post.author?.user_id, //  新增：補上行程擁有者的 user_id
               }}
-              currentUserId={currentUserId}  // ✅ 新增
-              onClick={handleItineraryCardClick}  // ✅ 修改
+              currentUserId={currentUserId} //  新增
+              onClick={handleItineraryCardClick} //  修改
               showCopyButton={true}
-              onCopy={handleItineraryCopy}  // ✅ 修改
+              onCopy={handleItineraryCopy} //  修改
             />
           </div>
         )}
 
-         {/* ✅ 新增：景點卡片（加在這裡，行程卡片下方）*/}
-      {post.place && (
-        <div className="my-4" onClick={(e) => e.stopPropagation()}>
-          <ItineraryCard
-            place={post.place}
-            onClick={handlePlaceCardClickInternal}
-            showCopyButton={false}
-          />
-        </div>
-      )}
+        {/*  新增：景點卡片（加在這裡，行程卡片下方）*/}
+        {post.place && (
+          <div className="my-4" onClick={(e) => e.stopPropagation()}>
+            <ItineraryCard
+              place={post.place}
+              onClick={handlePlaceCardClickInternal}
+              showCopyButton={false}
+            />
+          </div>
+        )}
         {/* 互動列 */}
         <PostActionBar
           postId={post.post_id}
@@ -412,7 +415,7 @@ export default function PostDetail({
         />
       </article>
 
-      {/* ✅ Lightbox 全螢幕查看 */}
+      {/*  Lightbox 全螢幕查看 */}
       {isLightboxOpen && (
         <div
           className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"

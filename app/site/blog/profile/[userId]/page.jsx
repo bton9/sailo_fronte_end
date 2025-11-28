@@ -23,7 +23,7 @@ import TabNavigation from '../../components/shared/TabNavigation'
 import SortBar from '../../components/shared/SortBar'
 import PostCard from '../../components/post/PostCard'
 import FloatingPostButton from '../../components/layout/FloatingPostButton'
-import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' // ✅ 加入這行
+import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  加入這行
 import * as FaIcons from 'react-icons/fa6'
 
 export default function ProfilePage() {
@@ -48,7 +48,7 @@ export default function ProfilePage() {
   const [isFollowing, setIsFollowing] = useState(false)
   const [sortBy, setSortBy] = useState('newest')
 
-  // ✅ 加入這兩個狀態
+  //  加入這兩個狀態
   const [selectedPlaceId, setSelectedPlaceId] = useState(null)
   const [showPlaceModal, setShowPlaceModal] = useState(false)
 
@@ -88,7 +88,7 @@ export default function ProfilePage() {
     { value: 'bookmarks', label: '最多收藏' },
   ]
 
-  // ✅ 新增: 統一建立 API 參數的輔助函式
+  //  新增: 統一建立 API 參數的輔助函式
   const buildPostsParams = () => {
     const params = {
       page,
@@ -96,7 +96,7 @@ export default function ProfilePage() {
       sort: sortBy,
     }
 
-    // ✅ 只在 category 有效時才加入
+    //  只在 category 有效時才加入
     if (
       filters.category &&
       filters.category !== '' &&
@@ -105,7 +105,7 @@ export default function ProfilePage() {
       params.category = filters.category
     }
 
-    // ✅ 只在有標籤時才加入
+    //  只在有標籤時才加入
     if (filters.tags && filters.tags.length > 0) {
       params.tags = filters.tags
     }
@@ -146,7 +146,7 @@ export default function ProfilePage() {
                     label: tag.tagname,
                   })),
                   onTagClick: (tagName) => {
-                    // ✅ 加入 onTagClick
+                    //  加入 onTagClick
                     router.push(`/site/blog?q=${encodeURIComponent(tagName)}`)
                   },
                 }
@@ -181,15 +181,15 @@ export default function ProfilePage() {
       if (!profileUser) return
 
       try {
-        // ✅ 第一頁顯示 loading，後續頁顯示 loadingMore
+        //  第一頁顯示 loading，後續頁顯示 loadingMore
         if (page === 1) {
           setLoading(true)
-          setPosts([]) // ✅ 清空舊資料
+          setPosts([]) //  清空舊資料
         } else {
           setLoadingMore(true)
         }
 
-        // ✅ 使用統一的參數建立函式
+        //  使用統一的參數建立函式
         const params = buildPostsParams()
 
         let result
@@ -201,7 +201,7 @@ export default function ProfilePage() {
           result = await getUserPosts(userId, params)
         }
 
-        // ✅ 第一頁直接設定，後續頁追加
+        //  第一頁直接設定，後續頁追加
         if (page === 1) {
           setPosts(result.data.posts)
         } else {
@@ -210,7 +210,7 @@ export default function ProfilePage() {
 
         setPagination(result.data.pagination)
 
-        // ✅ 檢查是否還有更多資料
+        //  檢查是否還有更多資料
         setHasMore(
           result.data.pagination.page < result.data.pagination.totalPages
         )
@@ -228,7 +228,7 @@ export default function ProfilePage() {
     loadPosts()
   }, [profileUser, filters, page, currentView, userId, sortBy])
 
-  // ✅ 新增：滾動載入更多
+  //  新增：滾動載入更多
   useEffect(() => {
     const handleScroll = () => {
       if (loadingMore || !hasMore || loading) return
@@ -300,7 +300,7 @@ export default function ProfilePage() {
     router.push(`/site/blog/post/${postId}`)
   }
 
-  // ✅ 修正: handleLike
+  //  修正: handleLike
   const handleLike = async (postId) => {
     if (!user?.id) {
       alert('請先登入')
@@ -313,7 +313,7 @@ export default function ProfilePage() {
       setPage(1)
       setHasMore(true)
 
-      // ✅ 使用統一的參數建立函式
+      //  使用統一的參數建立函式
       const params = buildPostsParams()
 
       let result
@@ -336,7 +336,7 @@ export default function ProfilePage() {
     router.push(`/site/blog/post/${postId}#comments`)
   }
 
-  // ✅ 修正: handleBookmark
+  //  修正: handleBookmark
   const handleBookmark = async (postId) => {
     if (!user?.id) {
       alert('請先登入')
@@ -349,7 +349,7 @@ export default function ProfilePage() {
       setPage(1)
       setHasMore(true)
 
-      // ✅ 使用統一的參數建立函式
+      //  使用統一的參數建立函式
       const params = buildPostsParams()
 
       let result
@@ -368,7 +368,7 @@ export default function ProfilePage() {
     }
   }
 
-  // ✅ 修正: handleFollow
+  //  修正: handleFollow
   const handleFollow = async (authorId) => {
     if (!user?.id) {
       alert('請先登入')
@@ -381,7 +381,7 @@ export default function ProfilePage() {
       setPage(1)
       setHasMore(true)
 
-      // ✅ 使用統一的參數建立函式
+      //  使用統一的參數建立函式
       const params = buildPostsParams()
 
       let result
@@ -419,7 +419,7 @@ export default function ProfilePage() {
     }
   }
 
-  // ✅ 修正: handleMenuClick
+  //  修正: handleMenuClick
   const handleMenuClick = async (postId, action) => {
     try {
       switch (action) {
@@ -433,7 +433,7 @@ export default function ProfilePage() {
             setPage(1)
             setHasMore(true)
 
-            // ✅ 使用統一的參數建立函式
+            //  使用統一的參數建立函式
             const params = buildPostsParams()
 
             let result
@@ -478,7 +478,7 @@ export default function ProfilePage() {
 
   const handleItineraryClick = async (tripId) => {
     try {
-      // ✅ 先找到這個行程的文章，確認是否為作者
+      //  先找到這個行程的文章，確認是否為作者
       const targetPost = posts.find((p) => p.trip_id === tripId)
 
       if (!targetPost) {
@@ -490,7 +490,7 @@ export default function ProfilePage() {
       const isOwnTrip = user?.id === targetPost.author?.user_id
 
       if (!isOwnTrip) {
-        // ✅ 不是自己的行程，先複製
+        //  不是自己的行程，先複製
         console.log('🔄 複製別人的行程:', tripId)
 
         // 呼叫 Blog 的複製行程 API
@@ -498,19 +498,19 @@ export default function ProfilePage() {
 
         if (copyResult.success) {
           const newTripId = copyResult.data.trip_id
-          console.log('✅ 行程複製成功，新行程 ID:', newTripId)
+          console.log(' 行程複製成功，新行程 ID:', newTripId)
           alert(`已將行程複製到您的行程列表！`)
 
-          // ✅ 改用 sessionStorage 傳遞
+          //  改用 sessionStorage 傳遞
           sessionStorage.setItem('openTripId', newTripId)
           router.push('/site/custom')
         } else {
           throw new Error(copyResult.message || '複製失敗')
         }
       } else {
-        // ✅ 是自己的行程，直接跳轉編輯
+        //  是自己的行程，直接跳轉編輯
         console.log('✏️ 編輯自己的行程:', tripId)
-        // ✅ 改用 sessionStorage 傳遞
+        //  改用 sessionStorage 傳遞
         sessionStorage.setItem('openTripId', tripId)
         router.push('/site/custom')
       }
@@ -520,7 +520,7 @@ export default function ProfilePage() {
     }
   }
 
-  // ✅ 加入這個函式 (在 handleItineraryClick 後面)
+  //  加入這個函式 (在 handleItineraryClick 後面)
   const handlePlaceCardClick = (placeId) => {
     console.log('🎯 開啟景點 Modal:', placeId)
     setSelectedPlaceId(placeId)
@@ -570,14 +570,14 @@ export default function ProfilePage() {
             onUsernameClick={handleUsernameClick}
             onSearchSubmit={handleSearchSubmit}
             onItineraryClick={handleItineraryClick}
-            onPlaceCardClick={handlePlaceCardClick} // ✅ 加入這行
+            onPlaceCardClick={handlePlaceCardClick} //  加入這行
           />
         </div>
 
         {/* 文章列表 */}
         <div className="grid lg:grid-cols-[1fr_300px] gap-8">
           <main className="flex flex-col gap-6">
-            {/* ✅ 手機版 ProfileWidget */}
+            {/*  手機版 ProfileWidget */}
 
             {/* Profile Tabs - 個人頁模式 */}
             <TabNavigation
@@ -628,7 +628,7 @@ export default function ProfilePage() {
                   })}
                 </div>
 
-                {/* ✅ 新增：載入更多提示 */}
+                {/*  新增：載入更多提示 */}
                 {loadingMore && (
                   <div className="text-center py-6">
                     <FaIcons.FaSpinner className="inline-block animate-spin text-2xl text-primary mb-2" />
@@ -636,7 +636,7 @@ export default function ProfilePage() {
                   </div>
                 )}
 
-                {/* ✅ 新增：沒有更多資料提示 */}
+                {/*  新增：沒有更多資料提示 */}
                 {!loading && !loadingMore && posts.length > 0 && !hasMore && (
                   <div className="text-center py-6 text-sm text-gray-500">
                     已顯示全部 {pagination?.total || posts.length} 篇文章
@@ -686,7 +686,7 @@ export default function ProfilePage() {
 
       <FloatingPostButton />
 
-      {/* ✅ 加入景點 Modal */}
+      {/*  加入景點 Modal */}
       {showPlaceModal && selectedPlaceId && (
         <PlaceDetail
           placeId={selectedPlaceId}

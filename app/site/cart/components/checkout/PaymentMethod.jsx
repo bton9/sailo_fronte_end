@@ -58,7 +58,7 @@ export default function PaymentMethod({ selected, onChange }) {
 
       {selected === 'ecpay' && (
         <div className="mt-4 rounded-lg bg-green-50 p-3 text-sm text-green-700">
-          ✅ 安全的第三方金流服務
+          安全的第三方金流服務
         </div>
       )}
     </div>

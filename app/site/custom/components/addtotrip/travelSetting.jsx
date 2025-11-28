@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronLeft, Edit2, Upload, X } from 'lucide-react'
-import { createTrip, updateTrip  } from '@/app/site/custom/lib/custom/tripApi'
+import { createTrip, updateTrip } from '@/app/site/custom/lib/custom/tripApi'
 import { useAuth } from '@/contexts/AuthContext'
 import ConfirmModal from '@/components/confirmModal'
 export default function ItinerarySettings({
@@ -33,7 +33,7 @@ export default function ItinerarySettings({
     confirmText: '確定',
     cancelText: '取消',
   })
-  // ✅ 使用 AuthContext 取得使用者 ID
+  //  使用 AuthContext 取得使用者 ID
   const { user } = useAuth()
   const userId = user?.id
   useEffect(() => {

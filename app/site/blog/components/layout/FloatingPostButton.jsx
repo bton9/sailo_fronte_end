@@ -23,7 +23,7 @@ export default function FloatingPostButton() {
   const router = useRouter()
   const { user } = useAuth()
 
-  // ✅ 未登入時不顯示按鈕
+  //  未登入時不顯示按鈕
   if (!user) {
     return null
   }

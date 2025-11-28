@@ -91,7 +91,7 @@ function ProductDetailContent({ productId }) {
 
         if (response.ok) {
           const data = await response.json()
-          console.log('✅ 獲取商品成功:', data)
+          console.log(' 獲取商品成功:', data)
 
           // 過濾掉當前商品,取前 8 個
           let products = Array.isArray(data)
@@ -101,7 +101,7 @@ function ProductDetailContent({ productId }) {
             .filter((p) => p.product_id !== product.product_id)
             .slice(0, 8)
 
-          console.log('✅ 過濾後的推薦商品數量:', products.length)
+          console.log(' 過濾後的推薦商品數量:', products.length)
           setRelatedProducts(products)
         } else {
           console.warn('⚠️ API 回應不成功:', response.status)

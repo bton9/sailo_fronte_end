@@ -1,5 +1,5 @@
 // 購物車側邊欄元件 - 使用 CartContext 從資料庫載入
-// ✅ UPDATED: 完全重寫以使用 CartContext
+//  UPDATED: 完全重寫以使用 CartContext
 
 'use client'
 
@@ -9,13 +9,13 @@ import { useCart } from '@/contexts/CartContext'
 
 /**
  * Shopping Cart Sidebar Component
- * ✅ 所有列表都有正確的 key prop
+ *  所有列表都有正確的 key prop
  */
 
 export default function CartSidebar({ isOpen, onClose }) {
   const router = useRouter()
 
-  // ✅ UPDATED: 使用 CartContext 取代 localStorage
+  //  UPDATED: 使用 CartContext 取代 localStorage
   const {
     items: cartItems = [], // 購物車項目 (預設空陣列)
     loading, // 載入狀態
@@ -25,7 +25,7 @@ export default function CartSidebar({ isOpen, onClose }) {
     clearCart, // 清空購物車
   } = useCart()
 
-  // ✅ UPDATED: 當側邊欄打開時，重新載入購物車
+  //  UPDATED: 當側邊欄打開時，重新載入購物車
   useEffect(() => {
     if (isOpen) {
       console.log('🛒 SideCart opened, fetching cart from database...')
@@ -33,7 +33,7 @@ export default function CartSidebar({ isOpen, onClose }) {
     }
   }, [isOpen, fetchCart])
 
-  // ✅ UPDATED: 監聽購物車更新事件
+  //  UPDATED: 監聽購物車更新事件
   useEffect(() => {
     const handleCartUpdate = () => {
       console.log('🔄 Cart updated event received, refreshing...')
@@ -44,7 +44,7 @@ export default function CartSidebar({ isOpen, onClose }) {
     return () => window.removeEventListener('cartUpdated', handleCartUpdate)
   }, [fetchCart])
 
-  // ✅ UPDATED: 計算總金額（使用資料庫的即時價格）
+  //  UPDATED: 計算總金額（使用資料庫的即時價格）
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
       // 支援兩種資料結構
@@ -54,7 +54,7 @@ export default function CartSidebar({ isOpen, onClose }) {
     }, 0)
   }
 
-  // ✅ UPDATED: 更新數量（調用 CartContext 的 API）
+  //  UPDATED: 更新數量（調用 CartContext 的 API）
   const handleUpdateQuantity = async (itemId, newQuantity) => {
     if (newQuantity < 1) return
 
@@ -65,7 +65,7 @@ export default function CartSidebar({ isOpen, onClose }) {
     }
   }
 
-  // ✅ UPDATED: 移除項目（調用 CartContext 的 API）
+  //  UPDATED: 移除項目（調用 CartContext 的 API）
   const handleRemoveItem = async (itemId) => {
     try {
       await removeItem(itemId)
@@ -74,7 +74,7 @@ export default function CartSidebar({ isOpen, onClose }) {
     }
   }
 
-  // ✅ UPDATED: 清空購物車（調用 CartContext 的 API）
+  //  UPDATED: 清空購物車（調用 CartContext 的 API）
   const handleClearCart = async () => {
     if (confirm('確定要清空購物車嗎？')) {
       try {
@@ -156,7 +156,7 @@ export default function CartSidebar({ isOpen, onClose }) {
           className="flex-1 overflow-y-auto px-6 py-4"
           style={{ height: 'calc(100vh - 240px)' }}
         >
-          {/* ✅ UPDATED: 顯示載入狀態 */}
+          {/*  UPDATED: 顯示載入狀態 */}
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-primary-500"></div>
@@ -187,7 +187,7 @@ export default function CartSidebar({ isOpen, onClose }) {
             // Cart Items List
             <div className="space-y-4">
               {cartItems.map((item) => {
-                // ✅ UPDATED: 支援多種資料結構
+                //  UPDATED: 支援多種資料結構
                 const itemId = item.id || item.cart_detail_id
                 const productId = item.productId || item.product_id
                 const productName = item.name || item.product_name
@@ -198,7 +198,7 @@ export default function CartSidebar({ isOpen, onClose }) {
 
                 return (
                   <div
-                    key={itemId} // ✅ 使用購物車項目 ID 作為 key
+                    key={itemId} //  使用購物車項目 ID 作為 key
                     className="flex gap-4 rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
                   >
                     {/* Product Image */}

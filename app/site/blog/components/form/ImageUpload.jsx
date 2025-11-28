@@ -80,8 +80,12 @@ export default function ImageUpload({
         if (processed === validFiles.length) {
           setPreviews(newPreviews)
           // 只回傳新上傳的檔案
-          const newFiles = newPreviews.filter((p) => !p.isExisting).map((p) => p.file)
-          const existingUrls = newPreviews.filter((p) => p.isExisting).map((p) => p.url)
+          const newFiles = newPreviews
+            .filter((p) => !p.isExisting)
+            .map((p) => p.file)
+          const existingUrls = newPreviews
+            .filter((p) => p.isExisting)
+            .map((p) => p.url)
           onImageSelect(newFiles, existingUrls)
         }
       }
@@ -94,13 +98,15 @@ export default function ImageUpload({
     const newPreviews = previews.filter((_, index) => index !== indexToRemove)
     setPreviews(newPreviews)
 
-    // ✅ 如果刪除的是舊圖片，通知父元件
+    //  如果刪除的是舊圖片，通知父元件
     if (removedPreview.isExisting && removedPreview.photo_id) {
       onPhotoDelete(removedPreview.photo_id)
     }
 
     const newFiles = newPreviews.filter((p) => !p.isExisting).map((p) => p.file)
-    const existingUrls = newPreviews.filter((p) => p.isExisting).map((p) => p.url)
+    const existingUrls = newPreviews
+      .filter((p) => p.isExisting)
+      .map((p) => p.url)
     onImageSelect(newFiles, existingUrls)
 
     // 清空 input

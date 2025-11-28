@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { useRouter } from 'next/navigation' // ✅ 加入 useRouter
+import { useRouter } from 'next/navigation' //  加入 useRouter
 import * as FaIcons from 'react-icons/fa6'
 import PostActionBar from './PostActionBar'
 import ItineraryCard from './ItineraryCard'
@@ -23,15 +23,13 @@ export default function PostCard({
   onAvatarClick = () => {},
   onUsernameClick = () => {},
   onItineraryClick = () => {},
-  onPlaceCardClick = () => {},  // ✅ 新增：景點卡片點擊
+  onPlaceCardClick = () => {}, //  新增：景點卡片點擊
 }) {
-  const router = useRouter() // ✅ 加入 router
+  const router = useRouter() //  加入 router
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
 
-  
-
-  // ✅ 除錯：檢查 props
+  //  除錯：檢查 props
   useEffect(() => {
     console.log('🔍 PostCard 接收的 props:', {
       postId: post.post_id,
@@ -42,7 +40,7 @@ export default function PostCard({
     })
   }, [post, currentUserId, showFollowButton])
 
-  // ✅ 加入這段除錯（在 useEffect 區塊前面）
+  //  加入這段除錯（在 useEffect 區塊前面）
   useEffect(() => {
     console.log('🔍 PostCard - Post 資料:', post)
     console.log('🔍 PostCard - Post.place:', post.place)
@@ -108,21 +106,21 @@ export default function PostCard({
   // 是否為作者本人
   const isAuthor = currentUserId === post.author?.user_id
 
-  // ✅ 修改：處理行程卡片點擊
+  //  修改：處理行程卡片點擊
   const handleItineraryCardClick = (tripId) => {
     console.log('🎯 PostCard 行程卡片點擊:', tripId)
     // 直接觸發父元件的 onItineraryClick（它會處理複製和跳轉）
     onItineraryClick(tripId)
   }
 
-  // ✅ 修改：處理行程卡片的複製按鈕
+  //  修改：處理行程卡片的複製按鈕
   const handleItineraryCopy = (tripId) => {
     console.log('🎯 PostCard 複製按鈕點擊:', tripId)
     // 直接觸發父元件的 onItineraryClick（它會處理複製和跳轉）
     onItineraryClick(tripId)
   }
 
-  // ✅ 新增：處理景點卡片點擊
+  //  新增：處理景點卡片點擊
   const handlePlaceCardClickInternal = (placeId) => {
     console.log('🎯 PostCard 點擊景點卡片:', placeId)
     if (onPlaceCardClick) {
@@ -144,35 +142,35 @@ export default function PostCard({
       ]
     : [{ label: '複製連結', icon: <FaIcons.FaLink />, action: 'copy' }]
 
-     
-
   return (
     <article
       className="bg-white/60 p-6 shadow-md hover:bg-white/80 hover:shadow-lg transition-all border-l-[3px] border-primary border-b border-border mb-6 cursor-pointer hover:border-l-point-500"
       onClick={() => onPostClick(post.post_id)}
     >
-    {/* 文章分類 */}
-{post.category && (
-  <div className="flex items-center gap-2 text-gray-400 text-xs mb-3 pb-3 border-b border-gray-200">
-    {post.category === 'travel' && <FaIcons.FaPlane />}
-    {post.category === 'food' && <FaIcons.FaUtensils />}
-    {post.category === 'life' && <FaIcons.FaMugHot />}
-    {post.category === 'photo' && <FaIcons.FaCamera />}
-    <span>
-      {post.category === 'travel' ? '旅遊紀錄' :
-       post.category === 'food' ? '美食推薦' :
-       post.category === 'life' ? '生活分享' :
-       post.category === 'photo' ? '攝影作品' :
-       post.category}
-    </span>
-  </div>
-)}
+      {/* 文章分類 */}
+      {post.category && (
+        <div className="flex items-center gap-2 text-gray-400 text-xs mb-3 pb-3 border-b border-gray-200">
+          {post.category === 'travel' && <FaIcons.FaPlane />}
+          {post.category === 'food' && <FaIcons.FaUtensils />}
+          {post.category === 'life' && <FaIcons.FaMugHot />}
+          {post.category === 'photo' && <FaIcons.FaCamera />}
+          <span>
+            {post.category === 'travel'
+              ? '旅遊紀錄'
+              : post.category === 'food'
+                ? '美食推薦'
+                : post.category === 'life'
+                  ? '生活分享'
+                  : post.category === 'photo'
+                    ? '攝影作品'
+                    : post.category}
+          </span>
+        </div>
+      )}
       {/* 文章頭部 */}
       <div className="flex items-center gap-3 mb-4">
         <img
-          src={
-            post.author?.avatar
-          }
+          src={post.author?.avatar}
           alt={post.author?.display_name || '使用者'}
           className="w-12 h-12 rounded-full object-cover cursor-pointer border-2 border-primary"
           onClick={(e) => {
@@ -196,14 +194,14 @@ export default function PostCard({
             {post.author?.display_name || post.author?.name || '未知使用者'}
           </div>
 
-          {/* ✅ 追蹤按鈕 */}
+          {/*  追蹤按鈕 */}
           {showFollowButton && (
             <button
               onClick={handleFollowClick}
               className={`px-4 py-2 border-2 rounded-full text-sm font-semibold transition-all min-w-[100px] ${
                 post.user_interaction?.is_following_author
                   ? 'bg-point-500 text-white '
-                    : 'border-secondary-600 bg-transparent hover:bg-point-500 hover:text-white '
+                  : 'border-secondary-600 bg-transparent hover:bg-point-500 hover:text-white '
               }`}
             >
               {post.user_interaction?.is_following_author ? (
@@ -221,16 +219,16 @@ export default function PostCard({
 
         <div className="text-sm text-gray-500 flex items-center gap-2">
           <span>{formatDate(post.created_at)}</span>
-          {/* ✅ 如果有編輯過，顯示編輯時間 */}
-          {post.updated_at && 
- post.updated_at !== post.created_at && 
- new Date(post.updated_at) - new Date(post.created_at) > 60000 && (  // 超過 1 分鐘才算編輯
-  <>
-    <span>•</span>
-    <span className="text-xs text-gray-400">(已編輯)</span>
-  </>
-)}
-          {/* ✅ 顯示瀏覽次數 */}
+          {/*  如果有編輯過，顯示編輯時間 */}
+          {post.updated_at &&
+            post.updated_at !== post.created_at &&
+            new Date(post.updated_at) - new Date(post.created_at) > 60000 && ( // 超過 1 分鐘才算編輯
+              <>
+                <span>•</span>
+                <span className="text-xs text-gray-400">(已編輯)</span>
+              </>
+            )}
+          {/*  顯示瀏覽次數 */}
           {post.view_count !== undefined && (
             <>
               <span>•</span>
@@ -287,7 +285,7 @@ export default function PostCard({
                 key={tagKey}
                 onClick={(e) => {
                   e.stopPropagation()
-                  // ✅ 使用 router.push 跳轉到搜尋頁面
+                  //  使用 router.push 跳轉到搜尋頁面
                   router.push(`/site/blog?q=${encodeURIComponent(tagText)}`)
                 }}
                 className="px-3 py-1.5 bg-transparent text-primary rounded-full text-sm cursor-pointer border border-primary hover:bg-primary/10 transition-all"
@@ -339,7 +337,7 @@ export default function PostCard({
           <ItineraryCard
             itinerary={{
               ...post.itinerary,
-              user_id: post.author?.user_id  // ✅ 新增：補上行程擁有者的 user_id
+              user_id: post.author?.user_id, //  新增：補上行程擁有者的 user_id
             }}
             currentUserId={currentUserId}
             onClick={handleItineraryCardClick}
@@ -349,20 +347,20 @@ export default function PostCard({
         </div>
       )}
 
-      {/* ✅ 加入這段：景點卡片 */}
-{post.place && (
-  <div className="my-4" onClick={(e) => e.stopPropagation()}>
-    <ItineraryCard
-      place={post.place}
-      onClick={(placeId) => {
-        if (onPlaceCardClick) {
-          onPlaceCardClick(placeId)
-        }
-      }}
-      showCopyButton={false}
-    />
-  </div>
-)}
+      {/*  加入這段：景點卡片 */}
+      {post.place && (
+        <div className="my-4" onClick={(e) => e.stopPropagation()}>
+          <ItineraryCard
+            place={post.place}
+            onClick={(placeId) => {
+              if (onPlaceCardClick) {
+                onPlaceCardClick(placeId)
+              }
+            }}
+            showCopyButton={false}
+          />
+        </div>
+      )}
 
       {/* 互動列 */}
       <PostActionBar
