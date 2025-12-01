@@ -1,8 +1,23 @@
+使用方法
+下載使用之前確保已經有下載並安裝node.js 以及 react next.js 和資料庫workbench 完整的資料 
+
+都確定有下載之後還需要一份.env檔案 
+
+接著在下再好的檔案裡的終端機裡輸入npm i (這會需要一段時間)
+
+下載完成之後 輸入npm run dev 
+
+按住ctrl 點擊 localhost 3000 瀏覽器就會跳轉到我們的，專案首頁，接著開始登入 
+帳號是:sailo@sailo.com
+密碼是:123456
+
+接下來是我負責的專案功能介紹
+
 Sailo — 旅遊行程規劃平台
 
 使用 Next.js + React 與 Node.js Backend 打造的整合式旅遊平台
 
-專案簡介（Overview）
+專案簡介（Overview）及功能介紹
 
 Sailo 是一個整合了 景點探索、互動式地圖導航、旅遊行程規劃 的完整旅遊平台。
 使用者能在平台內完成以下所有旅遊需求：
@@ -43,8 +58,6 @@ Backend — Sailo Backend
 Node.js + Express
 
 MySQL（景點、行程、評論、收藏資料）
-
-JWT（會員登入驗證）
 
 RESTful API 設計
 
