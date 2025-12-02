@@ -18,7 +18,7 @@ export function CreateListModal({ onSubmit, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[190] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[190] flex items-center justify-center p  -4">
       <div className="w-full max-w-md bg-white shadow-2xl overflow-hidden animate-slideUp">
         <ModalHeader title="新增清單" icon={Edit3} onClose={onClose} />
         <div className="px-6 pb-6 space-y-6">
@@ -46,7 +46,6 @@ export function CreateListModal({ onSubmit, onClose }) {
             />
           </div>
         </div>
-
         <div className="p-6">
           <button
             onClick={handleSubmit}
