@@ -1,36 +1,47 @@
-import { Star, MapPin } from 'lucide-react'
+import { MapPin, Plus, Star, MessageCircle } from 'lucide-react'
 
-export default function PlaceActions({
-  onGoogleReview,
-  onNavigation,
+export default function PlaceActions({ 
+  onGoogleReview, 
+  onNavigation, 
   onAddToTrip,
+  onComments
 }) {
   return (
-    <div className="grid grid-cols-3 gap-3 ">
+    <div className="grid grid-cols-2 gap-3">
+      {/* Google 評論按鈕 */}
       <button
         onClick={onGoogleReview}
-        className="py-3 bg-white border-2 border-gray-200 font-semibold text-sm text-gray-700 hover:border-primary-500 hover:bg-primary-50 hover:text-primary-500 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-1"
+        className="bg-[#a48c62] hover:bg-[#bfb3a1] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-md hover:shadow-lg"
       >
         <Star className="w-5 h-5" />
-        <span className="hidden lg:inline">Google評論</span>
-        <span className="lg:hidden">評論</span>
+        Google 評論
       </button>
 
+      {/* 導航按鈕 */}
       <button
         onClick={onNavigation}
-        className="py-3 bg-primary-500 hover:bg-amber-600 font-semibold text-sm text-white transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-1"
+        className="bg-[#a48c62] hover:bg-[#bfb3a1] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-md hover:shadow-lg"
       >
         <MapPin className="w-5 h-5" />
-        <span className="hidden lg:inline">開始導航</span>
-        <span className="lg:hidden">導航</span>
+        導航
       </button>
 
+      {/* 加入行程按鈕 */}
       <button
         onClick={onAddToTrip}
-        className="py-3 bg-secondary-900 hover:bg-secondary-800 font-semibold text-sm text-white transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+        className="bg-[#a48c62] hover:bg-[#bfb3a1] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-md hover:shadow-lg"
       >
-        <span className="hidden lg:inline">加入行程</span>
-        <span className="lg:hidden">行程</span>
+        <Plus className="w-5 h-5" />
+        加入行程
+      </button>
+
+      {/* 評論按鈕 */}
+      <button
+        onClick={onComments}
+        className="bg-[#a48c62] hover:bg-[#bfb3a1] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-md hover:shadow-lg"
+      >
+        <MessageCircle className="w-5 h-5" />
+        查看評論
       </button>
     </div>
   )

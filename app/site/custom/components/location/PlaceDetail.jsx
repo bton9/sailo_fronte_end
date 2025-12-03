@@ -6,15 +6,19 @@ import SoloTravelWishlist from '../addtotrip/SoloTravelWishlist'
 import AddToTripDrawer from '../addtotrip/addtotripdrawer'
 import ConfirmModal from '@/components/confirmModal'
 import PlaceDetailModal from './PlaceDetailModal'
+import PlaceComments from '../PlaceComments/CommentSystem'  // 新增
 import { usePlaceDetail } from '../../hook/usePlaceDetail'
 import { usePlaceImages } from '../../hook/usePlaceImages'
 import { useFavoriteStatus } from '../../hook/useFavoriteStatus'
+import NavigationModal from '../guide/NavigationModal'
 
 export default function PlaceDetail({ placeId, isOpen, onClose }) {
   const { user } = useAuth()
   const [mounted, setMounted] = useState(false)
   const [wishlistOpen, setWishlistOpen] = useState(false)
   const [showAddToTrip, setShowAddToTrip] = useState(false)
+  const [showNavigationModal, setShowNavigationModal] = useState(false)
+  const [showComments, setShowComments] = useState(false)  // 新增
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     title: '',
@@ -125,13 +129,20 @@ export default function PlaceDetail({ placeId, isOpen, onClose }) {
   const handleFavoriteClick = () => setWishlistOpen(true)
 
   const handleNavigation = () => {
+    setShowNavigationModal(true)
+  }
+
+  const handleNavigationChoice = (type) => {
     if (!place) return
-    const address = `台灣${place.location_name}${place.name}`
-    const mapsUrl =
-      place.latitude && place.longitude
-        ? `https://www.google.com/maps/dir/?api=1&destination=${place.latitude},${place.longitude}`
-        : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`
-    window.open(mapsUrl, '_blank')
+    if (type === 'google') {
+      const address = `台灣${place.location_name}${place.name}`
+      const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`
+      window.open(mapsUrl, '_blank')
+    } else if (type === 'leaflet') {
+      const routeUrl = `/site/custom/map-route?lat=${place.latitude}&lng=${place.longitude}&name=${encodeURIComponent(place.name)}`
+      window.open(routeUrl, '_blank')
+    }
+    setShowNavigationModal(false)
   }
 
   const handleAddToTrip = () => {
@@ -148,6 +159,11 @@ export default function PlaceDetail({ placeId, isOpen, onClose }) {
       ? `https://www.google.com/maps/place/?q=place_id:${place.google_place_id}`
       : `https://www.google.com/maps/search/?q=${encodeURIComponent(place.name)}`
     window.open(url, '_blank')
+  }
+
+  // 新增：評論按鈕處理函數
+  const handleComments = () => {
+    setShowComments(true)
   }
 
   if (!isOpen || !mounted) return null
@@ -167,6 +183,7 @@ export default function PlaceDetail({ placeId, isOpen, onClose }) {
         onNavigation={handleNavigation}
         onAddToTrip={handleAddToTrip}
         onGoogleReview={handleGoogleReview}
+        onComments={handleComments} 
         onImageUpload={handleImageUpload}
         onDeleteImage={handleDeleteImage}
       />
@@ -193,6 +210,14 @@ export default function PlaceDetail({ placeId, isOpen, onClose }) {
         userId={user?.id}
       />
 
+      {/* 新增：評論 Modal */}
+      <PlaceComments
+        placeId={placeId}
+        placeName={place?.name || ''}
+        isOpen={showComments}
+        onClose={() => setShowComments(false)}
+      />
+
       <ConfirmModal
         isOpen={confirmModal.isOpen}
         onClose={modalHelpers.closeModal}
@@ -201,6 +226,13 @@ export default function PlaceDetail({ placeId, isOpen, onClose }) {
         message={confirmModal.message}
         confirmText={confirmModal.confirmText}
         cancelText={confirmModal.cancelText}
+      />
+
+      <NavigationModal
+        isOpen={showNavigationModal}
+        onClose={() => setShowNavigationModal(false)}
+        place={place}
+        onSelectNavigation={handleNavigationChoice}
       />
     </>
   )

@@ -16,6 +16,7 @@ export default function PlaceDetailModal({
   onNavigation,
   onAddToTrip,
   onGoogleReview,
+  onComments,
   onImageUpload,
   onDeleteImage,
 }) {
@@ -79,6 +80,7 @@ export default function PlaceDetailModal({
                     onGoogleReview={onGoogleReview}
                     onNavigation={onNavigation}
                     onAddToTrip={onAddToTrip}
+                    onComments={onComments}
                   />
                 </div>
               </div>
