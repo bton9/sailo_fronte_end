@@ -53,7 +53,6 @@ export default function PlaceSearchModal({
   // 載入地區列表
   const loadLocations = async () => {
     try {
-      // 假設你有這個 API,如果沒有可以先註解掉
       const response = await fetch(`${API_URL}/api/locations`)
       const data = await response.json()
 

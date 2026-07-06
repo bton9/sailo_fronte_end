@@ -19,7 +19,11 @@ export default function Toast() {
             : 'bg-blue-600'
       }`}
       >
-        <Check size={18} />
+        {toast.type === 'error' ? (
+          <XCircle size={18} />
+        ) : (
+          <Check size={18} />
+        )}
         <span>{toast.message}</span>
       </div>
     </div>

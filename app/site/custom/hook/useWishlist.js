@@ -1,5 +1,6 @@
 // ==================== hooks/useWishlist.js ====================
 import { useState, useEffect } from 'react'
+import { getFavoriteListsWithStatus } from '../lib/favoritesApi'
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
@@ -11,27 +12,7 @@ export function useWishlist(userId, placeId, isOpen) {
     if (!isOpen || !userId) return
     setLoading(true)
     try {
-      const res = await fetch(`${BACKEND_URL}/api/favorites/${userId}`)
-      const data = await res.json()
-
-      if (!data.success || !data.favorites) {
-        setLists([])
-        return
-      }
-
-      const listsWithStatus = await Promise.all(
-        data.favorites.map(async (list) => {
-          const placesRes = await fetch(
-            `${BACKEND_URL}/api/favorites/list/${list.list_id}`
-          )
-          const placesData = await placesRes.json()
-          const isChecked =
-            placesData.success &&
-            placesData.places.some((p) => p.place_id === parseInt(placeId))
-          return { ...list, checked: isChecked }
-        })
-      )
-      setLists(listsWithStatus)
+      setLists(await getFavoriteListsWithStatus(userId, placeId))
     } catch (err) {
       console.error('載入收藏清單失敗:', err)
       setLists([])

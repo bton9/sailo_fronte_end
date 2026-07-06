@@ -72,13 +72,11 @@ function App() {
     filteredPlaces,
     setFilteredPlaces,
     places, // Pagination 模式使用
-    setPlaces,
     currentPage,
     setCurrentPage,
     isLoading,
     cities,
     totalPages,
-    itemsPerPage,
     // 無限滾動相關
     displayPlaces, // 無限滾動模式使用
     isLoadingMore,
@@ -96,15 +94,11 @@ function App() {
     selectedCategory,
     setSelectedCategory,
     clearFilters,
-  } = useFilters(allPlaces, setFilteredPlaces, setCurrentPage)
+  } = useFilters(allPlaces, setFilteredPlaces)
 
-  // ============ 分頁邏輯管理（保留以支援 Pagination 組件）============
+  // ============ 分頁換頁邏輯（保留以支援 Pagination 組件；當頁景點切片由 usePlaces 內部負責）============
   const { handlePageChange } = usePagination({
-    currentPage,
     setCurrentPage,
-    filteredPlaces,
-    setPlaces,
-    itemsPerPage,
     totalPages,
   })
 
