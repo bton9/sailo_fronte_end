@@ -1,9 +1,13 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { ChevronLeft, Edit2, Upload, X } from 'lucide-react'
-import { createTrip, updateTrip } from '@/app/site/custom/lib/custom/tripApi'
+import { ChevronLeft, Upload, X } from 'lucide-react'
+import {
+  createTrip,
+  updateTrip,
+  uploadTripCover,
+} from '@/app/site/custom/lib/custom/tripApi'
 import { useAuth } from '@/contexts/AuthContext'
 import ConfirmModal from '@/components/confirmModal'
 export default function ItinerarySettings({
@@ -24,6 +28,8 @@ export default function ItinerarySettings({
   const [isPublic, setIsPublic] = useState(false)
   const [loading, setLoading] = useState(false)
   const [imagePreview, setImagePreview] = useState(null)
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const fileInputRef = useRef(null)
   // 新增 ConfirmModal 狀態
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
@@ -197,6 +203,37 @@ export default function ItinerarySettings({
     setImagePreview(null)
   }
 
+  // 選擇並上傳封面圖
+  const handleFileSelect = async (e) => {
+    const file = e.target.files?.[0]
+    e.target.value = '' // 允許重複選同一個檔案
+    if (!file) return
+
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      showError('不支援的檔案格式，只接受 JPG、PNG、WEBP')
+      return
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      showError('檔案大小超過限制（最大 10MB）')
+      return
+    }
+
+    setUploadingImage(true)
+    try {
+      const response = await uploadTripCover(file)
+      if (response.success) {
+        setImagePreview(response.data.url)
+      } else {
+        showError(response.message || '圖片上傳失敗')
+      }
+    } catch (error) {
+      showError('圖片上傳失敗: ' + (error.message || '請稍後再試'))
+    } finally {
+      setUploadingImage(false)
+    }
+  }
+
   // 處理取消
   const handleCancel = () => {
     if (itineraryName || startDate || endDate || description) {
@@ -248,6 +285,42 @@ export default function ItinerarySettings({
                 e.target.src = '/photo_error.svg'
               }}
             />
+
+            {uploadingImage && (
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-4 border-white border-t-transparent"></div>
+              </div>
+            )}
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={handleFileSelect}
+              disabled={loading || uploadingImage}
+            />
+
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={loading || uploadingImage}
+              className="absolute bottom-3 right-3 flex items-center gap-2 px-3 py-2 bg-white/90 text-gray-700 rounded-full text-sm font-medium shadow hover:bg-white transition disabled:opacity-50"
+            >
+              <Upload size={16} />
+              更換封面
+            </button>
+
+            {imagePreview && (
+              <button
+                type="button"
+                onClick={handleRemovePreview}
+                disabled={loading || uploadingImage}
+                className="absolute top-3 right-3 p-2 bg-white/90 text-gray-700 rounded-full shadow hover:bg-white transition disabled:opacity-50"
+              >
+                <X size={16} />
+              </button>
+            )}
           </div>
         </div>
 

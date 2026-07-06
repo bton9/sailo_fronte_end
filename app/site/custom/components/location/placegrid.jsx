@@ -73,7 +73,7 @@ export default function PlaceGrid({ places, currentPage }) {
 
         .card-animate-existing {
           opacity: 1;
-          transform: translateY();
+          transform: translateY(0);
         }
       `}</style>
 

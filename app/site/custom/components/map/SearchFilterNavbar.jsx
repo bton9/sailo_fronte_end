@@ -1,6 +1,10 @@
 'use client'
 import React from 'react'
-import { Search, MapPin, X, Map, Landmark, Utensils, Hotel } from 'lucide-react'
+import { Search, MapPin, X } from 'lucide-react'
+import {
+  DEFAULT_CATEGORIES,
+  CATEGORY_ICON_MAP,
+} from '@/app/site/custom/lib/placeCategories'
 
 /**
  * 搜尋與篩選 Navbar 元件
@@ -27,27 +31,13 @@ export default function SearchFilterNavbar({
   selectedCategory = '',
   onCategoryChange,
   cities = [],
-  // 將預設的 categories 裡的 icon 從 Emoji 改為一個識別字串，以便映射到 Lucide 元件
-  categories = [
-    { value: '景點', label: '景點', icon: 'Landmark' }, // 景點對應 Landmark
-    { value: '餐廳', label: '美食', icon: 'Utensils' }, // 餐廳對應 Utensils
-    { value: '住宿', label: '住宿', icon: 'Hotel' }, // 住宿對應 Hotel
-  ],
+  categories = DEFAULT_CATEGORIES,
   resultCount = 0,
   onClearFilters,
   showResultCount = true,
   placeholder = '搜尋景點名稱、描述或城市...',
 }) {
   const hasActiveFilters = searchTerm || selectedCity || selectedCategory
-
-  // 1. 定義 Lucide 圖示元件的映射表
-  // 這樣可以使用 cat.icon 字串來動態載入對應的 React 元件
-  const IconMap = {
-    Landmark: Landmark,
-    Utensils: Utensils,
-    Hotel: Hotel,
-    // 如果傳入的 categories 陣列有額外的項目，可以根據需要在這裡擴展映射
-  }
 
   return (
     <div className="sticky top-0 md:top-5 z-40 px-2 sm:px-4 mb-4 md:mb-8 pt-0 md:pt-5 md:mx-5">
@@ -97,9 +87,9 @@ export default function SearchFilterNavbar({
               let bgColor = 'bg-gray-400'
               let hoverColor = 'hover:bg-gray-500'
 
-              // 2. 根據 cat.icon 字串查找對應的 Lucide 圖示元件
-              // 如果 IconMap 中找不到，則預設使用 MapPin
-              const IconComponent = IconMap[cat.icon] || MapPin
+              // 根據 cat.icon 字串查找對應的 Lucide 圖示元件
+              // 如果 CATEGORY_ICON_MAP 中找不到，則預設使用 MapPin
+              const IconComponent = CATEGORY_ICON_MAP[cat.icon] || MapPin
 
               // 根據分類設定顏色
               if (cat.value === '景點') {

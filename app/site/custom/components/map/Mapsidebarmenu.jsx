@@ -2,7 +2,10 @@ import React from 'react' // 新增這一行
 import { Search, MapPin, Heart, Star, Sun, Moon, X } from 'lucide-react'
 import { useRouter } from 'next/navigation' // 新增：用於頁面導航
 import { useAuth } from '@/contexts/AuthContext' // 新增：取得使用者資訊
-import { Landmark, Utensils, Hotel } from 'lucide-react'
+import {
+  DEFAULT_CATEGORIES,
+  CATEGORY_ICON_MAP,
+} from '@/app/site/custom/lib/placeCategories'
 
 export default function MapSidebar({
   isOpen,
@@ -23,11 +26,7 @@ export default function MapSidebar({
   selectedCategory = '',
   onCategoryChange,
   cities = [],
-  categories = [
-    { value: '景點', label: '景點', icon: 'Landmark' }, // 景點對應 Landmark
-    { value: '餐廳', label: '美食', icon: 'Utensils' }, // 餐廳對應 Utensils
-    { value: '住宿', label: '住宿', icon: 'Hotel' }, // 住宿對應 Hotel
-  ],
+  categories = DEFAULT_CATEGORIES,
   onClearFilters,
 }) {
   // 新增：用於滾動到指定景點的 ref
@@ -69,13 +68,6 @@ export default function MapSidebar({
       router.push('/site/custom/mapPage')
     }
   }
-  const IconMap = {
-    Landmark: Landmark,
-    Utensils: Utensils,
-    Hotel: Hotel,
-    // 如果傳入的 categories 陣列有額外的項目，可以根據需要在這裡擴展映射
-  }
-
   return (
     <>
       {/* 深色模式按鈕 - 移到標題下方 */}
@@ -161,7 +153,7 @@ export default function MapSidebar({
             {/* 新增：分類篩選 */}
             <div className="mt-3 flex justify-center gap-2 overflow-x-auto scrollbar-hide pb-2">
               {categories.map((cat) => {
-                const IconComponent = IconMap[cat.icon]
+                const IconComponent = CATEGORY_ICON_MAP[cat.icon]
                 return (
                   <button
                     key={cat.value}

@@ -6,6 +6,7 @@ import SoloTravelWishlist from '../addtotrip/SoloTravelWishlist'
 import PlaceDetail from './PlaceDetail'
 import AddToTripDrawer from '../addtotrip/addtotripdrawer'
 import RIC_fi from '@/lib/react_icon/fi'
+import { isPlaceFavorited } from '@/app/site/custom/lib/favoritesApi'
 
 export default function Card({
   place_id,
@@ -28,34 +29,8 @@ export default function Card({
   // 檢查此景點是否在任何收藏清單中
   const fetchFavoriteStatus = async () => {
     if (!user?.id) return
-
     try {
-      const res = await fetch(`${BACKEND_URL}/api/favorites/${user.id}`)
-      const data = await res.json()
-
-      if (!data.success || !data.favorites) {
-        setFavorited(false)
-        return
-      }
-
-      // 檢查所有清單的景點
-      let isInAnyList = false
-      for (const list of data.favorites) {
-        const placesRes = await fetch(
-          `${BACKEND_URL}/api/favorites/list/${list.list_id}`
-        )
-        const placesData = await placesRes.json()
-
-        if (
-          placesData.success &&
-          placesData.places.some((p) => p.place_id === place_id)
-        ) {
-          isInAnyList = true
-          break
-        }
-      }
-
-      setFavorited(isInAnyList)
+      setFavorited(await isPlaceFavorited(user.id, place_id))
     } catch (err) {
       console.error('檢查收藏狀態失敗:', err)
       setFavorited(false)
@@ -64,7 +39,6 @@ export default function Card({
 
   useEffect(() => {
     fetchFavoriteStatus()
-    // 行程狀態（使用內存存儲代替 localStorage）
   }, [place_id, user?.id])
 
   // 收藏按鈕 → 開啟清單 Modal

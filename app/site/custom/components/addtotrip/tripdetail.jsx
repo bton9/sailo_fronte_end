@@ -14,7 +14,101 @@ import {
   Trash2,
   Clock,
   Star,
+  X,
+  GripVertical,
 } from 'lucide-react'
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
+/**
+ * 單一景點項目（可拖曳排序）
+ */
+function SortablePlaceItem({ item, index, onPlaceClick, onRemoveClick }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: item.trip_item_id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="border border-gray-200 p-4 hover:shadow-md hover:border-secondary-900 transition-all cursor-pointer bg-white"
+      onClick={() => onPlaceClick(item.place_id)}
+    >
+      <div className="flex items-start justify-between">
+        <div className="flex items-start flex-1">
+          {/* 拖曳把手 */}
+          <button
+            {...attributes}
+            {...listeners}
+            onClick={(e) => e.stopPropagation()}
+            className="mr-2 mt-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing touch-none"
+            title="拖曳調整順序"
+          >
+            <GripVertical className="w-5 h-5" />
+          </button>
+
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="flex items-center justify-center w-8 h-8 bg-secondary-900 text-white rounded-full font-semibold">
+                {index + 1}
+              </span>
+              <h3 className="text-lg font-semibold text-secondary-900">
+                {item.place_name || '未命名景點'}
+              </h3>
+              <span className="px-3 py-1 bg-primary-500 text-white rounded-full text-sm">
+                {item.type}
+              </span>
+            </div>
+
+            {item.start_time && item.end_time && (
+              <div className="flex items-center text-sm text-gray-600 mb-2">
+                <Clock className="w-4 h-4 mr-1" />
+                {item.start_time} - {item.end_time}
+              </div>
+            )}
+
+            {item.note && <p className="text-gray-700 mb-2">{item.note}</p>}
+
+            {item.rating && (
+              <div className="flex items-center text-sm text-gray-600">
+                <Star className="w-4 h-4 mr-1 fill-primary-500 text-primary-500" />
+                {item.rating.toFixed(1)}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onRemoveClick(item.trip_item_id)
+          }}
+          className="ml-4 text-red-600 hover:text-red-800"
+        >
+          <Trash2 className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+  )
+}
 
 /**
  * 行程詳細頁面元件
@@ -24,6 +118,7 @@ export default function TripDetail({
   userId,
   onBack,
   onAddPlace,
+  onRemovePlace,
   isFavorite,
   onToggleFavorite,
 }) {
@@ -119,6 +214,9 @@ export default function TripDetail({
       setTimeout(() => {
         setToast({ show: false, message: '' })
       }, 3000)
+
+      // 通知外層（例如 ToggleBar）重新載入行程列表，讓天數/景點數統計同步更新
+      onRemovePlace?.(tripItemId)
     } catch (err) {
       console.error('刪除失敗:', err)
       alert('移除失敗: ' + err.message)
@@ -128,6 +226,45 @@ export default function TripDetail({
   const handlePlaceClick = (placeId) => {
     setSelectedPlaceId(placeId)
     setShowPlaceDetail(true)
+  }
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  )
+
+  // 拖曳結束 - 重新排序同一天的景點
+  const handleDragEnd = async (event, day) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const oldIndex = day.items.findIndex((i) => i.trip_item_id === active.id)
+    const newIndex = day.items.findIndex((i) => i.trip_item_id === over.id)
+    if (oldIndex === -1 || newIndex === -1) return
+
+    const reordered = arrayMove(day.items, oldIndex, newIndex)
+
+    // 樂觀更新畫面
+    setDays((prevDays) =>
+      prevDays.map((d) =>
+        d.trip_day_id === day.trip_day_id ? { ...d, items: reordered } : d
+      )
+    )
+
+    try {
+      await Promise.all(
+        reordered.map((item, idx) =>
+          tripApi.updatePlaceOrder(item.trip_item_id, idx + 1)
+        )
+      )
+    } catch (err) {
+      console.error('更新排序失敗:', err)
+      // 儲存失敗則重新載入正確的順序
+      const result = await tripApi.getTripDetail(tripId)
+      if (result.success && result.data) {
+        setTrip(result.data.trip)
+        setDays(result.data.days || [])
+      }
+    }
   }
   // Loading 狀態
   if (loading) {
@@ -279,61 +416,30 @@ export default function TripDetail({
                   </button>
                 </div>
 
-                {/* 景點列表 */}
+                {/* 景點列表（可拖曳排序） */}
                 {day.items && day.items.length > 0 ? (
-                  <div className="space-y-4">
-                    {day.items.map((item, index) => (
-                      <div
-                        key={item.trip_item_id}
-                        className="border border-gray-200 p-4 hover:shadow-md hover:border-secondary-900 transition-all cursor-pointer"
-                        onClick={() => handlePlaceClick(item.place_id)}
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <span className="flex items-center justify-center w-8 h-8 bg-secondary-900 text-white rounded-full font-semibold">
-                                {index + 1}
-                              </span>
-                              <h3 className="text-lg font-semibold text-secondary-900">
-                                {item.place_name || '未命名景點'}
-                              </h3>
-                              <span className="px-3 py-1 bg-primary-500 text-white rounded-full text-sm">
-                                {item.type}
-                              </span>
-                            </div>
-
-                            {item.start_time && item.end_time && (
-                              <div className="flex items-center text-sm text-gray-600 mb-2">
-                                <Clock className="w-4 h-4 mr-1" />
-                                {item.start_time} - {item.end_time}
-                              </div>
-                            )}
-
-                            {item.note && (
-                              <p className="text-gray-700 mb-2">{item.note}</p>
-                            )}
-
-                            {item.rating && (
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Star className="w-4 h-4 mr-1 fill-primary-500 text-primary-500" />
-                                {item.rating.toFixed(1)}
-                              </div>
-                            )}
-                          </div>
-
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleRemovePlaceClick(item.trip_item_id)
-                            }}
-                            className="ml-4 text-red-600 hover:text-red-800"
-                          >
-                            <Trash2 className="w-5 h-5" />
-                          </button>
-                        </div>
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={(event) => handleDragEnd(event, day)}
+                  >
+                    <SortableContext
+                      items={day.items.map((item) => item.trip_item_id)}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      <div className="space-y-4">
+                        {day.items.map((item, index) => (
+                          <SortablePlaceItem
+                            key={item.trip_item_id}
+                            item={item}
+                            index={index}
+                            onPlaceClick={handlePlaceClick}
+                            onRemoveClick={handleRemovePlaceClick}
+                          />
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </SortableContext>
+                  </DndContext>
                 ) : (
                   <div className="text-center py-8 text-gray-500">
                     此日期尚無景點安排

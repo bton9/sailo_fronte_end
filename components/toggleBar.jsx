@@ -674,7 +674,6 @@ const ToggleBar = ({
                 onBack={handleBackToList}
                 onAddPlace={handleAddPlace}
                 onRemovePlace={handleRemovePlace}
-                onUpdateOrder={() => {}}
                 isFavorite={favorites.has(viewingTripId)}
                 onToggleFavorite={async () => {
                   const schedule = schedules.find(

@@ -5,6 +5,7 @@ import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail'
 import MapSidebar from './Mapsidebarmenu'
 import SoloTravelWishlist from '../addtotrip/SoloTravelWishlist'
 import ToggleBar from '@/components/toggleBar'
+import { getFavoritedPlaceIds } from '../../lib/favoritesApi'
 
 // ============================================
 // 主要地圖邏輯組件
@@ -73,35 +74,7 @@ function MapContent() {
     }
 
     try {
-      // 1. 取得使用者的所有收藏清單
-      const res = await fetch(`${BACKEND_URL}/api/favorites/${user.id}`)
-      const data = await res.json()
-
-      if (!data.success || !data.favorites) {
-        setFavorites([])
-        return
-      }
-
-      // 2. 遍歷每個收藏清單,取得其中的景點 ID
-      const allFavoritePlaceIds = []
-      for (const list of data.favorites) {
-        const placesRes = await fetch(
-          `${BACKEND_URL}/api/favorites/list/${list.list_id}`
-        )
-        const placesData = await placesRes.json()
-
-        // 將景點 ID 加入陣列 (避免重複)
-        if (placesData.success && placesData.places) {
-          placesData.places.forEach((place) => {
-            if (!allFavoritePlaceIds.includes(place.place_id)) {
-              allFavoritePlaceIds.push(place.place_id)
-            }
-          })
-        }
-      }
-
-      setFavorites(allFavoritePlaceIds)
-      console.log('載入收藏列表:', allFavoritePlaceIds)
+      setFavorites(await getFavoritedPlaceIds(user.id))
     } catch (err) {
       console.error('載入收藏列表失敗:', err)
       setFavorites([])
