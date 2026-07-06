@@ -5,10 +5,6 @@ import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail'
 import MapSidebar from './Mapsidebarmenu'
 import SoloTravelWishlist from '../addtotrip/SoloTravelWishlist'
 import ToggleBar from '@/components/toggleBar'
-import TravelApp, {
-  NavigationProvider,
-  useNavigation,
-} from '../addtotrip/travelApp'
 
 // ============================================
 // 主要地圖邏輯組件
@@ -48,8 +44,7 @@ function MapContent() {
   const [selectedPlaceForFav, setSelectedPlaceForFav] = useState(null) // 要加入收藏的景點
   const [leafletLoaded, setLeafletLoaded] = useState(false) // Leaflet 是否已載入
 
-  const { navigateToSettings } = useNavigation() // 導航功能
-  const BACKEND_URL = 'http://localhost:5000' // 後端 API 位址
+  const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000' // 後端 API 位址
 
   // -----------------------------------
   // 2. 收藏功能相關
@@ -512,22 +507,15 @@ function MapContent() {
         userId={user?.id}
       />
 
-      {/* 上方切換列 (導航到設定頁面等) */}
-      <ToggleBar onNavigateToSettings={navigateToSettings} />
-
-      {/* 旅遊應用其他頁面 (根據導航狀態顯示) */}
-      <TravelApp />
+      {/* 上方切換列 */}
+      <ToggleBar />
     </div>
   )
 }
 
 // ============================================
-// 主要匯出組件 (用 NavigationProvider 包裹)
+// 主要匯出組件
 // ============================================
 export default function FullscreenMap() {
-  return (
-    <NavigationProvider>
-      <MapContent />
-    </NavigationProvider>
-  )
+  return <MapContent />
 }

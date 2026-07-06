@@ -253,8 +253,6 @@ const ToggleBar = ({
   isOpen: isOpenProp,
   onToggle,
   initialTripId = null,
-  onNavigateToDetail,
-  onNavigateToSettings,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('my')
