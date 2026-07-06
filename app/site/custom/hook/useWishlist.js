@@ -1,7 +1,7 @@
 // ==================== hooks/useWishlist.js ====================
 import { useState, useEffect } from 'react'
 
-const BACKEND_URL = 'http://localhost:5000'
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
 export function useWishlist(userId, placeId, isOpen) {
   const [lists, setLists] = useState([])

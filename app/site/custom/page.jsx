@@ -14,10 +14,6 @@ import { useFilters } from './hook/use-filter'
 import { usePagination } from './hook/use-pagination'
 import '@/app/globals.css'
 import ToggleBar from '@/components/toggleBar'
-import TravelApp, {
-  NavigationProvider,
-  useNavigation,
-} from './components/addtotrip/travelApp'
 import MapTransition from '@/components/mapTransition' // 引入地圖轉場組件
 
 /**
@@ -25,8 +21,6 @@ import MapTransition from '@/components/mapTransition' // 引入地圖轉場組�
  * @returns {JSX.Element}
  */
 function App() {
-  const { navigateToSettings } = useNavigation()
-
   // ============ 使用 AuthContext Hook ============
   const { user, logout } = useAuth()
   
@@ -195,25 +189,10 @@ function App() {
           isOpen={isToggleBarOpen}  // 新增：控制開關
           onToggle={handleToggleBar}  // 新增：切換函式
           initialTripId={targetTripId}  // 新增：初始要顯示的行程 ID
-          onNavigateToSettings={navigateToSettings}
         />
-
-        {/* TravelApp 會根據導航狀態顯示對應的頁面 */}
-        <TravelApp />
       </div>
     </AuthGuard>
   )
 }
 
-/**
- * AppWrapper - 主要導出元件
- */
-function AppWrapper() {
-  return (
-    <NavigationProvider>
-      <App />
-    </NavigationProvider>
-  )
-}
-
-export default AppWrapper
+export default App

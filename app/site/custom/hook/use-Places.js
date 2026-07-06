@@ -3,6 +3,8 @@ import useSWR from 'swr'
 import { processPlaceImage } from '../lib/imageutils'
 import { filterPlaces } from '../lib/filterutils'
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+
 /**
  * SWR fetcher 函數
  */
@@ -32,7 +34,7 @@ export function usePlaces({ itemsPerPage = 30 } = {}) {
 
   // 使用 SWR 獲取所有資料
   const { data, error, isLoading, mutate } = useSWR(
-    'http://localhost:5000/api/places',
+    `${API_URL}/api/places`,
     fetcher,
     {
       revalidateOnFocus: false,
