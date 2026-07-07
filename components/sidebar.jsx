@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import LoginModal from './auth/LoginModal'
 import ConfirmModal from './confirmModal'
 import React, { useState, useEffect } from 'react'
@@ -48,6 +49,7 @@ const menuItems = [
 
 const SideMenu = () => {
   const { user, logout, showLoginModal, setShowLoginModal } = useAuth()
+  const notify = useNotify()
   const [isExpanded, setIsExpanded] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
@@ -103,7 +105,7 @@ const SideMenu = () => {
       setShowLogoutConfirm(false)
     } catch (error) {
       console.error('登出失敗:', error)
-      alert('登出失敗,請稍後再試')
+      notify('登出失敗,請稍後再試', 'error')
       setShowLogoutConfirm(false)
     }
   }

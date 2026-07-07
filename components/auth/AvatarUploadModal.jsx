@@ -24,6 +24,7 @@ import { useState, useRef } from 'react'
 import { Camera, X, Upload, Trash2, Check } from 'lucide-react'
 import { userAPI } from '@/services/api'
 import { useAuth } from '@/contexts/AuthContext'
+import { useConfirm } from '@/contexts/ConfirmContext'
 import { getFullAvatarUrl } from '@/utils/avatar' // 頭像 URL 工具函數
 
 export default function AvatarUploadModal({
@@ -40,6 +41,7 @@ export default function AvatarUploadModal({
   const [success, setSuccess] = useState('') // 成功訊息
   const fileInputRef = useRef(null) // 檔案輸入參照
   const { updateUser } = useAuth() // 更新使用者資料方法
+  const confirmAction = useConfirm()
 
   // ============ 檔案驗證配置 ============
   const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -130,7 +132,7 @@ export default function AvatarUploadModal({
       return
     }
 
-    if (!confirm('確定要刪除頭像嗎？')) {
+    if (!(await confirmAction('確定要刪除頭像嗎？'))) {
       return
     }
 

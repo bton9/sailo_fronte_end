@@ -2,14 +2,16 @@
 import { useState } from 'react'
 import { Edit3 } from 'lucide-react'
 import { ModalHeader } from './ModalHeader'
+import { useNotify } from '@/contexts/NotificationContext'
 
 export function CreateListModal({ onSubmit, onClose }) {
+  const notify = useNotify()
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
 
   const handleSubmit = () => {
     if (!name.trim()) {
-      alert('請輸入清單名稱')
+      notify('請輸入清單名稱', 'error')
       return
     }
     onSubmit(name, description)

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import {
   getUserStats,
   getFollowers,
@@ -24,6 +25,7 @@ export default function FollowingPage() {
   const searchParams = useSearchParams()
   const userId = params.userId
   const { user } = useAuth()
+  const notify = useNotify()
 
   // 狀態管理
   const [profileUser, setProfileUser] = useState(null)
@@ -213,7 +215,7 @@ export default function FollowingPage() {
   // 處理追蹤/取消追蹤
   const handleFollowClick = async (targetUserId) => {
     if (!user?.id) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
 
@@ -257,7 +259,7 @@ export default function FollowingPage() {
       }
     } catch (error) {
       console.error('追蹤操作失敗:', error)
-      alert('操作失敗，請稍後重試')
+      notify('操作失敗，請稍後重試', 'error')
     }
   }
 
@@ -281,7 +283,7 @@ export default function FollowingPage() {
   // 處理追蹤個人頁使用者
   const handleProfileUserFollow = async () => {
     if (!user?.id) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
 
@@ -323,7 +325,7 @@ export default function FollowingPage() {
       setStats(userStatsResult.data.stats)
     } catch (error) {
       console.error('追蹤失敗:', error)
-      alert('操作失敗，請稍後重試')
+      notify('操作失敗，請稍後重試', 'error')
     }
   }
 

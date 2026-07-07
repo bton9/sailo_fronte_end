@@ -32,6 +32,7 @@ import {
 } from 'lucide-react'
 import ItinerarySettings from '../app/site/custom/components/addtotrip/travelSetting'
 import ConfirmModal from './confirmModal'
+import { useAuth } from '@/contexts/AuthContext'
 
 // 行程卡片元件
 const ScheduleCard = ({
@@ -254,6 +255,7 @@ const ToggleBar = ({
   onToggle,
   initialTripId = null,
 }) => {
+  const { isAuthenticated } = useAuth()
   const [internalIsOpen, setInternalIsOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('my')
   const [schedules, setSchedules] = useState([])
@@ -326,6 +328,14 @@ const ToggleBar = ({
   }
 
   const loadTrips = async () => {
+    // 未登入時不發送請求，避免打到需要登入的 API 而收到 401
+    if (!isAuthenticated) {
+      setSchedules([])
+      setFavorites(new Set())
+      setLoading(false)
+      return
+    }
+
     setLoading(true)
     try {
       console.log('🔍 開始載入行程...', { userId })
@@ -366,7 +376,7 @@ const ToggleBar = ({
     if (isOpen) {
       loadTrips()
     }
-  }, [isOpen])
+  }, [isOpen, isAuthenticated])
 
   const handleCopy = async (schedule) => {
     showConfirm(
@@ -736,7 +746,15 @@ const ToggleBar = ({
             </div>
 
             <div className="flex-1 px-6 py-4 pb-10 overflow-y-auto overflow-x-visible">
-              {loading ? (
+              {!isAuthenticated ? (
+                <div className="text-center py-12">
+                  <Package className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                  <p className="text-gray-500 text-lg mb-2">請先登入</p>
+                  <p className="text-gray-400 text-sm">
+                    登入後即可查看與管理你的行程
+                  </p>
+                </div>
+              ) : loading ? (
                 <div className="flex justify-center items-center h-64">
                   <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-500 border-t-transparent"></div>
                 </div>

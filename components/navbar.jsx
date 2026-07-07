@@ -7,6 +7,7 @@ import { useState } from 'react'
 import RIC_ai from '@/lib/react_icon/ai'
 import RIC_fi from '@/lib/react_icon/fi'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import LoginModal from './auth/LoginModal'
 import ConfirmModal from './confirmModal'
 
@@ -19,6 +20,7 @@ const menuItems = [
 
 export default function Navbar() {
   const { user, logout, showLoginModal, setShowLoginModal } = useAuth()
+  const notify = useNotify()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   // const [showLoginModal, setShowLoginModal] = useState(false) //  移除本地狀態,改用全域
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
@@ -60,7 +62,7 @@ export default function Navbar() {
       setShowLogoutConfirm(false)
     } catch (error) {
       console.error('登出失敗:', error)
-      alert('登出失敗,請稍後再試')
+      notify('登出失敗,請稍後再試', 'error')
       setShowLogoutConfirm(false)
     }
   }

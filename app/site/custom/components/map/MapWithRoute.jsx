@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
+import { useNotify } from '@/contexts/NotificationContext'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css'
@@ -98,6 +99,7 @@ function useGeolocation(setUserLocation, setLoading, setError) {
 
 // ============ 元件：地圖視圖 ============
 function MapView({ userLocation, destination, setError }) {
+  const notify = useNotify()
   const mapRef = useRef(null)
   const mapInstanceRef = useRef(null)
   const routingControlRef = useRef(null)
@@ -177,7 +179,8 @@ function MapView({ userLocation, destination, setError }) {
           animatedMarkerRef,
           setIsAnimating,
           setAnimationProgress,
-          animationFrameRef
+          animationFrameRef,
+          notify
         )}
         onStopAnimation={() => stopAnimation(animationFrameRef, setIsAnimating)}
         routeReady={routeReady}
@@ -352,9 +355,9 @@ function setupRoute(map, userLocation, destination, routingControlRef, userMarke
 }
 
 // ============ 工具函數：開始動畫 ============
-function startAnimation(map, routeCoordinates, animatedMarkerRef, setIsAnimating, setAnimationProgress, animationFrameRef) {
+function startAnimation(map, routeCoordinates, animatedMarkerRef, setIsAnimating, setAnimationProgress, animationFrameRef, notify) {
   if (routeCoordinates.length === 0) {
-    alert('請等待路線計算完成')
+    notify('請等待路線計算完成', 'error')
     return
   }
 

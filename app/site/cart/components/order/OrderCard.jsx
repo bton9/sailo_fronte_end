@@ -6,9 +6,11 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useNotify } from '@/contexts/NotificationContext'
 
 export default function OrderCard({ order }) {
   const router = useRouter()
+  const notify = useNotify()
 
   const statusStyles = {
     ordered: 'bg-green-200 text-green-700',
@@ -109,7 +111,7 @@ export default function OrderCard({ order }) {
 
           {order.status === 'shipped' && (
             <button
-              onClick={() => alert('物流追蹤功能開發中')}
+              onClick={() => notify('物流追蹤功能開發中', 'info')}
               className="w-full rounded-lg bg-primary-500 px-6 py-2.5 text-sm font-medium text-white transition-all hover:bg-primary-500/90 md:w-auto"
             >
               追蹤物流

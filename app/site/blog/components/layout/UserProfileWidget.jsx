@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useNotify } from '@/contexts/NotificationContext'
 import * as FaIcons from 'react-icons/fa6'
 
 export default function UserProfileWidget({
@@ -17,6 +18,7 @@ export default function UserProfileWidget({
   onSearchSubmit = () => {},
 }) {
   const router = useRouter()
+  const notify = useNotify()
   const [searchKeyword, setSearchKeyword] = useState('')
 
   // 判斷當前情境
@@ -125,7 +127,7 @@ export default function UserProfileWidget({
             onClick={() => {
               console.log('🔍 追蹤按鈕被點擊')
               if (!currentUser) {
-                alert('請先登入')
+                notify('請先登入', 'error')
                 return
               }
               onFollowClick()

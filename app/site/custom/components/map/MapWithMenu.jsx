@@ -6,6 +6,7 @@ import MapSidebar from './Mapsidebarmenu'
 import SoloTravelWishlist from '../addtotrip/SoloTravelWishlist'
 import ToggleBar from '@/components/toggleBar'
 import { getFavoritedPlaceIds } from '../../lib/favoritesApi'
+import { useNotify } from '@/contexts/NotificationContext'
 
 // ============================================
 // 主要地圖邏輯組件
@@ -15,6 +16,7 @@ function MapContent() {
   // 1. 狀態管理 (State Management)
   // -----------------------------------
   const { user } = useAuth() // 取得當前登入使用者資訊
+  const notify = useNotify()
 
   // 地圖相關 refs
   const mapRef = useRef(null) // Leaflet 地圖實例
@@ -370,7 +372,7 @@ function MapContent() {
    */
   const getUserLocation = () => {
     // 檢查瀏覽器是否支援定位
-    if (!navigator.geolocation) return alert('瀏覽器不支援定位')
+    if (!navigator.geolocation) return notify('瀏覽器不支援定位', 'error')
 
     const L = leafletRef.current
 
@@ -391,7 +393,7 @@ function MapContent() {
       },
       (err) => {
         // 定位失敗
-        alert('無法取得位置: ' + err.message)
+        notify('無法取得位置: ' + err.message, 'error')
       }
     )
   }

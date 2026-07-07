@@ -49,6 +49,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSocket } from '@/contexts/SocketContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import {
   X,
   Send,
@@ -68,6 +69,7 @@ import RatingModal from './RatingModal'
 export default function CustomerChat({ isOpen = false, onClose }) {
   const { user, isAuthenticated } = useAuth()
   const { socket, isConnected } = useSocket()
+  const notify = useNotify()
 
   // ============ State 管理 ============
   // 🆕 AI 客服狀態
@@ -279,12 +281,12 @@ export default function CustomerChat({ isOpen = false, onClose }) {
       }
     } catch (error) {
       console.error(' 轉接人工客服失敗:', error)
-      alert('轉接失敗,請稍後再試')
+      notify('轉接失敗,請稍後再試', 'error')
     } finally {
       setIsSending(false)
       setIsLoading(false)
     }
-  }, [aiRoom, socket, isConnected])
+  }, [aiRoom, socket, isConnected, notify])
 
   // ============================================
   // 🆕 API: 發送訊息給 AI
@@ -695,7 +697,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         // 恢復輸入框內容
         setInputMessage(userMessageText)
 
-        alert('訊息發送失敗,請稍後再試')
+        notify('訊息發送失敗,請稍後再試', 'error')
       } finally {
         setIsSending(false)
       }
@@ -711,6 +713,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
       isConnected,
       user,
       sendMessageToAI,
+      notify,
     ]
   )
 

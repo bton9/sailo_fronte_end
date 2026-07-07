@@ -15,6 +15,8 @@ import { usePagination } from './hook/use-pagination'
 import '@/app/globals.css'
 import ToggleBar from '@/components/toggleBar'
 import MapTransition from '@/components/mapTransition' // 引入地圖轉場組件
+import { useNotify } from '@/contexts/NotificationContext'
+import { useConfirm } from '@/contexts/ConfirmContext'
 
 /**
  * WrappedApp - 景點列表主頁面
@@ -23,6 +25,8 @@ import MapTransition from '@/components/mapTransition' // 引入地圖轉場組�
 function App() {
   // ============ 使用 AuthContext Hook ============
   const { user, logout } = useAuth()
+  const notify = useNotify()
+  const confirmAction = useConfirm()
   
   //新增：ToggleBar 開關狀態和當前查看的行程 ID
   const [isToggleBarOpen, setIsToggleBarOpen] = useState(false)
@@ -47,13 +51,13 @@ function App() {
    */
   const handleLogout = async () => {
     try {
-      const confirmed = window.confirm('確定要登出嗎？')
+      const confirmed = await confirmAction('確定要登出嗎？')
       if (!confirmed) return
 
       await logout()
     } catch (error) {
       console.error('登出失敗:', error)
-      alert('登出失敗，請稍後再試')
+      notify('登出失敗，請稍後再試', 'error')
     }
   }
 

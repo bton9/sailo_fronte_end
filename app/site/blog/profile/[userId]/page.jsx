@@ -16,6 +16,8 @@ import {
   copyItinerary,
 } from '@/lib/blogApi'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
+import { useConfirm } from '@/contexts/ConfirmContext'
 import BackButton from '../../components/layout/BackButton'
 import UserProfileWidget from '../../components/layout/UserProfileWidget'
 import FilterSidebar from '../../components/layout/FilterSidebar'
@@ -28,6 +30,8 @@ import * as FaIcons from 'react-icons/fa6'
 
 export default function ProfilePage() {
   const { user } = useAuth() // 🔐 使用 AuthContext
+  const notify = useNotify()
+  const confirmAction = useConfirm()
 
   const router = useRouter()
   const params = useParams()
@@ -273,7 +277,7 @@ export default function ProfilePage() {
   // 追蹤按鈕
   const handleFollowClick = async () => {
     if (!user) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
 
@@ -286,7 +290,7 @@ export default function ProfilePage() {
       setStats(userStatsResult.data.stats)
     } catch (error) {
       console.error('追蹤失敗:', error)
-      alert('追蹤失敗，請稍後重試')
+      notify('追蹤失敗，請稍後重試', 'error')
     }
   }
 
@@ -303,7 +307,7 @@ export default function ProfilePage() {
   //  修正: handleLike
   const handleLike = async (postId) => {
     if (!user?.id) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
 
@@ -328,7 +332,7 @@ export default function ProfilePage() {
       setPosts(result.data.posts)
     } catch (error) {
       console.error('按讚失敗:', error)
-      alert('按讚失敗，請稍後重試')
+      notify('按讚失敗，請稍後重試', 'error')
     }
   }
 
@@ -339,7 +343,7 @@ export default function ProfilePage() {
   //  修正: handleBookmark
   const handleBookmark = async (postId) => {
     if (!user?.id) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
 
@@ -364,14 +368,14 @@ export default function ProfilePage() {
       setPosts(result.data.posts)
     } catch (error) {
       console.error('收藏失敗:', error)
-      alert('收藏失敗，請稍後重試')
+      notify('收藏失敗，請稍後重試', 'error')
     }
   }
 
   //  修正: handleFollow
   const handleFollow = async (authorId) => {
     if (!user?.id) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
 
@@ -396,7 +400,7 @@ export default function ProfilePage() {
       setPosts(result.data.posts)
     } catch (error) {
       console.error('追蹤失敗:', error)
-      alert('追蹤失敗，請稍後重試')
+      notify('追蹤失敗，請稍後重試', 'error')
     }
   }
 
@@ -412,7 +416,7 @@ export default function ProfilePage() {
         })
       } else {
         await navigator.clipboard.writeText(postUrl)
-        alert('連結已複製到剪貼簿')
+        notify('連結已複製到剪貼簿', 'success')
       }
     } catch (error) {
       console.error('分享失敗:', error)
@@ -427,7 +431,7 @@ export default function ProfilePage() {
           router.push(`/site/blog/post/create?edit=${postId}`)
           break
         case 'delete':
-          if (window.confirm('確定要刪除這篇文章嗎？')) {
+          if (await confirmAction('確定要刪除這篇文章嗎？')) {
             await deletePost(postId)
 
             setPage(1)
@@ -451,20 +455,20 @@ export default function ProfilePage() {
             const userStatsResult = await getUserStats(userId)
             setStats(userStatsResult.data.stats)
 
-            alert('文章已刪除')
+            notify('文章已刪除', 'success')
           }
           break
         case 'copy':
           const postUrl = `${window.location.origin}/site/blog/post/${postId}`
           await navigator.clipboard.writeText(postUrl)
-          alert('連結已複製到剪貼簿')
+          notify('連結已複製到剪貼簿', 'success')
           break
         default:
           break
       }
     } catch (error) {
       console.error('操作失敗:', error)
-      alert('操作失敗，請稍後重試')
+      notify('操作失敗，請稍後重試', 'error')
     }
   }
 
@@ -483,7 +487,7 @@ export default function ProfilePage() {
 
       if (!targetPost) {
         console.error(' 找不到關聯的文章')
-        alert('找不到關聯的行程')
+        notify('找不到關聯的行程', 'error')
         return
       }
 
@@ -499,7 +503,7 @@ export default function ProfilePage() {
         if (copyResult.success) {
           const newTripId = copyResult.data.trip_id
           console.log(' 行程複製成功，新行程 ID:', newTripId)
-          alert(`已將行程複製到您的行程列表！`)
+          notify('已將行程複製到您的行程列表！', 'success')
 
           //  改用 sessionStorage 傳遞
           sessionStorage.setItem('openTripId', newTripId)
@@ -516,7 +520,7 @@ export default function ProfilePage() {
       }
     } catch (error) {
       console.error(' 行程操作失敗:', error)
-      alert(`操作失敗: ${error.message}`)
+      notify(`操作失敗: ${error.message}`, 'error')
     }
   }
 

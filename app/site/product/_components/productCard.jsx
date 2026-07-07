@@ -6,6 +6,7 @@ import Badge from './badge'
 import { Heart } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
 
 const ProductCard = ({
   id, // 商品 ID
@@ -21,6 +22,7 @@ const ProductCard = ({
 }) => {
   const router = useRouter()
   const { user, isAuthenticated, setShowLoginModal } = useAuth()
+  const notify = useNotify()
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -87,7 +89,7 @@ const ProductCard = ({
 
     if (!userId) {
       console.error(' user 物件中沒有 user_id 或 id')
-      alert('無法取得使用者 ID，請重新登入')
+      notify('無法取得使用者 ID，請重新登入', 'error')
       return
     }
 
@@ -138,7 +140,7 @@ const ProductCard = ({
       console.error(' 收藏操作失敗:', error)
       // 恢復原狀態
       setIsFavorite(!newFavoriteState)
-      alert(`收藏操作失敗：${error.message}`)
+      notify(`收藏操作失敗：${error.message}`, 'error')
     } finally {
       setIsLoading(false)
       // 動畫結束後重置

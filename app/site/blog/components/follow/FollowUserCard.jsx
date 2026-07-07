@@ -1,6 +1,7 @@
 'use client'
 
 import * as FaIcons from 'react-icons/fa6'
+import { useNotify } from '@/contexts/NotificationContext'
 
 /**
  * FollowUserCard - 追蹤列表使用者卡片元件
@@ -44,6 +45,7 @@ export default function FollowUserCard({
   onUserClick = () => {},
   onFollowClick = () => {},
 }) {
+  const notify = useNotify()
   // 解構使用者資料
   const {
     id,
@@ -85,7 +87,7 @@ export default function FollowUserCard({
   const handleFollowClick = (e) => {
     e.stopPropagation()
     if (!currentUserId) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
     if (id) {

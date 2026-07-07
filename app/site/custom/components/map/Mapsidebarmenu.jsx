@@ -2,6 +2,7 @@ import React from 'react' // 新增這一行
 import { Search, MapPin, Heart, Star, Sun, Moon, X } from 'lucide-react'
 import { useRouter } from 'next/navigation' // 新增：用於頁面導航
 import { useAuth } from '@/contexts/AuthContext' // 新增：取得使用者資訊
+import { useNotify } from '@/contexts/NotificationContext'
 import {
   DEFAULT_CATEGORIES,
   CATEGORY_ICON_MAP,
@@ -33,6 +34,7 @@ export default function MapSidebar({
   const placeRefs = React.useRef({})
   const router = useRouter() // 新增：路由器實例
   const { user } = useAuth() // 新增：取得使用者資訊
+  const notify = useNotify()
 
   // 新增：當 highlightedPlaceId 改變時，滾動到該景點
   React.useEffect(() => {
@@ -247,7 +249,7 @@ export default function MapSidebar({
                           e.stopPropagation()
                           // 檢查是否登入
                           if (!user) {
-                            alert('請先登入才能收藏景點')
+                            notify('請先登入才能收藏景點', 'error')
                             return
                           }
                           onOpenFavModal(place)

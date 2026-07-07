@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { X, Search } from 'lucide-react'
+import { useNotify } from '@/contexts/NotificationContext'
 
 /**
  * 景點搜尋彈窗元件
@@ -20,6 +21,7 @@ export default function PlaceSearchModal({
   userId,
   onPlaceSelect,
 }) {
+  const notify = useNotify()
   const [keyword, setKeyword] = useState('') // 搜尋關鍵字
   const [locationId, setLocationId] = useState('') // 地區篩選
   const [category, setCategory] = useState('') // 類別篩選
@@ -92,7 +94,7 @@ export default function PlaceSearchModal({
       }
     } catch (error) {
       console.error('搜尋失敗:', error)
-      alert('搜尋失敗,請稍後再試')
+      notify('搜尋失敗,請稍後再試', 'error')
       setPlaces([])
     } finally {
       setLoading(false)

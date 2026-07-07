@@ -2,6 +2,7 @@
 
 import { useState, forwardRef, useImperativeHandle } from 'react'
 import * as FaIcons from 'react-icons/fa6'
+import { useNotify } from '@/contexts/NotificationContext'
 
 /**
  * NewCommentInput - 新增留言輸入框元件
@@ -18,6 +19,7 @@ const NewCommentInput = forwardRef(({
   onSubmit = () => {},
   placeholder = '分享你的想法...',
 }, ref) => {
+  const notify = useNotify()
   const [content, setContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -38,12 +40,12 @@ const NewCommentInput = forwardRef(({
     const trimmedContent = content.trim()
     
     if (!trimmedContent) {
-      alert('請輸入留言內容')
+      notify('請輸入留言內容', 'error')
       return
     }
 
     if (trimmedContent.length > 1000) {
-      alert('留言內容不得超過 1000 字')
+      notify('留言內容不得超過 1000 字', 'error')
       return
     }
 
@@ -53,7 +55,7 @@ const NewCommentInput = forwardRef(({
       setContent('') // 清空輸入框
     } catch (error) {
       console.error('發布留言失敗:', error)
-      alert('發布留言失敗，請稍後重試')
+      notify('發布留言失敗，請稍後重試', 'error')
     } finally {
       setIsSubmitting(false)
     }

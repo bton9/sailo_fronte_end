@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation' //  確保有 useRouter
+import { useNotify } from '@/contexts/NotificationContext'
 import * as FaIcons from 'react-icons/fa6'
 import PostActionBar from './PostActionBar'
 import ItineraryCard from './ItineraryCard'
@@ -24,6 +25,7 @@ export default function PostDetail({
   onPlaceCardClick = () => {}, //  加入這行
 }) {
   const router = useRouter() //  加入 router
+  const notify = useNotify()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0) // 當前圖片索引
@@ -102,7 +104,7 @@ export default function PostDetail({
   // 處理追蹤
   const handleFollowClick = () => {
     if (!currentUserId) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
     onFollow(post.author.user_id)
