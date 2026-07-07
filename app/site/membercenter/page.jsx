@@ -15,6 +15,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import EditProfileModal from '@/components/auth/EditProfileModal'
 import { getFullAvatarUrl, getAvatarUrl } from '@/utils/avatar' // 頭像 URL 工具函數
 import ConfirmModal from '@/components/confirmModal'
+import { useNotify } from '@/contexts/NotificationContext'
 
 export default function ProfilePage() {
   // ============ 配置常數 ============
@@ -24,6 +25,7 @@ export default function ProfilePage() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const { user, logout, isAuthenticated } = useAuth() // 取得認證狀態
+  const notify = useNotify()
 
   // ============ 狀態管理 ============
   const [activeTab, setActiveTab] = useState('travelPlan')

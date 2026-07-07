@@ -17,6 +17,7 @@ import {
   Star,
   X,
   GripVertical,
+  User,
 } from 'lucide-react'
 import {
   DndContext,
@@ -36,9 +37,9 @@ import { CSS } from '@dnd-kit/utilities'
 /**
  * 單一景點項目（可拖曳排序）
  */
-function SortablePlaceItem({ item, index, onPlaceClick, onRemoveClick }) {
+function SortablePlaceItem({ item, index, onPlaceClick, onRemoveClick, isOwner = true }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: item.trip_item_id })
+    useSortable({ id: item.trip_item_id, disabled: !isOwner })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -55,16 +56,18 @@ function SortablePlaceItem({ item, index, onPlaceClick, onRemoveClick }) {
     >
       <div className="flex items-start justify-between">
         <div className="flex items-start flex-1">
-          {/* 拖曳把手 */}
-          <button
-            {...attributes}
-            {...listeners}
-            onClick={(e) => e.stopPropagation()}
-            className="mr-2 mt-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing touch-none"
-            title="拖曳調整順序"
-          >
-            <GripVertical className="w-5 h-5" />
-          </button>
+          {/* 拖曳把手(僅限自己的行程) */}
+          {isOwner && (
+            <button
+              {...attributes}
+              {...listeners}
+              onClick={(e) => e.stopPropagation()}
+              className="mr-2 mt-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing touch-none"
+              title="拖曳調整順序"
+            >
+              <GripVertical className="w-5 h-5" />
+            </button>
+          )}
 
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
@@ -97,15 +100,17 @@ function SortablePlaceItem({ item, index, onPlaceClick, onRemoveClick }) {
           </div>
         </div>
 
-        <button
-          onClick={(e) => {
-            e.stopPropagation()
-            onRemoveClick(item.trip_item_id)
-          }}
-          className="ml-4 text-red-600 hover:text-red-800"
-        >
-          <Trash2 className="w-5 h-5" />
-        </button>
+        {isOwner && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onRemoveClick(item.trip_item_id)
+            }}
+            className="ml-4 text-red-600 hover:text-red-800"
+          >
+            <Trash2 className="w-5 h-5" />
+          </button>
+        )}
       </div>
     </div>
   )
@@ -327,6 +332,9 @@ export default function TripDetail({
     })
   }
 
+  // 是否為行程擁有者（別人的公開行程不能編輯/刪除/排序）
+  const isOwner = trip.user_id === userId
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 頂部導覽 */}
@@ -367,9 +375,16 @@ export default function TripDetail({
       {/* 行程基本資訊 */}
       <div className="container mx-auto px-4 py-6">
         <div className="bg-white shadow-sm p-6 mb-6">
-          <h1 className="text-3xl font-bold text-secondary-900 mb-4">
+          <h1 className="text-3xl font-bold text-secondary-900 mb-2">
             {trip.trip_name}
           </h1>
+
+          {trip.creator_name && (
+            <div className="flex items-center text-gray-500 text-sm mb-4">
+              <User className="w-4 h-4 mr-1" />
+              由 {trip.creator_name} 建立
+            </div>
+          )}
 
           <div className="flex items-center gap-4 text-gray-600 mb-4">
             <div className="flex items-center">
@@ -409,13 +424,15 @@ export default function TripDetail({
                   <h2 className="text-xl font-semibold text-secondary-900">
                     Day {day.day_number} - {formatDate(day.date)}
                   </h2>
-                  <button
-                    onClick={() => onAddPlace(day.trip_day_id)}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white hover:bg-primary-600"
-                  >
-                    <Plus className="w-4 h-4" />
-                    新增景點
-                  </button>
+                  {isOwner && (
+                    <button
+                      onClick={() => onAddPlace(day.trip_day_id)}
+                      className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white hover:bg-primary-600"
+                    >
+                      <Plus className="w-4 h-4" />
+                      新增景點
+                    </button>
+                  )}
                 </div>
 
                 {/* 景點列表（可拖曳排序） */}
@@ -437,6 +454,7 @@ export default function TripDetail({
                             index={index}
                             onPlaceClick={handlePlaceClick}
                             onRemoveClick={handleRemovePlaceClick}
+                            isOwner={isOwner}
                           />
                         ))}
                       </div>

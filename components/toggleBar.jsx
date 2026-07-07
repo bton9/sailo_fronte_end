@@ -14,6 +14,8 @@ import {
   removeFavorite,
   getUserFavorites,
   addPlaceToDay,
+  getPublicTrips,
+  searchTrips,
 } from '@/app/site/custom/lib/custom/tripApi'
 import {
   Plus,
@@ -29,6 +31,8 @@ import {
   Users,
   Package,
   Edit2,
+  Search,
+  User,
 } from 'lucide-react'
 import ItinerarySettings from '../app/site/custom/components/addtotrip/travelSetting'
 import ConfirmModal from './confirmModal'
@@ -43,6 +47,7 @@ const ScheduleCard = ({
   onView,
   onEdit,
   isFavorited,
+  isOwner = true,
 }) => {
   const formatDateRange = (startDate, endDate) => {
     if (!startDate || !endDate) return '日期未設定'
@@ -126,6 +131,12 @@ const ScheduleCard = ({
           <h3 className="text-white text-lg font-bold mb-1">
             {schedule.trip_name}
           </h3>
+          {(schedule.user_name || schedule.creator_name) && (
+            <p className="flex items-center gap-1 text-white/80 text-xs mb-1">
+              <User className="w-3 h-3" />
+              {schedule.user_name || schedule.creator_name}
+            </p>
+          )}
           <p className="text-white/90 text-sm">
             {formatDateRange(schedule.start_date, schedule.end_date)}
           </p>
@@ -141,27 +152,30 @@ const ScheduleCard = ({
           </div>
         </div>
 
-        {/* 刪除和更多按鈕 - 右下角 */}
+        {/* 刪除和更多按鈕 - 右下角(僅限自己的行程) */}
         <div
           className="absolute bottom-3 right-3 flex items-center gap-2"
           onClick={(e) => e.stopPropagation()}
         >
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onDelete(schedule)
-            }}
-            className="w-9 h-9 flex rounded-full items-center justify-center hover:bg-white transition-all shadow-md"
-            title="刪除行程"
-          >
-            <Trash2 className="w-4 h-4 text-white " />
-          </button>
+          {isOwner && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onDelete(schedule)
+              }}
+              className="w-9 h-9 flex rounded-full items-center justify-center hover:bg-white transition-all shadow-md"
+              title="刪除行程"
+            >
+              <Trash2 className="w-4 h-4 text-white " />
+            </button>
+          )}
           <ActionDropdown
             schedule={schedule}
             onCopy={onCopy}
             onFavorite={onFavorite}
             onEdit={onEdit}
             isFavorited={isFavorited}
+            isOwner={isOwner}
           />
         </div>
       </div>
@@ -176,6 +190,7 @@ const ActionDropdown = ({
   onFavorite,
   onEdit,
   isFavorited,
+  isOwner = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -206,17 +221,19 @@ const ActionDropdown = ({
       {isOpen && (
         <div className="absolute right-0 z-150 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl">
           <ul className="py-1">
-            <li
-              onClick={(e) => {
-                e.stopPropagation()
-                onEdit(schedule)
-                setIsOpen(false)
-              }}
-              className="flex items-center px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            >
-              <Edit2 className="mr-2 w-4 h-4" />
-              <span>編輯行程</span>
-            </li>
+            {isOwner && (
+              <li
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onEdit(schedule)
+                  setIsOpen(false)
+                }}
+                className="flex items-center px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
+              >
+                <Edit2 className="mr-2 w-4 h-4" />
+                <span>編輯行程</span>
+              </li>
+            )}
             <li
               onClick={(e) => {
                 e.stopPropagation()
@@ -261,6 +278,9 @@ const ToggleBar = ({
   const [schedules, setSchedules] = useState([])
   const [favorites, setFavorites] = useState(new Set())
   const [loading, setLoading] = useState(false)
+  const [exploreTrips, setExploreTrips] = useState([])
+  const [exploreLoading, setExploreLoading] = useState(false)
+  const [exploreKeyword, setExploreKeyword] = useState('')
   const [editingTrip, setEditingTrip] = useState(null)
   const [viewingTripId, setViewingTripId] = useState(null)
   const [currentView, setCurrentView] = useState('list')
@@ -377,6 +397,40 @@ const ToggleBar = ({
       loadTrips()
     }
   }, [isOpen, isAuthenticated])
+
+  const loadExploreTrips = async (keyword = '') => {
+    if (!isAuthenticated) return
+
+    setExploreLoading(true)
+    try {
+      const response = keyword.trim()
+        ? await searchTrips(keyword.trim())
+        : await getPublicTrips()
+
+      if (response.success && response.data) {
+        setExploreTrips(response.data)
+      } else {
+        setExploreTrips([])
+      }
+    } catch (error) {
+      console.error('載入公開行程失敗:', error)
+      setExploreTrips([])
+    } finally {
+      setExploreLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isOpen && activeTab === 'explore') {
+      loadExploreTrips(exploreKeyword)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, activeTab, isAuthenticated])
+
+  const handleExploreSearchSubmit = (e) => {
+    e.preventDefault()
+    loadExploreTrips(exploreKeyword)
+  }
 
   const handleCopy = async (schedule) => {
     showConfirm(
@@ -686,9 +740,9 @@ const ToggleBar = ({
                 onRemovePlace={handleRemovePlace}
                 isFavorite={favorites.has(viewingTripId)}
                 onToggleFavorite={async () => {
-                  const schedule = schedules.find(
-                    (s) => s.trip_id === viewingTripId
-                  )
+                  const schedule =
+                    schedules.find((s) => s.trip_id === viewingTripId) ||
+                    exploreTrips.find((s) => s.trip_id === viewingTripId)
                   if (schedule) {
                     await handleFavorite(schedule)
                   }
@@ -743,7 +797,41 @@ const ToggleBar = ({
                   行程收藏({favorites.size})
                 </span>
               </button>
+              <button
+                onClick={() => setActiveTab('explore')}
+                className={`flex-1 py-2 px-4 font-medium transition border-b-2 -mb-[2px] ${
+                  activeTab === 'explore'
+                    ? 'border-secondary-900 text-secondary-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                探索行程
+              </button>
             </div>
+
+            {activeTab === 'explore' && (
+              <form
+                onSubmit={handleExploreSearchSubmit}
+                className="flex-shrink-0 flex gap-2 px-6 pt-3"
+              >
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    value={exploreKeyword}
+                    onChange={(e) => setExploreKeyword(e.target.value)}
+                    placeholder="搜尋公開行程名稱或描述..."
+                    className="w-full pl-9 pr-3 py-2 border border-gray-300 text-sm outline-none focus:border-secondary-900"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-secondary-900 text-white text-sm font-medium hover:bg-secondary-800 transition-colors"
+                >
+                  搜尋
+                </button>
+              </form>
+            )}
 
             <div className="flex-1 px-6 py-4 pb-10 overflow-y-auto overflow-x-visible">
               {!isAuthenticated ? (
@@ -754,6 +842,38 @@ const ToggleBar = ({
                     登入後即可查看與管理你的行程
                   </p>
                 </div>
+              ) : activeTab === 'explore' ? (
+                exploreLoading ? (
+                  <div className="flex justify-center items-center h-64">
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-500 border-t-transparent"></div>
+                  </div>
+                ) : exploreTrips.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Package className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                    <p className="text-gray-500 text-lg mb-2">
+                      找不到符合條件的公開行程
+                    </p>
+                    <p className="text-gray-400 text-sm">
+                      試試其他關鍵字，或清空搜尋看看所有公開行程
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-8">
+                    {exploreTrips.map((schedule) => (
+                      <ScheduleCard
+                        key={schedule.trip_id}
+                        schedule={schedule}
+                        onCopy={handleCopy}
+                        onDelete={handleDelete}
+                        onFavorite={handleFavorite}
+                        onEdit={handleEdit}
+                        onView={handleView}
+                        isFavorited={favorites.has(schedule.trip_id)}
+                        isOwner={schedule.user_id === userId}
+                      />
+                    ))}
+                  </div>
+                )
               ) : loading ? (
                 <div className="flex justify-center items-center h-64">
                   <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-500 border-t-transparent"></div>
@@ -790,15 +910,17 @@ const ToggleBar = ({
               )}
             </div>
 
-            <div className="flex-shrink-0 sticky bottom-0 bg-white p-6 shadow-lg border-t border-gray-100">
-              <button
-                onClick={handleCreateNew}
-                disabled={loading}
-                className="w-full px-8 py-3 bg-secondary-900 text-white font-medium hover:bg-secondary-800 transition-colors focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 rounded"
-              >
-                建立新旅程
-              </button>
-            </div>
+            {activeTab !== 'explore' && (
+              <div className="flex-shrink-0 sticky bottom-0 bg-white p-6 shadow-lg border-t border-gray-100">
+                <button
+                  onClick={handleCreateNew}
+                  disabled={loading}
+                  className="w-full px-8 py-3 bg-secondary-900 text-white font-medium hover:bg-secondary-800 transition-colors focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 rounded"
+                >
+                  建立新旅程
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
