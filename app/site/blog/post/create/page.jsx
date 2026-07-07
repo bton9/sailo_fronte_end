@@ -15,6 +15,8 @@ import {
   getPlaces, //  新增
 } from '@/lib/blogApi'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
+import { useConfirm } from '@/contexts/ConfirmContext'
 import BackButton from '../../components/layout/BackButton'
 import PostForm from '../../components/post/PostForm'
 import * as FaIcons from 'react-icons/fa6'
@@ -22,6 +24,8 @@ import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  
 
 export default function CreatePostPage() {
   const { user } = useAuth() // 🔐 使用 AuthContext
+  const notify = useNotify()
+  const confirmAction = useConfirm()
   const router = useRouter()
   const searchParams = useSearchParams()
   const editPostId = searchParams.get('edit') //  取得編輯的文章 ID
@@ -62,7 +66,7 @@ export default function CreatePostPage() {
 
         // 1. 檢查登入狀態 (使用 AuthContext)
         if (!user) {
-          alert('請先登入')
+          notify('請先登入', 'error')
           router.push('/login?redirect=/site/blog/post/create')
           return
         }
@@ -70,7 +74,7 @@ export default function CreatePostPage() {
         //  檢查 id 是否存在
         if (!user.id) {
           console.error(' user 物件沒有 id 屬性:', user)
-          alert('使用者資料異常，請重新登入')
+          notify('使用者資料異常，請重新登入', 'error')
           router.push('/login')
           return
         }
@@ -83,7 +87,7 @@ export default function CreatePostPage() {
 
             //  檢查是否為文章作者
             if (post.author?.user_id !== user.id) {
-              alert('您沒有權限編輯此文章')
+              notify('您沒有權限編輯此文章', 'error')
               router.push('/site/blog')
               return
             }
@@ -113,7 +117,7 @@ export default function CreatePostPage() {
             })
           } catch (error) {
             console.error('載入文章失敗:', error)
-            alert('載入文章失敗')
+            notify('載入文章失敗', 'error')
             router.push('/site/blog')
             return
           }
@@ -159,7 +163,7 @@ export default function CreatePostPage() {
         }
       } catch (error) {
         console.error('初始化失敗:', error)
-        alert('載入失敗，請重試')
+        notify('載入失敗，請重試', 'error')
       } finally {
         setLoading(false)
       }
@@ -169,8 +173,8 @@ export default function CreatePostPage() {
   }, [router, isEditMode, editPostId, user])
 
   // 處理取消
-  const handleCancel = () => {
-    if (window.confirm('確定要取消？未儲存的內容將會遺失。')) {
+  const handleCancel = async () => {
+    if (await confirmAction('確定要取消？未儲存的內容將會遺失。')) {
       router.back()
     }
   }
@@ -212,7 +216,7 @@ export default function CreatePostPage() {
           setUploadProgress(null)
         } catch (error) {
           console.error('圖片上傳失敗:', error)
-          alert('圖片上傳失敗，但仍會繼續發布文章')
+          notify('圖片上傳失敗，但仍會繼續發布文章', 'error')
           setUploadProgress(null)
         }
       }
@@ -286,9 +290,10 @@ export default function CreatePostPage() {
       }
     } catch (error) {
       console.error(isEditMode ? '更新文章失敗:' : '發布文章失敗:', error)
-      alert(
+      notify(
         error.message ||
-          (isEditMode ? '更新失敗，請稍後重試' : '發布失敗，請稍後重試')
+          (isEditMode ? '更新失敗，請稍後重試' : '發布失敗，請稍後重試'),
+        'error'
       )
     } finally {
       setIsSubmitting(false)

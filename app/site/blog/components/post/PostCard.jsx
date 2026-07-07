@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation' //  加入 useRouter
+import { useNotify } from '@/contexts/NotificationContext'
 import * as FaIcons from 'react-icons/fa6'
 import PostActionBar from './PostActionBar'
 import ItineraryCard from './ItineraryCard'
@@ -26,6 +27,7 @@ export default function PostCard({
   onPlaceCardClick = () => {}, //  新增：景點卡片點擊
 }) {
   const router = useRouter() //  加入 router
+  const notify = useNotify()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
 
@@ -85,7 +87,7 @@ export default function PostCard({
   const handleFollowClick = (e) => {
     e.stopPropagation()
     if (!currentUserId) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
     onFollow(post.author.user_id)

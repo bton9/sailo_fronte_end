@@ -19,6 +19,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import AuthGuard from '@/components/auth/AuthGuard'
 import AdminSidebar from './components/AdminSidebar'
 import '@/app/globals.css'
@@ -26,6 +27,7 @@ import '@/app/globals.css'
 export default function AdminLayout({ children }) {
   // ============ 認證與路由 ============
   const { user, isAuthenticated, isLoading } = useAuth()
+  const notify = useNotify()
   const router = useRouter()
 
   /**
@@ -47,7 +49,7 @@ export default function AdminLayout({ children }) {
     // 已登入但不是管理員
     if (user && user.access !== 'admin') {
       console.warn(' 非管理員嘗試訪問管理頁面:', user.email)
-      alert('您沒有權限訪問此頁面')
+      notify('您沒有權限訪問此頁面', 'error')
       router.push('/')
     }
   }, [isAuthenticated, isLoading, user, router])

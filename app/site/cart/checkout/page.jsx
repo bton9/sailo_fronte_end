@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/contexts/CartContext'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import { orderAPI } from '@/lib/cartApi'
 import CheckoutForm from '../components/checkout/CheckoutForm'
 import LoadingSpinner from '../components/shared/LoadingSpinner'
@@ -19,6 +20,7 @@ export default function CheckoutPage() {
   const router = useRouter()
   const { user, isAuthenticated } = useAuth()
   const { cartItems, summary, loading: cartLoading } = useCart()
+  const notify = useNotify()
   const [submitting, setSubmitting] = useState(false)
 
   // 未登入處理
@@ -124,12 +126,12 @@ export default function CheckoutPage() {
           router.push(`/site/cart/success`)
         }
       } else {
-        alert(response.message || '建立訂單失敗')
+        notify(response.message || '建立訂單失敗', 'error')
         setSubmitting(false)
       }
     } catch (error) {
       console.error(' 建立訂單錯誤:', error)
-      alert(error.message || '建立訂單失敗,請稍後再試')
+      notify(error.message || '建立訂單失敗,請稍後再試', 'error')
       setSubmitting(false)
     }
   }

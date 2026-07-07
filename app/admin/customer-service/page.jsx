@@ -30,6 +30,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSocket } from '@/contexts/SocketContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import { MessageCircle } from 'lucide-react'
 import AuthGuard from '@/components/auth/AuthGuard'
 import SideMenu from '@/components/sidebar'
@@ -41,6 +42,7 @@ import AdminDashboard from '@/components/chatroom/admin_chat/AdminDashboard'
 export default function CustomerServicePage() {
   const { user, isAuthenticated } = useAuth()
   const { socket, isConnected } = useSocket()
+  const notify = useNotify()
 
   // ============ State 管理 ============
   const [selectedRoom, setSelectedRoom] = useState(null) // 當前選中的聊天室
@@ -68,8 +70,10 @@ export default function CustomerServicePage() {
   // ============================================
   useEffect(() => {
     if (isAuthenticated && user?.access !== 'admin') {
-      alert('您沒有權限訪問此頁面')
-      window.location.href = '/'
+      notify('您沒有權限訪問此頁面', 'error')
+      setTimeout(() => {
+        window.location.href = '/'
+      }, 1500)
     }
   }, [isAuthenticated, user])
 
@@ -202,11 +206,11 @@ export default function CustomerServicePage() {
         loadStats() // 🆕 更新統計資訊
         setSelectedRoom(data.room)
       } else {
-        alert(data.message || '接單失敗')
+        notify(data.message || '接單失敗', 'error')
       }
     } catch (error) {
       console.error(' 接單失敗:', error)
-      alert('接單失敗，請稍後再試')
+      notify('接單失敗，請稍後再試', 'error')
     }
   }
 
@@ -246,11 +250,11 @@ export default function CustomerServicePage() {
           setSelectedRoom(null)
         }
       } else {
-        alert(data.message || '關閉失敗')
+        notify(data.message || '關閉失敗', 'error')
       }
     } catch (error) {
       console.error(' 關閉聊天室失敗:', error)
-      alert('關閉失敗，請稍後再試')
+      notify('關閉失敗，請稍後再試', 'error')
     }
   }
 

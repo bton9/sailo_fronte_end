@@ -6,25 +6,31 @@ import { SocketProvider } from '@/contexts/SocketContext'
 import { ChatButtonWrapper } from '@/components/message'
 import { TransitionProvider } from '@/contexts/transitionContext'
 import CustomCursor from '@/components/cursor'
+import { NotificationProvider } from '@/contexts/NotificationContext'
+import { ConfirmProvider } from '@/contexts/ConfirmContext'
 
 export default function RootLayout({ children }) {
   return (
     <html lang="zh-Hant">
       <body>
-        <TransitionProvider>
-          <AuthProvider>
-            <CartProvider>
-              <TransitionProvider>
-                <SocketProvider>
-                  {children}
-                  {/* 全站客服聊天按鈕 (WebSocket + ImageKit) */}
-                  <CustomCursor />
-                  <ChatButtonWrapper />
-                </SocketProvider>
-              </TransitionProvider>
-            </CartProvider>
-          </AuthProvider>
-        </TransitionProvider>
+        <NotificationProvider>
+          <ConfirmProvider>
+            <TransitionProvider>
+              <AuthProvider>
+                <CartProvider>
+                  <TransitionProvider>
+                    <SocketProvider>
+                      {children}
+                      {/* 全站客服聊天按鈕 (WebSocket + ImageKit) */}
+                      <CustomCursor />
+                      <ChatButtonWrapper />
+                    </SocketProvider>
+                  </TransitionProvider>
+                </CartProvider>
+              </AuthProvider>
+            </TransitionProvider>
+          </ConfirmProvider>
+        </NotificationProvider>
       </body>
     </html>
   )

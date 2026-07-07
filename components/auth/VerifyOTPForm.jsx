@@ -29,8 +29,10 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { authAPI } from '@/services/api'
+import { useNotify } from '@/contexts/NotificationContext'
 
 export default function VerifyOTPForm({ email, onSuccess, onBack }) {
+  const notify = useNotify()
   // ============ 狀態管理 ============
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const [error, setError] = useState('')
@@ -176,7 +178,7 @@ export default function VerifyOTPForm({ email, onSuccess, onBack }) {
         setCountdown(600) // 重設倒數計時
         setOtp(['', '', '', '', '', ''])
         inputRefs.current[0]?.focus()
-        alert('新的驗證碼已發送到您的信箱')
+        notify('新的驗證碼已發送到您的信箱', 'success')
       } else {
         setError(data.message || '發送失敗，請稍後再試')
       }

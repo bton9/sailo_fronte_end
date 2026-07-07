@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useNotify } from '@/contexts/NotificationContext'
 import * as FaIcons from 'react-icons/fa6'
 
 /**
@@ -14,6 +15,7 @@ export default function TagInput({
   existingTags = [],
   suggestedTags = ['日本', '美食', '景點', '攝影', '旅遊', '自由行'],
 }) {
+  const notify = useNotify()
   const [inputValue, setInputValue] = useState('')
   const [dropdown, setDropdown] = useState([])
   const [showDropdown, setShowDropdown] = useState(false)
@@ -77,17 +79,17 @@ export default function TagInput({
     if (!trimmedTag) return
 
     if (trimmedTag.length < minTagLength) {
-      alert(`標籤至少需要 ${minTagLength} 個字元`)
+      notify(`標籤至少需要 ${minTagLength} 個字元`, 'error')
       return
     }
 
     if (tags.length >= maxTags) {
-      alert(`最多只能新增 ${maxTags} 個標籤`)
+      notify(`最多只能新增 ${maxTags} 個標籤`, 'error')
       return
     }
 
     if (tags.includes(trimmedTag)) {
-      alert('此標籤已存在')
+      notify('此標籤已存在', 'error')
       return
     }
 

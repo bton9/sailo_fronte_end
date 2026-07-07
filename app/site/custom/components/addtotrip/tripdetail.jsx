@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import * as tripApi from '../../lib/custom/tripApi'
 import PlaceDetail from '../location/PlaceDetail'
 import ConfirmModal from '@/components/confirmModal'
+import { useNotify } from '@/contexts/NotificationContext'
 import {
   ArrowLeft,
   Heart,
@@ -122,6 +123,7 @@ export default function TripDetail({
   isFavorite,
   onToggleFavorite,
 }) {
+  const notify = useNotify()
   const [trip, setTrip] = useState(null)
   const [days, setDays] = useState([])
   const [loading, setLoading] = useState(true)
@@ -219,7 +221,7 @@ export default function TripDetail({
       onRemovePlace?.(tripItemId)
     } catch (err) {
       console.error('刪除失敗:', err)
-      alert('移除失敗: ' + err.message)
+      notify('移除失敗: ' + err.message, 'error')
     }
   }
   // 開啟景點詳細頁

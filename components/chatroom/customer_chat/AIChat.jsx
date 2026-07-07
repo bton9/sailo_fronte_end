@@ -36,6 +36,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import { Bot, ArrowRight, X, Send, Loader2, Sparkles } from 'lucide-react'
 
 // ============================================
@@ -48,6 +49,7 @@ export default function AIChat({ isOpen = false, onClose, onTransferToHuman }) {
   // Hooks & Refs
   // ============================================
   const { user, isAuthenticated } = useAuth()
+  const notify = useNotify()
   const messagesEndRef = useRef(null)
 
   // ============================================
@@ -306,7 +308,7 @@ export default function AIChat({ isOpen = false, onClose, onTransferToHuman }) {
       }
     } catch (error) {
       console.error(' 轉接失敗:', error)
-      alert('轉接失敗,請稍後再試')
+      notify('轉接失敗,請稍後再試', 'error')
     } finally {
       setIsSending(false)
     }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react' //  新增 useEffect
 import { useRouter } from 'next/navigation' //  新增
+import { useNotify } from '@/contexts/NotificationContext'
 import * as FaIcons from 'react-icons/fa6'
 import CategorySelector from '../form/CategorySelector'
 import ImageUpload from '../form/ImageUpload'
@@ -25,6 +26,7 @@ export default function PostForm({
   isSubmitting = false,
 }) {
   const router = useRouter() //  新增
+  const notify = useNotify()
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     content: initialData?.content || '',
@@ -165,7 +167,7 @@ export default function PostForm({
     if (onPlaceCardClick) {
       onPlaceCardClick(placeId)
     } else {
-      alert(`景點 ID: ${placeId}\n（景點 Modal 未設定）`)
+      notify(`景點 ID: ${placeId}（景點 Modal 未設定）`, 'info')
     }
   }
 
@@ -224,17 +226,17 @@ export default function PostForm({
   // 表單驗證
   const validateForm = () => {
     if (!formData.title.trim()) {
-      alert('請輸入文章標題')
+      notify('請輸入文章標題', 'error')
       return false
     }
 
     if (!formData.content.trim()) {
-      alert('請輸入文章內容')
+      notify('請輸入文章內容', 'error')
       return false
     }
 
     if (!formData.category) {
-      alert('請選擇文章分類')
+      notify('請選擇文章分類', 'error')
       return false
     }
 

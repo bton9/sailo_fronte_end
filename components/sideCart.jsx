@@ -6,6 +6,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/contexts/CartContext'
+import { useConfirm } from '@/contexts/ConfirmContext'
 
 /**
  * Shopping Cart Sidebar Component
@@ -14,6 +15,7 @@ import { useCart } from '@/contexts/CartContext'
 
 export default function CartSidebar({ isOpen, onClose }) {
   const router = useRouter()
+  const confirmAction = useConfirm()
 
   //  UPDATED: 使用 CartContext 取代 localStorage
   const {
@@ -76,7 +78,7 @@ export default function CartSidebar({ isOpen, onClose }) {
 
   //  UPDATED: 清空購物車（調用 CartContext 的 API）
   const handleClearCart = async () => {
-    if (confirm('確定要清空購物車嗎？')) {
+    if (await confirmAction('確定要清空購物車嗎？')) {
       try {
         await clearCart()
       } catch (error) {

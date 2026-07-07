@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import { orderAPI } from '@/lib/cartApi'
 import OrderCard from '../components/order/OrderCard'
 import LoadingSpinner from '../components/shared/LoadingSpinner'
@@ -15,6 +16,7 @@ import LoadingSpinner from '../components/shared/LoadingSpinner'
 export default function OrdersPage() {
   const router = useRouter()
   const { user, isAuthenticated } = useAuth()
+  const notify = useNotify()
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeFilter, setActiveFilter] = useState('all')
@@ -52,14 +54,14 @@ export default function OrdersPage() {
       } catch (error) {
         console.error(' 載入訂單失敗:', error)
         setOrders([])
-        alert('載入訂單失敗: ' + error.message)
+        notify('載入訂單失敗: ' + error.message, 'error')
       } finally {
         setLoading(false)
       }
     }
 
     loadOrders()
-  }, [isAuthenticated, user?.user_id, user?.id, activeFilter])
+  }, [isAuthenticated, user?.user_id, user?.id, activeFilter, notify])
 
   // 未登入處理
   if (!isAuthenticated) {

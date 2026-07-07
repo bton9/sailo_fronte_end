@@ -6,12 +6,14 @@
 'use client'
 
 import { useState } from 'react'
+import { useNotify } from '@/contexts/NotificationContext'
 import ShippingForm from './ShippingForm'
 import ShippingMethod from './ShippingMethod'
 import PaymentMethod from './PaymentMethod'
 import OrderSummary from './OrderSummary'
 
 export default function CheckoutForm({ cartItems, summary, onSubmit, loading }) {
+  const notify = useNotify()
   const [shippingInfo, setShippingInfo] = useState({
     recipientName: '',
     phone: '',
@@ -65,7 +67,7 @@ export default function CheckoutForm({ cartItems, summary, onSubmit, loading }) 
     e.preventDefault()
 
     if (!validateForm()) {
-      alert('請填寫所有必填欄位')
+      notify('請填寫所有必填欄位', 'error')
       return
     }
 

@@ -16,6 +16,8 @@ import {
   copyItinerary, //  新增
 } from '@/lib/blogApi'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
+import { useConfirm } from '@/contexts/ConfirmContext'
 import BackButton from '../../components/layout/BackButton'
 import PostDetail from '../../components/post/PostDetail'
 import CommentsSection from '../../components/comment/CommentsSection'
@@ -23,6 +25,8 @@ import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  
 
 export default function PostDetailPage() {
   const { user } = useAuth() // 🔐 使用 AuthContext
+  const notify = useNotify()
+  const confirmAction = useConfirm()
   const router = useRouter()
   const params = useParams()
   const postId = params.postId
@@ -52,7 +56,7 @@ export default function PostDetailPage() {
         setTotalComments(commentsResult.data.pagination.total)
       } catch (error) {
         console.error('載入失敗:', error)
-        alert('載入文章失敗')
+        notify('載入文章失敗', 'error')
         router.push('/site/blog')
       } finally {
         setLoading(false)
@@ -90,7 +94,7 @@ export default function PostDetailPage() {
   // 文章互動處理
   const handleLike = async () => {
     if (!user?.id) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
 
@@ -99,7 +103,7 @@ export default function PostDetailPage() {
       await reloadPost()
     } catch (error) {
       console.error('按讚失敗:', error)
-      alert('按讚失敗，請稍後重試')
+      notify('按讚失敗，請稍後重試', 'error')
     }
   }
 
@@ -110,7 +114,7 @@ export default function PostDetailPage() {
 
   const handleBookmark = async () => {
     if (!user?.id) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
 
@@ -119,13 +123,13 @@ export default function PostDetailPage() {
       await reloadPost()
     } catch (error) {
       console.error('收藏失敗:', error)
-      alert('收藏失敗，請稍後重試')
+      notify('收藏失敗，請稍後重試', 'error')
     }
   }
 
   const handleFollow = async (userId) => {
     if (!user?.id) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
 
@@ -134,7 +138,7 @@ export default function PostDetailPage() {
       await reloadPost()
     } catch (error) {
       console.error('追蹤失敗:', error)
-      alert('追蹤失敗，請稍後重試')
+      notify('追蹤失敗，請稍後重試', 'error')
     }
   }
 
@@ -150,7 +154,7 @@ export default function PostDetailPage() {
         })
       } else {
         await navigator.clipboard.writeText(postUrl)
-        alert('連結已複製到剪貼簿')
+        notify('連結已複製到剪貼簿', 'success')
       }
     } catch (error) {
       console.error('分享失敗:', error)
@@ -165,9 +169,9 @@ export default function PostDetailPage() {
           break
 
         case 'delete':
-          if (window.confirm('確定要刪除這篇文章嗎？')) {
+          if (await confirmAction('確定要刪除這篇文章嗎？')) {
             await deletePost(postId)
-            alert('文章已刪除')
+            notify('文章已刪除', 'success')
             router.push('/site/blog')
           }
           break
@@ -175,7 +179,7 @@ export default function PostDetailPage() {
         case 'copy':
           const postUrl = `${window.location.origin}/site/blog/post/${postId}`
           await navigator.clipboard.writeText(postUrl)
-          alert('連結已複製到剪貼簿')
+          notify('連結已複製到剪貼簿', 'success')
           break
 
         default:
@@ -183,7 +187,7 @@ export default function PostDetailPage() {
       }
     } catch (error) {
       console.error('操作失敗:', error)
-      alert('操作失敗，請稍後重試')
+      notify('操作失敗，請稍後重試', 'error')
     }
   }
 
@@ -200,7 +204,7 @@ export default function PostDetailPage() {
       //  在詳情頁，直接使用當前 post
       if (!post) {
         console.error(' 找不到文章資料')
-        alert('找不到關聯的行程')
+        notify('找不到關聯的行程', 'error')
         return
       }
 
@@ -215,7 +219,7 @@ export default function PostDetailPage() {
         if (copyResult.success) {
           const newTripId = copyResult.data.trip_id
           console.log(' 行程複製成功，新行程 ID:', newTripId)
-          alert(`已將行程複製到您的行程列表！`)
+          notify('已將行程複製到您的行程列表！', 'success')
 
           //  改用 sessionStorage 傳遞
           sessionStorage.setItem('openTripId', newTripId)
@@ -233,7 +237,7 @@ export default function PostDetailPage() {
       }
     } catch (error) {
       console.error(' 行程操作失敗:', error)
-      alert(`操作失敗: ${error.message}`)
+      notify(`操作失敗: ${error.message}`, 'error')
     }
   }
 
@@ -262,7 +266,7 @@ export default function PostDetailPage() {
 
   const handleCommentLike = async (commentId) => {
     if (!user?.id) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
 
@@ -271,7 +275,7 @@ export default function PostDetailPage() {
       await reloadComments()
     } catch (error) {
       console.error('按讚留言失敗:', error)
-      alert('按讚失敗，請稍後重試')
+      notify('按讚失敗，請稍後重試', 'error')
     }
   }
 
@@ -281,7 +285,7 @@ export default function PostDetailPage() {
       await reloadComments()
     } catch (error) {
       console.error('編輯留言失敗:', error)
-      alert('編輯失敗，請稍後重試')
+      notify('編輯失敗，請稍後重試', 'error')
       throw error
     }
   }
@@ -293,7 +297,7 @@ export default function PostDetailPage() {
       await reloadPost() // 更新留言數
     } catch (error) {
       console.error('刪除留言失敗:', error)
-      alert('刪除失敗，請稍後重試')
+      notify('刪除失敗，請稍後重試', 'error')
       throw error
     }
   }

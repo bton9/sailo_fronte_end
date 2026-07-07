@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { MessageCircle, Send, Trash2, Star, X } from 'lucide-react'
 import { createPortal } from 'react-dom'
+import { useConfirm } from '@/contexts/ConfirmContext'
 
 export default function PlaceComments({ placeId, placeName, isOpen, onClose }) {
+  const confirmAction = useConfirm()
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
   const [rating, setRating] = useState(5)
@@ -89,8 +91,8 @@ export default function PlaceComments({ placeId, placeName, isOpen, onClose }) {
     }
   }
 
-  const handleDelete = (commentId) => {
-    if (!confirm('確定要刪除這則評論嗎？')) return
+  const handleDelete = async (commentId) => {
+    if (!(await confirmAction('確定要刪除這則評論嗎？'))) return
 
     const updatedComments = comments.filter(c => c.id !== commentId)
 

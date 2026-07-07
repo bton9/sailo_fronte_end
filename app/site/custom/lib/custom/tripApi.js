@@ -32,6 +32,7 @@ export const createTrip = async (tripData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/trips`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -56,6 +57,7 @@ export const getUserTrips = async (userId, sortBy = 'created_at') => {
       `${API_BASE_URL}/trips/user/${userId}?sort=${sortBy}`,
       {
         method: 'GET',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -76,6 +78,7 @@ export const getTripDetail = async (tripId) => {
   try {
     const response = await fetch(`${API_BASE_URL}/trips/${tripId}`, {
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -95,6 +98,7 @@ export const updateTrip = async (tripId, updateData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/trips/${tripId}`, {
       method: 'PUT',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -115,6 +119,7 @@ export const deleteTrip = async (tripId) => {
   try {
     const response = await fetch(`${API_BASE_URL}/trips/${tripId}`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -134,6 +139,7 @@ export const copyTrip = async (tripId, userId) => {
   try {
     const response = await fetch(`${API_BASE_URL}/trips/${tripId}/copy`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -166,6 +172,7 @@ export const searchTrips = async (
       `${API_BASE_URL}/trips/search?${params.toString()}`,
       {
         method: 'GET',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -196,6 +203,7 @@ export const getPublicTrips = async (
       `${API_BASE_URL}/trips/public?${params.toString()}`,
       {
         method: 'GET',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -220,6 +228,7 @@ export const addPlaceToDay = async (tripDayId, placeData) => {
       `${API_BASE_URL}/trips/days/${tripDayId}/items`,
       {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -241,6 +250,7 @@ export const removePlaceFromTrip = async (tripItemId) => {
   try {
     const response = await fetch(`${API_BASE_URL}/trips/items/${tripItemId}`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -262,6 +272,7 @@ export const updatePlaceOrder = async (tripItemId, sortOrder) => {
       `${API_BASE_URL}/trips/items/${tripItemId}/order`,
       {
         method: 'PUT',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -289,6 +300,7 @@ export const addFavorite = async (userId, tripId) => {
 
     const response = await fetch(FAVORITE_BASE_URL, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -331,6 +343,7 @@ export const removeFavorite = async (userId, tripId) => {
 
     const response = await fetch(url, {
       method: 'DELETE',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -343,7 +356,7 @@ export const removeFavorite = async (userId, tripId) => {
 
     return result
 
-    /* 
+    /*
     //方案 2: 使用 Query 參數 (如果後端這樣設計)
     const url = `${FAVORITE_BASE_URL}?user_id=${userId}&trip_id=${tripId}`
     const response = await fetch(url, {
@@ -383,6 +396,7 @@ export const getUserFavorites = async (userId) => {
   try {
     const response = await fetch(`${FAVORITE_BASE_URL}/user/${userId}`, {
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -407,6 +421,7 @@ export const uploadTripCover = async (file) => {
 
     const response = await fetch(`${UPLOAD_BASE_URL}/cover`, {
       method: 'POST',
+      credentials: 'include',
       body: formData,
       // 注意: 不要設定 Content-Type header,讓瀏覽器自動設定
     })
@@ -425,6 +440,7 @@ export const deleteImage = async (fileId) => {
   try {
     const response = await fetch(`${UPLOAD_BASE_URL}/${fileId}`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },

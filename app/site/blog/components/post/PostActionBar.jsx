@@ -5,6 +5,7 @@ import {
   FaHeart as FaHeartRegular,
   FaBookmark as FaBookmarkRegular,
 } from 'react-icons/fa'
+import { useNotify } from '@/contexts/NotificationContext'
 
 /**
  * PostActionBar - 文章互動列元件
@@ -44,11 +45,12 @@ export default function PostActionBar({
   onBookmark = () => {},
   onShare = () => {},
 }) {
+  const notify = useNotify()
   // 處理按讚
   const handleLikeClick = (e) => {
     e.stopPropagation()
     if (!isLoggedIn) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
     onLike(postId)
@@ -58,7 +60,7 @@ export default function PostActionBar({
   const handleCommentClick = (e) => {
     e.stopPropagation()
     if (!isLoggedIn) {
-      alert('請先登入以留言')
+      notify('請先登入以留言', 'error')
     }
     onComment(postId)
   }
@@ -67,7 +69,7 @@ export default function PostActionBar({
   const handleBookmarkClick = (e) => {
     e.stopPropagation()
     if (!isLoggedIn) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
     onBookmark(postId)

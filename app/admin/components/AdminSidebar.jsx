@@ -17,6 +17,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
@@ -92,6 +93,7 @@ const adminMenuItems = [
 export default function AdminSidebar() {
   // ============ 狀態管理 ============
   const { user, logout } = useAuth()
+  const notify = useNotify()
   const pathname = usePathname()
   const [isExpanded, setIsExpanded] = useState(false) // 桌面版展開狀態
   const [isMobileOpen, setIsMobileOpen] = useState(false) // 手機版開關
@@ -120,7 +122,7 @@ export default function AdminSidebar() {
       setShowLogoutConfirm(false)
     } catch (error) {
       console.error('登出失敗:', error)
-      alert('登出失敗，請稍後再試')
+      notify('登出失敗，請稍後再試', 'error')
     }
   }
 
@@ -129,7 +131,7 @@ export default function AdminSidebar() {
    */
   const handleMenuClick = (item) => {
     if (item.comingSoon) {
-      alert('此功能即將推出，敬請期待！')
+      notify('此功能即將推出，敬請期待！', 'info')
       return
     }
 

@@ -5,6 +5,8 @@ import { useWishlist } from '../../hook/useWishlist'
 import { Toast } from './Toast'
 import { SelectListModal } from './SelectListModal'
 import { CreateListModal } from './CreateListModal'
+import { useNotify } from '@/contexts/NotificationContext'
+import { useConfirm } from '@/contexts/ConfirmContext'
 
 export default function SoloTravelWishlist({
   isOpen,
@@ -12,6 +14,8 @@ export default function SoloTravelWishlist({
   userId,
   placeId,
 }) {
+  const notify = useNotify()
+  const confirmAction = useConfirm()
   const [showSelectList, setShowSelectList] = useState(true)
   const [showCreateList, setShowCreateList] = useState(false)
   const [toast, setToast] = useState({ show: false, message: '', type: '' })
@@ -26,7 +30,7 @@ export default function SoloTravelWishlist({
     if (isOpen && !userId) {
       console.warn('SoloTravelWishlist: userId 未提供')
       onClose()
-      alert('請先登入才能使用收藏功能')
+      notify('請先登入才能使用收藏功能', 'error')
     }
   }, [isOpen, userId, onClose])
 
@@ -72,7 +76,7 @@ export default function SoloTravelWishlist({
   }
 
   const handleDelete = async (listId) => {
-    if (!confirm('確定要刪除此收藏清單嗎?')) return
+    if (!(await confirmAction('確定要刪除此收藏清單嗎?'))) return
     const result = await deleteList(listId)
     if (result.success) {
       showToast('已刪除收藏清單', 'info')

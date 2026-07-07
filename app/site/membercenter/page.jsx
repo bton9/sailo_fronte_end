@@ -117,7 +117,7 @@ export default function ProfilePage() {
       // 登出成功後 AuthGuard 會自動處理導向
     } catch (error) {
       console.error('登出失敗:', error)
-      alert('登出失敗,請稍後再試')
+      notify('登出失敗,請稍後再試', 'error')
       setShowLogoutConfirm(false)
     }
   }

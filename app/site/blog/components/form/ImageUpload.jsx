@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { useNotify } from '@/contexts/NotificationContext'
 import * as FaIcons from 'react-icons/fa6'
 
 /**
@@ -15,6 +16,7 @@ export default function ImageUpload({
   initialImages = [], // 編輯模式的初始圖片
   initialPhotosWithIds = [], // ← 新增：完整的圖片資料（含 photo_id）
 }) {
+  const notify = useNotify()
   const [previews, setPreviews] = useState(
     initialPhotosWithIds.length > 0
       ? initialPhotosWithIds.map((photo) => ({
@@ -38,7 +40,7 @@ export default function ImageUpload({
 
     // 檢查數量限制
     if (previews.length + files.length > maxFiles) {
-      alert(`最多只能上傳 ${maxFiles} 張圖片`)
+      notify(`最多只能上傳 ${maxFiles} 張圖片`, 'error')
       return
     }
 
@@ -47,13 +49,13 @@ export default function ImageUpload({
     for (const file of files) {
       // 檢查檔案大小
       if (file.size > maxSize * 1024 * 1024) {
-        alert(`${file.name} 檔案大小不能超過 ${maxSize}MB`)
+        notify(`${file.name} 檔案大小不能超過 ${maxSize}MB`, 'error')
         continue
       }
 
       // 檢查檔案格式
       if (!acceptedFormats.includes(file.type)) {
-        alert(`${file.name} 格式不支援，只能上傳 JPG、PNG、GIF`)
+        notify(`${file.name} 格式不支援，只能上傳 JPG、PNG、GIF`, 'error')
         continue
       }
 

@@ -24,6 +24,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
 import { useRouter } from 'next/navigation'
 import {
   Users,
@@ -42,6 +43,7 @@ import {
 export default function AdminDashboard() {
   // ============ 狀態管理 ============
   const { user, isAuthenticated } = useAuth()
+  const notify = useNotify()
   const router = useRouter()
   const [stats, setStats] = useState({
     totalUsers: 0,
@@ -233,7 +235,7 @@ export default function AdminDashboard() {
    */
   const handleActionClick = (action) => {
     if (action.status === 'coming-soon') {
-      alert('此功能即將推出，敬請期待！')
+      notify('此功能即將推出，敬請期待！', 'info')
       return
     }
     router.push(action.href)

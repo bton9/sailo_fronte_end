@@ -23,6 +23,7 @@
 
 import { useState } from 'react'
 import { Star, X, Send } from 'lucide-react'
+import { useNotify } from '@/contexts/NotificationContext'
 
 export default function RatingModal({
   isOpen,
@@ -31,6 +32,7 @@ export default function RatingModal({
   onSubmit,
   onClose,
 }) {
+  const notify = useNotify()
   const [rating, setRating] = useState(0) // 當前評分 (1-5)
   const [hoveredRating, setHoveredRating] = useState(0) // 滑鼠懸停的評分
   const [comment, setComment] = useState('') // 評價留言
@@ -41,7 +43,7 @@ export default function RatingModal({
   // ============================================
   const handleSubmit = async () => {
     if (rating === 0) {
-      alert('請選擇評分星級')
+      notify('請選擇評分星級', 'error')
       return
     }
 
@@ -52,7 +54,7 @@ export default function RatingModal({
       onClose()
     } catch (error) {
       console.error(' 提交評分失敗:', error)
-      alert('評分提交失敗，請稍後再試')
+      notify('評分提交失敗，請稍後再試', 'error')
     } finally {
       setIsSubmitting(false)
     }

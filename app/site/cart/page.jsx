@@ -8,6 +8,8 @@
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/contexts/CartContext'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
+import { useConfirm } from '@/contexts/ConfirmContext'
 import CartItem from './components/cart/CartItem'
 import CartSummary from './components/cart/CartSummary'
 import EmptyCart from './components/cart/EmptyCart'
@@ -18,6 +20,8 @@ export default function CartPage() {
   const { isAuthenticated } = useAuth()
   const { cartItems, summary, loading, error, updateQuantity, removeItem } =
     useCart()
+  const notify = useNotify()
+  const confirmAction = useConfirm()
 
   // 未登入處理
   if (!isAuthenticated) {
@@ -56,24 +60,24 @@ export default function CartPage() {
 
     const result = await updateQuantity(itemId, newQuantity)
     if (!result.success) {
-      alert(result.message || '更新數量失敗')
+      notify(result.message || '更新數量失敗', 'error')
     }
   }
 
   // 刪除商品處理
   const handleRemoveItem = async (itemId) => {
-    if (!window.confirm('確定要移除此商品嗎?')) return
+    if (!(await confirmAction('確定要移除此商品嗎?'))) return
 
     const result = await removeItem(itemId)
     if (!result.success) {
-      alert(result.message || '刪除商品失敗')
+      notify(result.message || '刪除商品失敗', 'error')
     }
   }
 
   // 前往結帳
   const handleCheckout = () => {
     if (cartItems.length === 0) {
-      alert('購物車是空的!')
+      notify('購物車是空的!', 'error')
       return
     }
     router.push('/site/cart/checkout')

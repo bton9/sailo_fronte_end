@@ -8,6 +8,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { useNotify } from '@/contexts/NotificationContext'
+import { useConfirm } from '@/contexts/ConfirmContext'
 import { orderAPI } from '@/lib/cartApi'
 import OrderStatus from '../../components/order/OrderStatus'
 import OrderTimeline from '../../components/order/OrderTimeline'
@@ -17,6 +19,8 @@ export default function OrderDetailPage() {
   const router = useRouter()
   const params = useParams()
   const { isAuthenticated } = useAuth()
+  const notify = useNotify()
+  const confirmAction = useConfirm()
   const orderId = params.orderId
 
   const [order, setOrder] = useState(null)
@@ -36,12 +40,12 @@ export default function OrderDetailPage() {
         if (response.success) {
           setOrder(response.data)
         } else {
-          alert('無法載入訂單資訊')
+          notify('無法載入訂單資訊', 'error')
           router.push('/site/cart/orders')
         }
       } catch (error) {
         console.error('載入訂單失敗:', error)
-        alert('載入訂單失敗')
+        notify('載入訂單失敗', 'error')
         router.push('/site/cart/orders')
       } finally {
         setLoading(false)
@@ -49,7 +53,7 @@ export default function OrderDetailPage() {
     }
 
     loadOrder()
-  }, [isAuthenticated, orderId, router])
+  }, [isAuthenticated, orderId, router, notify])
 
   // 未登入處理
   if (!isAuthenticated) {
@@ -248,7 +252,7 @@ export default function OrderDetailPage() {
 
                 {order.status === 'shipped' && (
                   <button
-                    onClick={() => alert('物流追蹤功能開發中')}
+                    onClick={() => notify('物流追蹤功能開發中', 'info')}
                     className="w-full rounded-lg bg-primary-500 py-3 text-white transition-colors hover:bg-[#4a7080]"
                   >
                     追蹤物流
@@ -258,21 +262,21 @@ export default function OrderDetailPage() {
                 {['pending', 'ordered'].includes(order.status) && (
                   <button
                     onClick={async () => {
-                      if (!window.confirm('確定要取消此訂單嗎？')) return
+                      if (!(await confirmAction('確定要取消此訂單嗎？'))) return
 
                       try {
                         const response = await orderAPI.cancelOrder(
                           order.orderId
                         )
                         if (response.success) {
-                          alert('訂單已取消')
+                          notify('訂單已取消', 'success')
                           router.push('/site/cart/orders')
                         } else {
-                          alert(response.message || '取消訂單失敗')
+                          notify(response.message || '取消訂單失敗', 'error')
                         }
                       } catch (error) {
                         console.error('取消訂單失敗:', error)
-                        alert('取消訂單失敗')
+                        notify('取消訂單失敗', 'error')
                       }
                     }}
                     className="w-full rounded-lg border border-red-500 bg-transparent py-3 text-red-500 transition-colors hover:bg-red-50"

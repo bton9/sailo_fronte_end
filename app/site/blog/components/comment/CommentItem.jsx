@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import * as FaIcons from 'react-icons/fa6'
 import { FaHeart as FaHeartRegular } from 'react-icons/fa'
+import { useNotify } from '@/contexts/NotificationContext'
 
 /**
  * CommentItem - 單一留言元件
@@ -17,6 +18,7 @@ export default function CommentItem({
   onAvatarClick = () => {},
   onUsernameClick = () => {},
 }) {
+  const notify = useNotify()
   const [menuOpen, setMenuOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState('')
@@ -62,7 +64,7 @@ export default function CommentItem({
   // 處理按讚
   const handleLike = () => {
     if (!currentUserId) {
-      alert('請先登入')
+      notify('請先登入', 'error')
       return
     }
     onLike(comment.comment_id)
@@ -93,12 +95,12 @@ export default function CommentItem({
     const trimmedContent = editContent.trim()
 
     if (!trimmedContent) {
-      alert('請輸入留言內容')
+      notify('請輸入留言內容', 'error')
       return
     }
 
     if (trimmedContent.length > 1000) {
-      alert('留言內容不得超過 1000 字')
+      notify('留言內容不得超過 1000 字', 'error')
       return
     }
 
@@ -112,7 +114,7 @@ export default function CommentItem({
       setIsEditing(false)
     } catch (error) {
       console.error('編輯留言失敗:', error)
-      alert('編輯失敗，請稍後重試')
+      notify('編輯失敗，請稍後重試', 'error')
     }
   }
 
