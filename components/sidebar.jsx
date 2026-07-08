@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext'
 import { useNotify } from '@/contexts/NotificationContext'
+import { useOverlay } from '@/contexts/OverlayContext'
 import LoginModal from './auth/LoginModal'
 import ConfirmModal from './confirmModal'
 import React, { useState, useEffect } from 'react'
@@ -50,6 +51,7 @@ const menuItems = [
 const SideMenu = () => {
   const { user, logout, showLoginModal, setShowLoginModal } = useAuth()
   const notify = useNotify()
+  const { hideMobileHeader } = useOverlay()
   const [isExpanded, setIsExpanded] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
@@ -142,7 +144,7 @@ const SideMenu = () => {
   return (
     <>
       {/* 手機版頂部導航欄 */}
-      {isMobile && (
+      {isMobile && !hideMobileHeader && (
         <header className="sticky top-0 fixed left-0 right-0 h-16 bg-white z-500 flex items-center justify-between px-4 md:hidden">
           {/* 漢堡選單按鈕 - 點擊切換開關 */}
           <button
