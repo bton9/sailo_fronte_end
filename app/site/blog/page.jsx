@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import {
   getPosts,
@@ -25,7 +25,7 @@ import FloatingPostButton from './components/layout/FloatingPostButton'
 import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  加入這行
 import ConfirmModal from '@/components/confirmModal'
 
-export default function BlogListPage() {
+function BlogListPageContent() {
   const { user } = useAuth() // 🔐 使用 AuthContext
 
   const router = useRouter()
@@ -900,5 +900,13 @@ export default function BlogListPage() {
         message={notificationModal.message}
       />
     </>
+  )
+}
+
+export default function BlogListPage() {
+  return (
+    <Suspense fallback={null}>
+      <BlogListPageContent />
+    </Suspense>
   )
 }

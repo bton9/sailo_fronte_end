@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx next *)",
+      "Bash(powershell -Command \"Get-Content 'c:\\\\Users\\\\linxi\\\\Documents\\\\sailo_backend\\\\.env' | Select-String -Pattern 'EMAIL_|ACCOUNT_LOCK|MAX_LOGIN'\")"
+    ]
+  }
+}

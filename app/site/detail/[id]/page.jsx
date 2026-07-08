@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import RIC_fi from '../../../lib/react_icon/fi'
+import RIC_fi from '@/lib/react_icon/fi'
 import SideMenu from '@/components/sidebar'
 
 export default function ChecklistPage() {

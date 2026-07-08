@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import {
   getUserStats,
@@ -28,7 +28,7 @@ import FloatingPostButton from '../../components/layout/FloatingPostButton'
 import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  加入這行
 import * as FaIcons from 'react-icons/fa6'
 
-export default function ProfilePage() {
+function ProfilePageContent() {
   const { user } = useAuth() // 🔐 使用 AuthContext
   const notify = useNotify()
   const confirmAction = useConfirm()
@@ -702,5 +702,13 @@ export default function ProfilePage() {
         />
       )}
     </>
+  )
+}
+
+export default function ProfilePage() {
+  return (
+    <Suspense fallback={null}>
+      <ProfilePageContent />
+    </Suspense>
   )
 }

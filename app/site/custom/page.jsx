@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'  //新增
+import { useState, useEffect, Suspense } from 'react'  //新增
 import { useSearchParams } from 'next/navigation'  //確認有這個
 import AuthGuard from '@/components/auth/AuthGuard'
 import SearchFilterNavbar from './components/map/SearchFilterNavbar'
@@ -193,4 +193,10 @@ function App() {
   )
 }
 
-export default App
+export default function CustomPage() {
+  return (
+    <Suspense fallback={null}>
+      <App />
+    </Suspense>
+  )
+}
