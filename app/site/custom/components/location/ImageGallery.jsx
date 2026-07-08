@@ -1,14 +1,12 @@
 import { useState } from 'react'
-import { Heart, Upload, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react'
+import { Upload, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react'
 
 export default function ImageGallery({
   coverImage,
   galleryImages,
   currentImageIndex,
   setCurrentImageIndex,
-  isFavorited,
   placeName,
-  onFavoriteClick,
   onImageUpload,
   onDeleteImage,
 }) {
@@ -45,15 +43,6 @@ export default function ImageGallery({
 
         {/* 漸層遮罩 */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-        {/* 收藏按鈕 (右上角) */}
-        <button
-          onClick={onFavoriteClick}
-          className="absolute top-4 right-4 bg-white/30 hover:bg-white text-red-500 p-3 rounded-full transition-all hover:scale-110 z-20"
-          title={isFavorited ? '已收藏' : '加入收藏'}
-        >
-          <Heart className={`w-6 h-6 ${isFavorited ? 'fill-red-500' : ''}`} />
-        </button>
 
         {/* 刪除按鈕 (左下角) - 只有相簿圖片才顯示 */}
         {currentImageIndex > 0 && (

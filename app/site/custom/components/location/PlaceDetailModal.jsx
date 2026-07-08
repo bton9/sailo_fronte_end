@@ -1,4 +1,4 @@
-import { X } from 'lucide-react'
+import { Heart, X } from 'lucide-react'
 import ImageGallery from './ImageGallery'
 import PlaceInfo from './PlaceInfo'
 import PlaceActions from './PlaceActions'
@@ -34,18 +34,27 @@ export default function PlaceDetailModal({
       {/* Modal 視窗 */}
       <div className="fixed inset-0 z-[160] flex items-center justify-center p-4">
         <div className="max-w-5xl w-full animate-scale-in relative">
-          {/* 關閉按鈕 */}
-          <div className="absolute -top-3 -right-3 z-[10000] flex gap-2">
-            <button
-              onClick={onClose}
-              className="bg-white hover:bg-gray-100 text-gray-800 rounded-full p-2.5 transition-all duration-300 transform hover:scale-110 hover:rotate-90"
-              title="關閉 (ESC)"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+          <div className="bg-white overflow-y-auto max-h-[90vh] relative">
+            {/* 收藏鈕(左上)、關閉鈕(右上):sticky 釘在卡片頂端,卡片內容捲動時不會跟著跑掉 */}
+            <div className="sticky top-0 z-30 h-0 flex items-start justify-between px-4 pointer-events-none">
+              <button
+                onClick={onFavoriteClick}
+                className="mt-4 pointer-events-auto bg-white/90 hover:bg-white text-red-500 p-2.5 rounded-full shadow-lg transition-all hover:scale-110"
+                title={isFavorited ? '已收藏' : '加入收藏'}
+              >
+                <Heart
+                  className={`w-5 h-5 ${isFavorited ? 'fill-red-500' : ''}`}
+                />
+              </button>
+              <button
+                onClick={onClose}
+                className="mt-4 pointer-events-auto bg-white/90 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 hover:rotate-90"
+                title="關閉 (ESC)"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-          <div className="bg-white overflow-hidden">
             {loading ? (
               <div className="h-[300px] flex items-center justify-center">
                 <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-secondary-900"></div>
@@ -67,9 +76,7 @@ export default function PlaceDetailModal({
                   galleryImages={galleryImages}
                   currentImageIndex={currentImageIndex}
                   setCurrentImageIndex={setCurrentImageIndex}
-                  isFavorited={isFavorited}
                   placeName={place.name}
-                  onFavoriteClick={onFavoriteClick}
                   onImageUpload={onImageUpload}
                   onDeleteImage={onDeleteImage}
                 />

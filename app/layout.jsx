@@ -8,6 +8,7 @@ import { TransitionProvider } from '@/contexts/transitionContext'
 import CustomCursor from '@/components/cursor'
 import { NotificationProvider } from '@/contexts/NotificationContext'
 import { ConfirmProvider } from '@/contexts/ConfirmContext'
+import { OverlayProvider } from '@/contexts/OverlayContext'
 
 export default function RootLayout({ children }) {
   return (
@@ -20,10 +21,12 @@ export default function RootLayout({ children }) {
                 <CartProvider>
                   <TransitionProvider>
                     <SocketProvider>
-                      {children}
-                      {/* 全站客服聊天按鈕 (WebSocket + ImageKit) */}
-                      <CustomCursor />
-                      <ChatButtonWrapper />
+                      <OverlayProvider>
+                        {children}
+                        {/* 全站客服聊天按鈕 (WebSocket + ImageKit) */}
+                        <CustomCursor />
+                        <ChatButtonWrapper />
+                      </OverlayProvider>
                     </SocketProvider>
                   </TransitionProvider>
                 </CartProvider>

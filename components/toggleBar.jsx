@@ -37,6 +37,7 @@ import {
 import ItinerarySettings from '../app/site/custom/components/addtotrip/travelSetting'
 import ConfirmModal from './confirmModal'
 import { useAuth } from '@/contexts/AuthContext'
+import { useOverlay } from '@/contexts/OverlayContext'
 
 // 行程卡片元件
 const ScheduleCard = ({
@@ -267,12 +268,13 @@ const ActionDropdown = ({
 
 // 主元件
 const ToggleBar = ({
-  userId = 3,
+  userId,
   isOpen: isOpenProp,
   onToggle,
   initialTripId = null,
 }) => {
   const { isAuthenticated } = useAuth()
+  const { setHideMobileHeader } = useOverlay()
   const [internalIsOpen, setInternalIsOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('my')
   const [schedules, setSchedules] = useState([])
@@ -303,6 +305,12 @@ const ToggleBar = ({
 
   const isOpen = isOpenProp !== undefined ? isOpenProp : internalIsOpen
   const handleToggle = onToggle || (() => setInternalIsOpen(!internalIsOpen))
+
+  // 面板打開時隱藏手機版頂部導覽列，避免蓋住面板自己的返回/收藏按鈕
+  useEffect(() => {
+    setHideMobileHeader(isOpen)
+    return () => setHideMobileHeader(false)
+  }, [isOpen, setHideMobileHeader])
 
   useEffect(() => {
     if (initialTripId && isOpen) {
@@ -348,8 +356,9 @@ const ToggleBar = ({
   }
 
   const loadTrips = async () => {
-    // 未登入時不發送請求，避免打到需要登入的 API 而收到 401
-    if (!isAuthenticated) {
+    // 未登入或使用者資料尚未載入完成時不發送請求
+    // （避免用預設/錯誤的 userId 打到 API，被後端擋下「無權查詢其他使用者的行程」）
+    if (!isAuthenticated || !userId) {
       setSchedules([])
       setFavorites(new Set())
       setLoading(false)
@@ -396,7 +405,8 @@ const ToggleBar = ({
     if (isOpen) {
       loadTrips()
     }
-  }, [isOpen, isAuthenticated])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, isAuthenticated, userId])
 
   const loadExploreTrips = async (keyword = '') => {
     if (!isAuthenticated) return

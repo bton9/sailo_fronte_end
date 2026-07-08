@@ -183,7 +183,7 @@ function App() {
 
         {/* 傳遞完整參數給 ToggleBar */}
         <ToggleBar
-          userId={user?.id || 1}
+          userId={user?.id}
           isOpen={isToggleBarOpen}  // 新增：控制開關
           onToggle={handleToggleBar}  // 新增：切換函式
           initialTripId={targetTripId}  // 新增：初始要顯示的行程 ID

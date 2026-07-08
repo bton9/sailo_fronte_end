@@ -483,7 +483,7 @@ function MapContent() {
       />
 
       {/* 上方切換列 */}
-      <ToggleBar />
+      <ToggleBar userId={user?.id} />
     </div>
   )
 }

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useOverlay } from '@/contexts/OverlayContext'
 import SoloTravelWishlist from '../addtotrip/SoloTravelWishlist'
 import AddToTripDrawer from '../addtotrip/addtotripdrawer'
 import ConfirmModal from '@/components/confirmModal'
@@ -14,6 +15,7 @@ import NavigationModal from '../guide/NavigationModal'
 
 export default function PlaceDetail({ placeId, isOpen, onClose }) {
   const { user } = useAuth()
+  const { setHideMobileHeader } = useOverlay()
   const [mounted, setMounted] = useState(false)
   const [wishlistOpen, setWishlistOpen] = useState(false)
   const [showAddToTrip, setShowAddToTrip] = useState(false)
@@ -95,6 +97,12 @@ export default function PlaceDetail({ placeId, isOpen, onClose }) {
     setMounted(true)
     return () => setMounted(false)
   }, [])
+
+  // 開啟時隱藏手機版頂部導覽列，避免蓋住彈窗自己的收藏/關閉按鈕
+  useEffect(() => {
+    setHideMobileHeader(isOpen)
+    return () => setHideMobileHeader(false)
+  }, [isOpen, setHideMobileHeader])
 
   // 防止背景滾動
   useEffect(() => {
