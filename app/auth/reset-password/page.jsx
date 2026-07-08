@@ -17,7 +17,7 @@
 
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import ResetPasswordForm from '@/components/auth/ResetPasswordForm'
 
 /**
@@ -25,7 +25,7 @@ import ResetPasswordForm from '@/components/auth/ResetPasswordForm'
  *
  * @returns {JSX.Element} 重置密碼頁面
  */
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [token, setToken] = useState('')
@@ -124,5 +124,19 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      }
+    >
+      <ResetPasswordContent />
+    </Suspense>
   )
 }

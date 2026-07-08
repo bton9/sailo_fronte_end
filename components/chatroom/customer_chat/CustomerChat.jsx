@@ -1,13 +1,8 @@
 /**
- * CustomerChat - 整合 AI 客服的即時聊天元件
+ * CustomerChat - 即時客服聊天元件
  * 路徑: sailo/components/chatroom/customer_chat/CustomerChat.jsx
- * 版本: v3.2.0
  *
  * 功能說明:
- * - 🆕 AI 客服自動接待 (Ollama + llama3.1:8b)
- * - 🆕 關鍵字自動轉接人工客服 (無需手動點擊)
- * - 🆕 訊息智能摺疊 (超過3分鐘自動收合)
- * - 🆕 AI轉接只顯示近期對話 (3分鐘內)
  * - 即時客服聊天 (WebSocket)
  * - 支援文字訊息與圖片上傳 (ImageKit)
  * - 訊息歷史載入與分頁
@@ -15,25 +10,7 @@
  * - 輸入中狀態 (typing indicator)
  * - 自動滾動到最新訊息
  * - 響應式設計 (手機/桌面)
- *
- * v3.2.0 新增功能:
- * - 訊息時間管理: 超過3分鐘的訊息自動摺疊
- * - 一鍵展開/收合舊訊息
- * - AI轉接時只保留3分鐘內的對話記錄
- * - 優化閱讀體驗,減少訊息堆積
- *
- * v3.1.0 改進:
- * - 移除所有轉人工按鈕
- * - 關鍵字自動轉接: "轉人工"、"人工"、"真人客服"
- * - AI 建議轉接時自動執行 (無需確認)
- * - 更流暢的用戶體驗
- *
- * 工作流程:
- * 1. 使用者開啟聊天室 → AI 自動接待
- * 2. 使用者與 AI 對話 → AI 判斷需求
- * 3. 輸入關鍵字或 AI 建議轉接 → 自動建立客服單號
- * 4. 真人客服接手 → 查看 3分鐘內的 AI 對話記錄
- * 5. 舊訊息自動收合 → 可手動展開查看
+ * - 客服評分系統
  *
  * 使用方式:
  * import CustomerChat from '@/components/chatroom/customer_chat'
@@ -58,7 +35,6 @@ import {
   Loader2,
   MessageCircle,
   History,
-  Bot,
   User,
 } from 'lucide-react'
 import ImageUploader from './ImageUploader'
@@ -72,11 +48,6 @@ export default function CustomerChat({ isOpen = false, onClose }) {
   const notify = useNotify()
 
   // ============ State 管理 ============
-  // 🆕 AI 客服狀態
-  const [chatMode, setChatMode] = useState('ai') // 'ai' | 'human'
-  const [aiRoom, setAiRoom] = useState(null) // AI 聊天室
-
-  // 人工客服狀態
   const [room, setRoom] = useState(null) // 當前聊天室
   const [messages, setMessages] = useState([]) // 訊息列表
   const [inputMessage, setInputMessage] = useState('') // 輸入框內容
@@ -131,259 +102,6 @@ export default function CustomerChat({ isOpen = false, onClose }) {
       return ''
     }
   }
-
-  // ============================================
-  // 🆕 API: 建立或取得 AI 聊天室
-  // ============================================
-  const createOrGetAIRoom = useCallback(async () => {
-    if (!isAuthenticated) return
-
-    try {
-      setIsLoading(true)
-
-      const response = await fetch(`${API_URL}/api/ai-chat/rooms`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-      })
-
-      const data = await response.json()
-
-      if (data.success) {
-        setAiRoom(data.room)
-
-        // 若是新建立的聊天室,顯示歡迎訊息
-        if (data.isNew && data.welcomeMessage) {
-          setMessages([
-            {
-              id: 'ai-welcome',
-              type: 'ai',
-              message: data.welcomeMessage,
-              sender_id: 'ai',
-              created_at: new Date().toISOString(),
-            },
-          ])
-        } else {
-          // 載入 AI 歷史訊息
-          await loadAIMessages(data.room.id)
-        }
-      }
-    } catch (error) {
-      console.error(' 建立 AI 聊天室失敗:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [isAuthenticated])
-
-  // ============================================
-  // 🆕 API: 載入 AI 訊息歷史
-  // ============================================
-  const loadAIMessages = useCallback(
-    async (roomId) => {
-      try {
-        const response = await fetch(
-          `${API_URL}/api/ai-chat/rooms/${roomId}/messages`,
-          {
-            credentials: 'include',
-          }
-        )
-
-        const data = await response.json()
-
-        if (data.success) {
-          // 🆕 v3.2.0: 計算3分鐘前的時間
-          const threeMinutesAgo = new Date(Date.now() - 3 * 60 * 1000)
-
-          // 轉換 AI 訊息格式為統一格式
-          const formattedMessages = data.messages.flatMap((msg) => {
-            const msgTime = new Date(msg.created_at)
-            const isOld = msgTime < threeMinutesAgo
-
-            return [
-              {
-                id: `user-${msg.id}`,
-                type: 'user',
-                message: msg.user_message,
-                sender_id: user?.id,
-                created_at: msg.created_at,
-                isOldMessage: isOld, // 🆕 標記舊訊息
-              },
-              {
-                id: `ai-${msg.id}`,
-                type: 'ai',
-                message: msg.ai_response,
-                sender_id: 'ai',
-                created_at: msg.created_at,
-                shouldTransfer: msg.is_transfer_request,
-                isOldMessage: isOld, // 🆕 標記舊訊息
-              },
-            ]
-          })
-
-          setMessages(formattedMessages)
-          setTimeout(scrollToBottom, 100)
-        }
-      } catch (error) {
-        console.error(' 載入 AI 訊息失敗:', error)
-      }
-    },
-    [user]
-  )
-
-  // ============================================
-  // 🆕 API: 轉接到人工客服
-  // ============================================
-  const transferToHuman = useCallback(async () => {
-    if (!aiRoom) return
-
-    try {
-      setIsSending(true)
-      setIsLoading(true)
-
-      // 呼叫轉接 API
-      const response = await fetch(`${API_URL}/api/ai-chat/transfer`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ roomId: aiRoom.id }),
-      })
-
-      const data = await response.json()
-
-      if (data.success) {
-        // 切換到人工模式
-        setChatMode('human')
-        setRoom(data.customerServiceRoom)
-        setAiRoom(null)
-
-        // 新增系統訊息
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `system-transfer-${Date.now()}`,
-            type: 'system',
-            message: ' 已為您轉接真人客服,客服人員將盡快為您服務。',
-            sender_id: 'system',
-            created_at: new Date().toISOString(),
-          },
-        ])
-
-        // 加入人工客服聊天室 (WebSocket)
-        if (socket && isConnected) {
-          socket.emit('join_room', { roomId: data.customerServiceRoom.id })
-          console.log(' 已加入人工客服聊天室:', data.customerServiceRoom.id)
-        }
-
-        // 載入人工客服訊息 (包含轉接上下文)
-        await loadMessages(data.customerServiceRoom.id)
-      } else {
-        throw new Error(data.message)
-      }
-    } catch (error) {
-      console.error(' 轉接人工客服失敗:', error)
-      notify('轉接失敗,請稍後再試', 'error')
-    } finally {
-      setIsSending(false)
-      setIsLoading(false)
-    }
-  }, [aiRoom, socket, isConnected, notify])
-
-  // ============================================
-  // 🆕 API: 發送訊息給 AI
-  // ============================================
-  const sendMessageToAI = useCallback(
-    async (message) => {
-      try {
-        // 🆕 檢查是否包含轉人工關鍵字
-        const transferKeywords = ['轉人工', '人工', '真人客服']
-        const shouldAutoTransfer = transferKeywords.some((keyword) =>
-          message.toLowerCase().includes(keyword.toLowerCase())
-        )
-
-        // 先發送訊息給 AI（讓後端儲存）
-        const response = await fetch(`${API_URL}/api/ai-chat/messages`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            roomId: aiRoom.id,
-            message,
-          }),
-        })
-
-        const data = await response.json()
-
-        console.log('🔍 [CustomerChat] 收到 AI 回應:', data)
-
-        if (data.success) {
-          // 新增 AI 回應到訊息列表
-          const aiMsg = {
-            id: `ai-${data.message.id}`,
-            type: 'ai',
-            message: data.message.aiResponse,
-            sender_id: 'ai',
-            created_at: data.message.createdAt,
-            shouldTransfer: data.message.shouldTransfer,
-          }
-
-          setMessages((prev) => [...prev, aiMsg])
-
-          // 🆕 處理特殊指令：導航到密碼修改頁面
-          if (data.message.specialAction === 'NAVIGATE_CHANGE_PASSWORD') {
-            console.log(' [CustomerChat] 偵測到密碼修改指令，準備跳轉...')
-
-            // 延遲 1.5 秒後跳轉，讓使用者看到 AI 的回應
-            setTimeout(() => {
-              const targetPath =
-                data.message.navigationPath || '/site/membercenter?tab=password'
-              console.log('🚀 [CustomerChat] 開始跳轉到:', targetPath)
-              window.location.href = targetPath
-            }, 1500)
-
-            return data.message
-          }
-
-          // 🆕 關鍵字觸發轉接（優先級高於 AI 建議）
-          if (shouldAutoTransfer) {
-            console.log('🔄 偵測到轉人工關鍵字，自動轉接...')
-            setTimeout(() => {
-              transferToHuman()
-            }, 800)
-            return data.message
-          }
-
-          // 🆕 若 AI 建議轉接,自動執行轉接
-          if (data.message.shouldTransfer) {
-            console.log('🔄 AI 建議轉接，自動轉接到真人客服...')
-            setTimeout(() => {
-              transferToHuman()
-            }, 1000)
-          }
-
-          return data.message
-        } else {
-          throw new Error(data.message)
-        }
-      } catch (error) {
-        console.error(' 發送 AI 訊息失敗:', error)
-
-        // 顯示錯誤訊息
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `error-${Date.now()}`,
-            type: 'system',
-            message: '抱歉,訊息發送失敗。請稍後再試。',
-            sender_id: 'system',
-            created_at: new Date().toISOString(),
-          },
-        ])
-
-        throw error
-      }
-    },
-    [aiRoom, user, transferToHuman]
-  )
 
   // ============================================
   // API: 建立或取得聊天室 (人工客服)
@@ -566,7 +284,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
   }, [socket, room, user, scrollToBottom])
 
   // ============================================
-  // 🆕 事件: 發送訊息 (支援 AI 和人工模式)
+  // 事件: 發送訊息
   // ============================================
   const handleSendMessage = useCallback(
     async (e) => {
@@ -579,117 +297,94 @@ export default function CustomerChat({ isOpen = false, onClose }) {
       setIsSending(true)
 
       try {
-        // 🆕 情況 A: AI 模式
-        if (chatMode === 'ai') {
-          // 立即顯示使用者訊息 (AI 模式需要立即顯示)
-          const userMsg = {
-            id: `user-${Date.now()}`,
-            type: 'user',
-            message: userMessageText,
-            sender_id: user?.id,
-            created_at: new Date().toISOString(),
-          }
-          setMessages((prev) => [...prev, userMsg])
+        let targetRoom = room
 
-          if (!aiRoom) {
-            console.error(' AI 聊天室不存在')
-            throw new Error('AI 聊天室不存在')
-          }
+        // 🔧 不要手動新增訊息，等 WebSocket 返回
+        // 原因: handleNewMessage 會自動新增，避免重複
 
-          // 發送訊息給 AI
-          await sendMessageToAI(userMessageText)
-        }
-        // 情況 B: 人工模式
-        else if (chatMode === 'human') {
-          let targetRoom = room
+        // 情況 A: 如果沒有聊天室（第一次發送訊息），建立新聊天室
+        if (!room && !isRoomClosed) {
+          console.log('📝 第一次發送訊息，建立聊天室...')
 
-          // 🔧 人工模式: 不要手動新增訊息，等 WebSocket 返回
-          // 原因: handleNewMessage 會自動新增，避免重複
-
-          // 情況 B1: 如果沒有聊天室（第一次發送訊息），建立新聊天室
-          if (!room && !isRoomClosed) {
-            console.log('📝 第一次發送訊息，建立聊天室...')
-
-            const response = await fetch(
-              `${API_URL}/api/customer-service/rooms`,
-              {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  subject: '一般諮詢',
-                  priority: 'medium',
-                }),
-              }
-            )
-
-            const data = await response.json()
-
-            if (data.success) {
-              targetRoom = data.room
-              setRoom(data.room)
-
-              // 加入 WebSocket 聊天室
-              if (socket && isConnected) {
-                socket.emit('join_room', { roomId: data.room.id })
-              }
-            } else {
-              throw new Error('建立聊天室失敗')
+          const response = await fetch(
+            `${API_URL}/api/customer-service/rooms`,
+            {
+              method: 'POST',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                subject: '一般諮詢',
+                priority: 'medium',
+              }),
             }
-          }
-          // 情況 B2: 聊天室已關閉，建立新聊天室
-          else if (isRoomClosed && room) {
-            console.log('📝 聊天室已關閉，建立新聊天室...')
+          )
 
-            const response = await fetch(
-              `${API_URL}/api/customer-service/rooms`,
-              {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  subject: '一般諮詢',
-                  priority: 'medium',
-                }),
-              }
-            )
+          const data = await response.json()
 
-            const data = await response.json()
+          if (data.success) {
+            targetRoom = data.room
+            setRoom(data.room)
 
-            if (data.success) {
-              targetRoom = data.room
-              setRoom(data.room)
-              setIsRoomClosed(false)
-
-              // 離開舊聊天室
-              if (socket && isConnected) {
-                socket.emit('leave_room', { roomId: room.id })
-              }
-
-              // 清空訊息列表
-              setMessages([])
-
-              // 加入新聊天室
-              if (socket && isConnected) {
-                socket.emit('join_room', { roomId: data.room.id })
-              }
-            } else {
-              throw new Error('建立新聊天室失敗')
+            // 加入 WebSocket 聊天室
+            if (socket && isConnected) {
+              socket.emit('join_room', { roomId: data.room.id })
             }
-          }
-
-          // 發送訊息 (WebSocket)
-          if (socket && isConnected && targetRoom) {
-            socket.emit('send_message', {
-              roomId: targetRoom.id,
-              message: userMessageText.trim(),
-              messageType: 'text',
-            })
-
-            console.log(' 訊息已發送 (人工模式):', userMessageText)
           } else {
-            throw new Error('WebSocket 未連接或聊天室不存在')
+            throw new Error('建立聊天室失敗')
           }
+        }
+        // 情況 B: 聊天室已關閉，建立新聊天室
+        else if (isRoomClosed && room) {
+          console.log('📝 聊天室已關閉，建立新聊天室...')
+
+          const response = await fetch(
+            `${API_URL}/api/customer-service/rooms`,
+            {
+              method: 'POST',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                subject: '一般諮詢',
+                priority: 'medium',
+              }),
+            }
+          )
+
+          const data = await response.json()
+
+          if (data.success) {
+            targetRoom = data.room
+            setRoom(data.room)
+            setIsRoomClosed(false)
+
+            // 離開舊聊天室
+            if (socket && isConnected) {
+              socket.emit('leave_room', { roomId: room.id })
+            }
+
+            // 清空訊息列表
+            setMessages([])
+
+            // 加入新聊天室
+            if (socket && isConnected) {
+              socket.emit('join_room', { roomId: data.room.id })
+            }
+          } else {
+            throw new Error('建立新聊天室失敗')
+          }
+        }
+
+        // 發送訊息 (WebSocket)
+        if (socket && isConnected && targetRoom) {
+          socket.emit('send_message', {
+            roomId: targetRoom.id,
+            message: userMessageText.trim(),
+            messageType: 'text',
+          })
+
+          console.log(' 訊息已發送:', userMessageText)
+        } else {
+          throw new Error('WebSocket 未連接或聊天室不存在')
         }
       } catch (error) {
         console.error(' 發送訊息失敗:', error)
@@ -702,19 +397,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         setIsSending(false)
       }
     },
-    [
-      inputMessage,
-      isSending,
-      chatMode,
-      aiRoom,
-      room,
-      isRoomClosed,
-      socket,
-      isConnected,
-      user,
-      sendMessageToAI,
-      notify,
-    ]
+    [inputMessage, isSending, room, isRoomClosed, socket, isConnected, notify]
   )
 
   // ============================================
@@ -825,23 +508,13 @@ export default function CustomerChat({ isOpen = false, onClose }) {
   )
 
   // ============================================
-  // 🆕 初始化: 開啟聊天室時先建立 AI 聊天室
+  // 初始化: 開啟聊天室時建立客服聊天室
   // ============================================
   useEffect(() => {
-    if (isOpen && isAuthenticated && !aiRoom && !room && chatMode === 'ai') {
-      createOrGetAIRoom()
+    if (isOpen && isAuthenticated && !room) {
+      createOrGetRoom()
     }
-  }, [isOpen, isAuthenticated, aiRoom, room, chatMode, createOrGetAIRoom])
-
-  // ============================================
-  // 初始化: 不再自動建立人工客服聊天室
-  // 改為 AI 轉接時或使用者主動要求時才建立
-  // ============================================
-  // useEffect(() => {
-  //   if (isOpen && isAuthenticated && !room) {
-  //     createOrGetRoom()
-  //   }
-  // }, [isOpen, isAuthenticated, room, createOrGetRoom])
+  }, [isOpen, isAuthenticated, room, createOrGetRoom])
 
   // ============================================
   // 自動滾動: 訊息更新時
@@ -854,7 +527,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
   // 🆕 WebSocket: 監聽聊天室關閉事件
   // ============================================
   useEffect(() => {
-    if (!socket || !isConnected || chatMode !== 'human') return
+    if (!socket || !isConnected) return
 
     const handleRoomClosed = (data) => {
       console.log('📢 收到聊天室關閉通知:', data)
@@ -885,7 +558,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
     return () => {
       socket.off('room_closed', handleRoomClosed)
     }
-  }, [socket, isConnected, chatMode])
+  }, [socket, isConnected])
 
   // ============================================
   // 未登入提示
@@ -951,23 +624,11 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         {/* 🆕 v3.0.0: 支援 AI/人工模式切換顯示 */}
         <div className="bg-primary-500 text-white p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* 🆕 AI/人工模式圖示 */}
-            {chatMode === 'ai' ? (
-              <Bot size={24} className="animate-pulse" />
-            ) : (
-              <User size={24} />
-            )}
+            <User size={24} />
             <div>
-              {/* 🆕 動態標題 */}
-              <h3 className="text-lg font-bold">
-                {chatMode === 'ai' ? 'AI 智能助手' : '真人客服'}
-              </h3>
+              <h3 className="text-lg font-bold">真人客服</h3>
               <p className="text-xs opacity-80">
-                {chatMode === 'ai'
-                  ? 'AI 為您即時解答'
-                  : isConnected
-                    ? '線上客服為您服務'
-                    : '連線中...'}
+                {isConnected ? '線上客服為您服務' : '連線中...'}
               </p>
             </div>
           </div>
@@ -1050,32 +711,6 @@ export default function CustomerChat({ isOpen = false, onClose }) {
 
                 const isOwnMessage = msg.sender_id === user?.id
                 const isSystemMessage = msg.message_type === 'system'
-                // 🆕 v3.0.0: AI 訊息判斷
-                const isAIMessage =
-                  msg.sender_id === 'ai' ||
-                  msg.sender_type === 'ai' ||
-                  msg.type === 'ai'
-
-                // 🆕 v3.2.0: 在【從 AI 客服轉接】標題後顯示提示
-                if (
-                  msg.message === '【從 AI 客服轉接】 對話記錄:' &&
-                  !showOldMessages
-                ) {
-                  return (
-                    <div key={msg.id}>
-                      <div className="flex justify-center">
-                        <span className="text-xs text-gray-400 bg-gray-200 px-3 py-1 rounded-full">
-                          {msg.message}
-                        </span>
-                      </div>
-                      <div className="flex justify-center mt-2">
-                        <span className="text-xs text-gray-500 italic">
-                          (僅顯示 3 分鐘內的對話記錄)
-                        </span>
-                      </div>
-                    </div>
-                  )
-                }
 
                 // 系統訊息
                 if (isSystemMessage) {
@@ -1084,31 +719,6 @@ export default function CustomerChat({ isOpen = false, onClose }) {
                       <span className="text-xs text-gray-400 bg-gray-200 px-3 py-1 rounded-full">
                         {msg.message}
                       </span>
-                    </div>
-                  )
-                }
-
-                // 🆕 v3.0.0: AI 訊息 (文字)
-                if (isAIMessage) {
-                  return (
-                    <div
-                      key={msg.id}
-                      className="flex justify-start items-start gap-2"
-                    >
-                      <Bot
-                        size={20}
-                        className="text-primary-500 mt-2 flex-shrink-0"
-                      />
-                      <div className="max-w-[75%]">
-                        <div className="bg-white border border-primary-200 text-gray-800 shadow-sm px-4 py-2.5 rounded-lg">
-                          <p className="text-sm break-words whitespace-pre-wrap">
-                            {msg.message}
-                          </p>
-                        </div>
-                        <p className="text-xs mt-1 text-gray-500 text-left">
-                          {formatTime(msg.created_at)}
-                        </p>
-                      </div>
                     </div>
                   )
                 }

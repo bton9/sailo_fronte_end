@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, Suspense } from 'react'
 import {
   Settings,
   Edit,
@@ -17,7 +17,7 @@ import { getFullAvatarUrl, getAvatarUrl } from '@/utils/avatar' // 頭像 URL �
 import ConfirmModal from '@/components/confirmModal'
 import { useNotify } from '@/contexts/NotificationContext'
 
-export default function ProfilePage() {
+function ProfilePageContent() {
   // ============ 配置常數 ============
   const REDIRECT_DELAY = 500 // 未登入時的跳轉延遲時間 (毫秒)，可調整
 
@@ -470,5 +470,13 @@ export default function ProfilePage() {
         confirmButtonStyle="bg-red-500 hover:bg-red-600"
       />
     </div>
+  )
+}
+
+export default function ProfilePage() {
+  return (
+    <Suspense fallback={null}>
+      <ProfilePageContent />
+    </Suspense>
   )
 }

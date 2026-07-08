@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import {
   createPost,
@@ -22,7 +22,7 @@ import PostForm from '../../components/post/PostForm'
 import * as FaIcons from 'react-icons/fa6'
 import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  新增
 
-export default function CreatePostPage() {
+function CreatePostPageContent() {
   const { user } = useAuth() // 🔐 使用 AuthContext
   const notify = useNotify()
   const confirmAction = useConfirm()
@@ -432,5 +432,13 @@ export default function CreatePostPage() {
         </div>
       )}
     </>
+  )
+}
+
+export default function CreatePostPage() {
+  return (
+    <Suspense fallback={null}>
+      <CreatePostPageContent />
+    </Suspense>
   )
 }

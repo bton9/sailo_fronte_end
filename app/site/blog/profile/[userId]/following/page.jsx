@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useNotify } from '@/contexts/NotificationContext'
@@ -19,7 +19,7 @@ import FollowList from '../../../components/follow/FollowList'
 import FloatingPostButton from '../../../components/layout/FloatingPostButton'
 import * as FaIcons from 'react-icons/fa6'
 
-export default function FollowingPage() {
+function FollowingPageContent() {
   const router = useRouter()
   const params = useParams()
   const searchParams = useSearchParams()
@@ -459,5 +459,13 @@ export default function FollowingPage() {
       {/* 浮動發文按鈕 */}
       <FloatingPostButton />
     </>
+  )
+}
+
+export default function FollowingPage() {
+  return (
+    <Suspense fallback={null}>
+      <FollowingPageContent />
+    </Suspense>
   )
 }

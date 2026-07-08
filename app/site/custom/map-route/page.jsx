@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { ArrowLeft, Navigation } from 'lucide-react'
@@ -10,7 +10,7 @@ const MapWithRoute = dynamic(
   { ssr: false }
 )
 
-export default function MapRoutePage() {
+function MapRoutePageContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [destination, setDestination] = useState(null)
@@ -62,5 +62,13 @@ export default function MapRoutePage() {
 
       <MapWithRoute destination={destination} />
     </div>
+  )
+}
+
+export default function MapRoutePage() {
+  return (
+    <Suspense fallback={null}>
+      <MapRoutePageContent />
+    </Suspense>
   )
 }

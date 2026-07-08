@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import SideMenu from '@/components/sidebar'
 const EnhancedPlaceMap = dynamic(
-  () => import('@/components/custom/MapWithMenu'),
+  () => import('@/app/site/custom/components/map/MapWithMenu'),
   {
     ssr: false,
   }
