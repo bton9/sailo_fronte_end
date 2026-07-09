@@ -30,6 +30,7 @@ import {
   useEffect,
   useCallback,
   useMemo,
+  useRef,
 } from 'react'
 import { authAPI } from '@/services/api'
 
@@ -48,6 +49,11 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false) // 是否已登入
   const [isLoading, setIsLoading] = useState(true) // 是否正在載入
   const [showLoginModal, setShowLoginModal] = useState(false) // 登入視窗狀態 (全域共享)
+  // Access Token 明文只存在記憶體（不進 state/不進 localStorage），單純給
+  // Socket.IO 連線的 handshake auth 欄位用（WebSocket 沒辦法像一般 API
+  // 那樣經由 Vercel rewrite 代理成同網域請求，跨網域 cookie 在 Safari 上
+  // 不穩定，所以 Socket.IO 改用明確帶 token 的方式認證）
+  const accessTokenRef = useRef(null)
 
   /**
    * 載入使用者資料
@@ -70,17 +76,20 @@ export function AuthProvider({ children }) {
       if (data.valid && data.user) {
         setUser(data.user)
         setIsAuthenticated(true)
+        accessTokenRef.current = data.accessToken || null
         console.log(' 使用者已登入:', data.user.email)
         console.log(' user.user_id:', data.user.user_id)
         console.log(' user.id:', data.user.id)
       } else {
         setUser(null)
         setIsAuthenticated(false)
+        accessTokenRef.current = null
       }
     } catch (error) {
       console.error(' 載入使用者資料失敗:', error)
       setUser(null)
       setIsAuthenticated(false)
+      accessTokenRef.current = null
     } finally {
       setIsLoading(false)
     }
@@ -107,6 +116,7 @@ export function AuthProvider({ children }) {
         // 登入成功，更新狀態
         setUser(data.user)
         setIsAuthenticated(true)
+        accessTokenRef.current = data.accessToken || null
 
         console.log(' 登入成功:', data.user.email)
 
@@ -181,6 +191,7 @@ export function AuthProvider({ children }) {
       // 無論 API 是否成功，都重置前端狀態
       setUser(null)
       setIsAuthenticated(false)
+      accessTokenRef.current = null
     }
   }, [])
 
@@ -264,24 +275,42 @@ export function AuthProvider({ children }) {
       // 登入視窗狀態管理 (全域共享，避免重複開啟)
       showLoginModal,
       setShowLoginModal,
-      // 🆕 取得 Access Token (用於 WebSocket 認證)
+      // 取得 Access Token 明文 (用於 Socket.IO WebSocket handshake 認證，
+      // 見上方 accessTokenRef 註解)
       getAccessToken: async () => {
-        // Token 存在 httpOnly Cookie 中,前端無法直接讀取
-        // 這個函數會嘗試從 Cookie 取得,若失敗則嘗試刷新
+        // 記憶體裡已經有的話直接回傳 (login/loadUser 時就存好了)
+        if (accessTokenRef.current) {
+          return accessTokenRef.current
+        }
+
+        // 記憶體是空的 (例如頁面剛整理過)，呼叫 verify 用 cookie 換回明文 token
         try {
-          // 先驗證 Token 是否有效
           const response = await fetch(`${API_URL}/api/v2/auth/verify`, {
+            method: 'POST',
             credentials: 'include', // 包含 httpOnly Cookie
           })
+          const data = await response.json()
 
-          if (response.ok) {
-            // 返回一個假的 token 標記 (實際 token 在 cookie 中)
-            return 'token_in_cookie'
+          if (response.ok && data.accessToken) {
+            accessTokenRef.current = data.accessToken
+            return data.accessToken
           }
 
-          // 若驗證失敗,嘗試刷新 Token
-          await refreshToken()
-          return 'token_in_cookie'
+          // 若驗證失敗,嘗試刷新 Token 後再拿一次
+          const refreshed = await refreshToken()
+          if (refreshed) {
+            const retryResponse = await fetch(
+              `${API_URL}/api/v2/auth/verify`,
+              { method: 'POST', credentials: 'include' }
+            )
+            const retryData = await retryResponse.json()
+            if (retryResponse.ok && retryData.accessToken) {
+              accessTokenRef.current = retryData.accessToken
+              return retryData.accessToken
+            }
+          }
+
+          return null
         } catch (error) {
           console.error(' 取得 Access Token 失敗:', error)
           return null
