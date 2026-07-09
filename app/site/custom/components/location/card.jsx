@@ -1,12 +1,11 @@
 'use client'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { Heart, Plus, Star } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import SoloTravelWishlist from '../addtotrip/SoloTravelWishlist'
 import PlaceDetail from './PlaceDetail'
 import AddToTripDrawer from '../addtotrip/addtotripdrawer'
 import RIC_fi from '@/lib/react_icon/fi'
-import { isPlaceFavorited } from '@/app/site/custom/lib/favoritesApi'
 
 export default function Card({
   place_id,
@@ -15,6 +14,8 @@ export default function Card({
   location_name,
   rating,
   category,
+  isFavorited = false,
+  onFavoriteChange,
 }) {
   const cardRef = useRef(null)
   const { user } = useAuth() // Auth V2
@@ -22,24 +23,8 @@ export default function Card({
   const [imageError, setImageError] = useState(false)
   const [showWishlist, setShowWishlist] = useState(false)
   const [showDetail, setShowDetail] = useState(false)
-  const [favorited, setFavorited] = useState(false)
   const [showAddToTrip, setShowAddToTrip] = useState(false)
   const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-
-  // 檢查此景點是否在任何收藏清單中
-  const fetchFavoriteStatus = async () => {
-    if (!user?.id) return
-    try {
-      setFavorited(await isPlaceFavorited(user.id, place_id))
-    } catch (err) {
-      console.error('檢查收藏狀態失敗:', err)
-      setFavorited(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchFavoriteStatus()
-  }, [place_id, user?.id])
 
   // 收藏按鈕 → 開啟清單 Modal
   const handleFavoriteClick = (e) => {
@@ -138,7 +123,7 @@ export default function Card({
             <Heart
               size={15}
               className={`transition ${
-                favorited ? 'text-point-500 fill-point-500' : 'text-white'
+                isFavorited ? 'text-point-500 fill-point-500' : 'text-white'
               }`}
             />
           </button>
@@ -177,7 +162,7 @@ export default function Card({
         isOpen={showWishlist}
         onClose={() => {
           setShowWishlist(false)
-          fetchFavoriteStatus()
+          onFavoriteChange?.()
         }}
         userId={user?.id}
         placeId={place_id}
