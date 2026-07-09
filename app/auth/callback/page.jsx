@@ -11,40 +11,46 @@
  * 流程：
  * 1. Google 授權成功後，後端重導向到本頁面，網址帶 ?code=一次性代碼
  * 2. 本頁面用 fetch POST /api/v2/auth/google/exchange 把代碼換成 httpOnly cookie
- * 3. 呼叫 /api/v2/auth/me 取得使用者資料（cookies 自動傳送）
- * 4. 更新 AuthContext 狀態
+ * 3. 呼叫 /api/v2/auth/verify 取得使用者資料（cookies 自動傳送）
+ * 4. 呼叫 AuthContext 的 reloadUser() 同步全域登入狀態
  * 5. 導向到使用者原本要去的頁面
  */
 
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useRef, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { authAPI } from '@/services/api'
 
 function AuthCallbackContent() {
   // ============ Hooks ============
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { login } = useAuth()
+  const { reloadUser } = useAuth()
 
   // ============ 狀態管理 ============
   const [status, setStatus] = useState('processing') // 'processing', 'success', 'error'
   const [message, setMessage] = useState('正在處理 Google 登入...')
+  // 一次性交換代碼只能兌換一次，用 ref 擋掉 React Strict Mode 在開發模式下
+  // 對 useEffect 的重複呼叫，避免第二次呼叫因代碼已被用掉而誤判登入失敗
+  const hasRunRef = useRef(false)
 
   // ============ 處理回調 ============
   useEffect(() => {
+    if (hasRunRef.current) return
+    hasRunRef.current = true
     handleCallback()
   }, [])
 
   /**
    * 處理 Google OAuth 回調 (Auth V2)
    *
-   * Auth V2 安全流程：
    * 1. 檢查是否有錯誤參數
-   * 2. 呼叫後端 /api/v2/auth/me 取得使用者資料（cookies 自動傳送）
-   * 3. 更新 AuthContext 狀態
-   * 4. 導向到原本的頁面
+   * 2. 用一次性代碼換取 httpOnly cookie
+   * 3. 呼叫 /api/v2/auth/verify 取得使用者資料（cookies 自動傳送）
+   * 4. 更新 AuthContext 狀態
+   * 5. 導向到原本的頁面
    */
   async function handleCallback() {
     try {
@@ -69,8 +75,17 @@ function AuthCallbackContent() {
       // 追蹤防護會把那種模式下設定的 cookie 丟棄），改成帶一個短效期代碼
       // 過來，這裡用一般 fetch（非導向）換成真正的登入 cookie
       const code = searchParams.get('code')
+      // 一次性代碼只能兌換一次；用 sessionStorage 記錄「這個代碼已經換過」，
+      // 防止開發模式熱重載或 React Strict Mode 造成的重複掛載重新呼叫
+      // 已經用掉的代碼（跟 hasRunRef 不同，這個能撐過元件整個重新掛載）
+      const usedCodeKey = code ? `google_oauth_code_used_${code}` : null
+      const alreadyUsed = usedCodeKey
+        ? sessionStorage.getItem(usedCodeKey)
+        : false
 
-      if (code) {
+      if (code && !alreadyUsed) {
+        sessionStorage.setItem(usedCodeKey, '1')
+
         const exchangeResponse = await fetch(
           `${API_BASE_URL}/api/v2/auth/google/exchange`,
           {
@@ -91,36 +106,19 @@ function AuthCallbackContent() {
       // ========================================
       // 步驟 3: 從後端取得使用者資料
       // ========================================
-      // Tokens 已經在 httpOnly cookies 中，呼叫 /api/v2/auth/me
-      // 瀏覽器會自動傳送 cookies
-      const response = await fetch(`${API_BASE_URL}/api/v2/auth/me`, {
-        method: 'GET',
-        credentials: 'include', // 🔑 重要：傳送 httpOnly cookies
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      // Tokens 已經在 httpOnly cookies 中，呼叫 /api/v2/auth/verify
+      // 瀏覽器會自動傳送 cookies（跟 AuthContext 內部驗證用同一支 API）
+      const data = await authAPI.verify()
 
-      if (!response.ok) {
-        throw new Error('無法取得使用者資料')
-      }
-
-      const data = await response.json()
-
-      if (!data.success || !data.user) {
+      if (!data.valid || !data.user) {
         throw new Error('使用者資料無效')
       }
-
-      const user = data.user
 
       // ========================================
       // 步驟 4: 更新 AuthContext 狀態
       // ========================================
-      // Auth V2: 不使用 localStorage 儲存使用者資料
-      // 直接更新 AuthContext，讓 Context 處理狀態管理
-      if (login) {
-        await login(user)
-      }
+      // 重新載入使用者資料，讓 AuthContext 的 user/isAuthenticated 同步更新
+      await reloadUser()
 
       // 設定成功狀態
       setStatus('success')
