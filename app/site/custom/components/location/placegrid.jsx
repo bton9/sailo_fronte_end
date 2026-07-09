@@ -1,5 +1,7 @@
-import { useMemo, useRef, useEffect, useState } from 'react'
+import { useMemo, useRef, useEffect, useState, useCallback } from 'react'
 import Card from '../location/card'
+import { useAuth } from '@/contexts/AuthContext'
+import { getFavoritedPlaceIds } from '@/app/site/custom/lib/favoritesApi'
 
 /**
  * 使用 CSS Grid Masonry 解決左右載入延遲問題
@@ -11,6 +13,29 @@ import Card from '../location/card'
 export default function PlaceGrid({ places, currentPage }) {
   const prevLengthRef = useRef(0)
   const [columnCount, setColumnCount] = useState(6)
+  const { user } = useAuth()
+  // 使用者的收藏景點 ID 只在這裡統一抓一次，往下傳給每張卡片，
+  // 卡片本身不再各自呼叫 API（原本每張卡片各自查詢，卡片一多就會
+  // 打出大量重複的 /api/favorites/:userId 請求）
+  const [favoritedIds, setFavoritedIds] = useState(new Set())
+
+  const fetchFavorites = useCallback(async () => {
+    if (!user?.id) {
+      setFavoritedIds(new Set())
+      return
+    }
+    try {
+      const ids = await getFavoritedPlaceIds(user.id)
+      setFavoritedIds(new Set(ids))
+    } catch (err) {
+      console.error('載入收藏狀態失敗:', err)
+      setFavoritedIds(new Set())
+    }
+  }, [user?.id])
+
+  useEffect(() => {
+    fetchFavorites()
+  }, [fetchFavorites])
 
   // 監聽視窗大小變化，更新欄位數量
   useEffect(() => {
@@ -97,7 +122,12 @@ export default function PlaceGrid({ places, currentPage }) {
                     animationDelay: isNewItem ? animationDelay : undefined,
                   }}
                 >
-                  <Card {...item} cover_image={item.cover_image} />
+                  <Card
+                    {...item}
+                    cover_image={item.cover_image}
+                    isFavorited={favoritedIds.has(item.place_id)}
+                    onFavoriteChange={fetchFavorites}
+                  />
                 </div>
               )
             })}
