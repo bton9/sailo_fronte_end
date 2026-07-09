@@ -2,27 +2,18 @@
  * Google OAuth 回調處理頁面 (Auth V2)
  * 路徑: sailo/app/auth/callback/page.jsx
  *
- * Auth V2 功能：
- * 1. 後端已透過 httpOnly cookies 設定 tokens (access_token, refresh_token, session_token)
- * 2. 前端只需從後端 API 取得使用者資料
- * 3. 更新 AuthContext 狀態
- * 4. 導向到原本的頁面或預設頁面
- *
- * Auth V2 安全性改進：
- * -  Tokens 儲存在 httpOnly cookies（無法被 JavaScript 存取）
- * -  不使用 localStorage 儲存敏感資料
- * -  前端透過 credentials: 'include' 自動傳送 cookies
- * -  防止 XSS 攻擊竊取 tokens
+ * 後端 Google callback 不會在「Google → 後端 → 前端」的跨網域轉址鏈中直接
+ * 用 res.cookie() 設 cookie——Safari 的反彈追蹤防護 (bounce tracking
+ * protection) 會把那種轉址鏈中設定的 cookie 直接丟棄。改成後端先把 token
+ * 暫存起來、只在網址帶一個短效期一次性代碼過來，這個頁面再用一般 fetch
+ * （非導向）把代碼換成真正的 httpOnly cookie，避開轉址鏈設 cookie 的模式。
  *
  * 流程：
- * 1. Google 授權成功後，後端設定 httpOnly cookies
- * 2. 後端可能重導向到此頁面（相容舊流程）
- * 3. 前端呼叫 /api/v2/auth/me 取得使用者資料（cookies 自動傳送）
+ * 1. Google 授權成功後，後端重導向到本頁面，網址帶 ?code=一次性代碼
+ * 2. 本頁面用 fetch POST /api/v2/auth/google/exchange 把代碼換成 httpOnly cookie
+ * 3. 呼叫 /api/v2/auth/me 取得使用者資料（cookies 自動傳送）
  * 4. 更新 AuthContext 狀態
  * 5. 導向到使用者原本要去的頁面
- *
- * 注意：此頁面主要用於相容舊的 OAuth 流程
- * Auth V2 的 Google 登入通常直接重導向到目標頁面，不經過此頁面
  */
 
 'use client'
@@ -68,14 +59,40 @@ function AuthCallbackContent() {
         return
       }
 
-      // ========================================
-      // 步驟 2: 從後端取得使用者資料
-      // ========================================
-      // Auth V2: Tokens 已經在 httpOnly cookies 中
-      // 只需呼叫 /api/v2/auth/me，瀏覽器會自動傳送 cookies
       const API_BASE_URL =
         process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
+      // ========================================
+      // 步驟 2: 用一次性代碼換取 httpOnly cookie
+      // ========================================
+      // 後端 Google callback 不再直接於轉址鏈中設 cookie（Safari 的反彈
+      // 追蹤防護會把那種模式下設定的 cookie 丟棄），改成帶一個短效期代碼
+      // 過來，這裡用一般 fetch（非導向）換成真正的登入 cookie
+      const code = searchParams.get('code')
+
+      if (code) {
+        const exchangeResponse = await fetch(
+          `${API_BASE_URL}/api/v2/auth/google/exchange`,
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code }),
+          }
+        )
+
+        const exchangeData = await exchangeResponse.json()
+
+        if (!exchangeResponse.ok || !exchangeData.success) {
+          throw new Error(exchangeData.message || '登入代碼交換失敗')
+        }
+      }
+
+      // ========================================
+      // 步驟 3: 從後端取得使用者資料
+      // ========================================
+      // Tokens 已經在 httpOnly cookies 中，呼叫 /api/v2/auth/me
+      // 瀏覽器會自動傳送 cookies
       const response = await fetch(`${API_BASE_URL}/api/v2/auth/me`, {
         method: 'GET',
         credentials: 'include', // 🔑 重要：傳送 httpOnly cookies
@@ -97,7 +114,7 @@ function AuthCallbackContent() {
       const user = data.user
 
       // ========================================
-      // 步驟 3: 更新 AuthContext 狀態
+      // 步驟 4: 更新 AuthContext 狀態
       // ========================================
       // Auth V2: 不使用 localStorage 儲存使用者資料
       // 直接更新 AuthContext，讓 Context 處理狀態管理
@@ -110,7 +127,7 @@ function AuthCallbackContent() {
       setMessage('登入成功！即將跳轉...')
 
       // ========================================
-      // 步驟 4: 導向到原本的頁面
+      // 步驟 5: 導向到原本的頁面
       // ========================================
       // 從 URL 參數讀取重導向路徑（後端可能傳遞）
       const redirectTo = searchParams.get('redirect') || '/site/membercenter'
