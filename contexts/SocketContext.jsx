@@ -80,10 +80,16 @@ export function SocketProvider({ children }) {
 
       // ============================================
       // 建立 Socket.IO 客戶端連線
-      // Token 從 httpOnly Cookie 中自動傳送
+      // 前後端不同網域，WebSocket 沒辦法像一般 API 那樣經由 Vercel
+      // rewrite 代理成同網域請求，跨網域 cookie 在 Safari 上不穩定，
+      // 所以明確帶 token 在 handshake 的 auth 欄位（後端 socketHandler
+      // 的認證中介軟體本來就支援：cookie 沒有時會 fallback 讀 auth.token）
       // ============================================
+      const token = await getAccessToken()
+
       const newSocket = io(SOCKET_URL, {
-        withCredentials: true, // 🔑 重要: 允許傳送 Cookie
+        withCredentials: true, // cookie 能送就送，送不到時靠下面的 auth.token
+        auth: { token },
         transports: ['websocket', 'polling'], // 優先使用 WebSocket,備援使用 Polling
         reconnection: true, // 自動重連
         reconnectionAttempts: 5, // 重連嘗試次數
