@@ -24,7 +24,7 @@ import CommentsSection from '../../components/comment/CommentsSection'
 import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  加入這行
 
 export default function PostDetailPage() {
-  const { user } = useAuth() // 🔐 使用 AuthContext
+  const { user } = useAuth() // 使用 AuthContext
   const notify = useNotify()
   const confirmAction = useConfirm()
   const router = useRouter()
@@ -212,13 +212,11 @@ export default function PostDetailPage() {
 
       if (!isOwnTrip) {
         //  不是自己的行程，先複製
-        console.log('🔄 複製別人的行程:', tripId)
 
         const copyResult = await copyItinerary(tripId)
 
         if (copyResult.success) {
           const newTripId = copyResult.data.trip_id
-          console.log(' 行程複製成功，新行程 ID:', newTripId)
           notify('已將行程複製到您的行程列表！', 'success')
 
           //  改用 sessionStorage 傳遞
@@ -229,7 +227,6 @@ export default function PostDetailPage() {
         }
       } else {
         //  是自己的行程，直接跳轉編輯
-        console.log('✏️ 編輯自己的行程:', tripId)
 
         //  改用 sessionStorage 傳遞
         sessionStorage.setItem('openTripId', tripId)
@@ -247,7 +244,6 @@ export default function PostDetailPage() {
 
   //  加入這個函式
   const handlePlaceCardClick = (placeId) => {
-    console.log('🎯 開啟景點 Modal:', placeId)
     setSelectedPlaceId(placeId)
     setShowPlaceModal(true)
   }

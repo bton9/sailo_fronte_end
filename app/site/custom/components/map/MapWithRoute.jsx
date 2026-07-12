@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
+import { MapPin } from 'lucide-react'
 import { useNotify } from '@/contexts/NotificationContext'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -199,7 +200,7 @@ function ControlPanel({
 }) {
   return (
     <div className="absolute bottom-4 right-4 bg-white p-4 rounded-xl shadow-2xl z-[500] space-y-3">
-      <div className="font-bold text-gray-800 mb-2">🎮 控制面板</div>
+      <div className="font-bold text-gray-800 mb-2">控制面板</div>
       
       <button
         onClick={onStartAnimation}
@@ -210,7 +211,7 @@ function ControlPanel({
             : 'bg-green-500 text-white hover:bg-green-600'
         }`}
       >
-        {isAnimating ? '動畫進行中...' : '▶️ 開始動畫'}
+        {isAnimating ? '動畫進行中...' : '開始動畫'}
       </button>
 
       {isAnimating && (
@@ -219,7 +220,7 @@ function ControlPanel({
             onClick={onStopAnimation}
             className="w-full px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors"
           >
-            ⏸️ 停止動畫
+            停止動畫
           </button>
 
           <div className="text-sm text-gray-600">
@@ -268,7 +269,7 @@ function LocationInfo({ location }) {
   return (
     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white px-6 py-3 rounded-xl shadow-2xl z-[500] max-w-sm">
       <p className="font-bold text-gray-800 mb-2 flex items-center gap-2">
-        <span className="text-pink-500">📍</span>
+        <MapPin className="w-4 h-4 text-pink-500" />
         目前位置
       </p>
       <p className="text-gray-600 text-sm mb-1">
@@ -338,7 +339,6 @@ function setupRoute(map, userLocation, destination, routingControlRef, userMarke
       const route = routes[0]
       routeCoordinatesRef.current = route.coordinates.map(coord => [coord.lat, coord.lng])
       setRouteReady(true) // 路線準備好了
-      console.log('路線已找到，座標數量:', routeCoordinatesRef.current.length)
     })
 
     routingControl.on('routingerror', (e) => {

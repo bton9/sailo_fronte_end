@@ -25,7 +25,6 @@ async function apiRequest(endpoint, options = {}) {
     const data = await response.json()
 
     if (!response.ok) {
-      console.log(data.message || 'API request failed')
     }
 
     return data

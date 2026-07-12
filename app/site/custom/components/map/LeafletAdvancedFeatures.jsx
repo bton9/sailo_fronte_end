@@ -4,10 +4,10 @@ export default function LeafletAdvancedFeatures() {
   const [activeFeature, setActiveFeature] = useState('drawing');
 
   const features = [
-    { id: 'drawing', name: '✏️ 繪圖工具', desc: '在地圖上畫線、多邊形、圓形' },
-    { id: 'measurement', name: '📏 測量工具', desc: '測量距離與面積' },
-    { id: 'cluster', name: '📍 標記群集', desc: '智慧聚合大量標記' },
-    { id: 'tracking', name: '🎯 即時追蹤', desc: '模擬移動物體追蹤' },
+    { id: 'drawing', name: '繪圖工具', desc: '在地圖上畫線、多邊形、圓形' },
+    { id: 'measurement', name: '測量工具', desc: '測量距離與面積' },
+    { id: 'cluster', name: '標記群集', desc: '智慧聚合大量標記' },
+    { id: 'tracking', name: '即時追蹤', desc: '模擬移動物體追蹤' },
   ];
 
   return (
@@ -16,7 +16,7 @@ export default function LeafletAdvancedFeatures() {
       <div className="bg-white shadow-lg z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <h1 className="text-2xl font-bold text-gray-800 mb-3">
-            🗺️ Leaflet 進階功能展示
+            Leaflet 進階功能展示
           </h1>
           <div className="flex flex-wrap gap-2">
             {features.map(feature => (
@@ -180,7 +180,7 @@ function DrawingToolsComponent() {
       </MapContainerComponent>
 
       <div className="absolute top-4 right-4 bg-white p-4 rounded-xl shadow-2xl space-y-2 max-w-xs">
-        <h3 className="font-bold text-gray-800 mb-3">🎨 繪圖工具</h3>
+        <h3 className="font-bold text-gray-800 mb-3">繪圖工具</h3>
         
         <button
           onClick={() => setCurrentTool('marker')}
@@ -190,7 +190,7 @@ function DrawingToolsComponent() {
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           }`}
         >
-          📍 放置標記
+          放置標記
         </button>
 
         <button
@@ -201,7 +201,7 @@ function DrawingToolsComponent() {
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           }`}
         >
-          ⭕ 繪製圓形
+          繪製圓形
         </button>
 
         <button
@@ -212,14 +212,14 @@ function DrawingToolsComponent() {
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           }`}
         >
-          🔷 繪製多邊形
+          繪製多邊形
         </button>
 
         <button
           onClick={() => clearAll(window.currentMap)}
           className="w-full px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600"
         >
-          🗑️ 清除全部
+          清除全部
         </button>
 
         <div className="border-t pt-2 mt-2">
@@ -228,7 +228,7 @@ function DrawingToolsComponent() {
           </p>
           {currentTool === 'polygon' && (
             <p className="text-xs text-blue-600 mt-1">
-              💡 點擊地圖繪製多邊形，雙擊完成
+              點擊地圖繪製多邊形，雙擊完成
             </p>
           )}
         </div>
@@ -299,7 +299,7 @@ function MeasurementToolsComponent() {
       </MapContainerComponent>
 
       <div className="absolute top-4 right-4 bg-white p-4 rounded-xl shadow-2xl space-y-2 max-w-xs">
-        <h3 className="font-bold text-gray-800 mb-3">📏 測量工具</h3>
+        <h3 className="font-bold text-gray-800 mb-3">測量工具</h3>
         
         <button
           onClick={() => setIsMeasuring(!isMeasuring)}
@@ -309,14 +309,14 @@ function MeasurementToolsComponent() {
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           }`}
         >
-          {isMeasuring ? '✓ 測量中...' : '📐 開始測量'}
+          {isMeasuring ? '✓ 測量中...' : '開始測量'}
         </button>
 
         <button
           onClick={() => clearMeasurement(window.currentMap)}
           className="w-full px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600"
         >
-          🗑️ 清除測量
+          清除測量
         </button>
 
         {distance > 0 && (
@@ -336,7 +336,7 @@ function MeasurementToolsComponent() {
 
         {isMeasuring && (
           <p className="text-xs text-blue-600 mt-2">
-            💡 點擊地圖上的點來測量距離
+            點擊地圖上的點來測量距離
           </p>
         )}
       </div>
@@ -376,7 +376,7 @@ function MarkerClusterComponent() {
       </MapContainerComponent>
 
       <div className="absolute top-4 right-4 bg-white p-4 rounded-xl shadow-2xl space-y-3 max-w-xs">
-        <h3 className="font-bold text-gray-800 mb-3">📍 標記群集</h3>
+        <h3 className="font-bold text-gray-800 mb-3">標記群集</h3>
         
         <div>
           <label className="text-sm text-gray-600 block mb-2">
@@ -400,7 +400,7 @@ function MarkerClusterComponent() {
           }}
           className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600"
         >
-          🔄 重新生成
+          重新生成
         </button>
 
         <div className="border-t pt-3">
@@ -408,7 +408,7 @@ function MarkerClusterComponent() {
             目前顯示: {markersRef.current.length} 個標記
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            💡 在真實應用中，可以使用 Marker Cluster 插件來自動分組大量標記
+            在真實應用中，可以使用 Marker Cluster 插件來自動分組大量標記
           </p>
         </div>
       </div>
@@ -487,7 +487,7 @@ function GeolocationTrackerComponent() {
       </MapContainerComponent>
 
       <div className="absolute top-4 right-4 bg-white p-4 rounded-xl shadow-2xl space-y-3 max-w-xs">
-        <h3 className="font-bold text-gray-800 mb-3">🎯 即時追蹤</h3>
+        <h3 className="font-bold text-gray-800 mb-3">即時追蹤</h3>
         
         <button
           onClick={() => startTracking(window.currentMap, window.L)}
@@ -497,7 +497,7 @@ function GeolocationTrackerComponent() {
               : 'bg-green-500 text-white hover:bg-green-600'
           }`}
         >
-          {isTracking ? '⏹️ 停止追蹤' : '▶️ 開始追蹤'}
+          {isTracking ? '停止追蹤' : '開始追蹤'}
         </button>
 
         <div>

@@ -31,7 +31,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSocket } from '@/contexts/SocketContext'
 import { useNotify } from '@/contexts/NotificationContext'
-import { MessageCircle } from 'lucide-react'
+import { MessageCircle, Star } from 'lucide-react'
 import AuthGuard from '@/components/auth/AuthGuard'
 import SideMenu from '@/components/sidebar'
 import ConfirmModal from '@/components/confirmModal'
@@ -58,7 +58,7 @@ export default function CustomerServicePage() {
   const [agentRating, setAgentRating] = useState({
     avg_rating: 0,
     total_ratings: 0,
-  }) // 🆕 客服評分統計
+  }) //  客服評分統計
   //  新增：ConfirmModal 狀態
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
@@ -84,8 +84,8 @@ export default function CustomerServicePage() {
     if (!isAuthenticated) return
 
     loadRooms()
-    loadStats() // 🆕 載入統計資訊
-    loadAgentRating() // 🆕 載入客服評分
+    loadStats() //  載入統計資訊
+    loadAgentRating() //  載入客服評分
   }, [isAuthenticated, statusFilter])
 
   const loadRooms = async () => {
@@ -112,7 +112,7 @@ export default function CustomerServicePage() {
   }
 
   // ============================================
-  // 🆕 載入統計資訊
+  //  載入統計資訊
   // ============================================
   const loadStats = async () => {
     try {
@@ -127,7 +127,6 @@ export default function CustomerServicePage() {
 
       if (data.success) {
         setStats(data.stats)
-        console.log(' 統計資訊已更新:', data.stats)
       }
     } catch (error) {
       console.error(' 載入統計資訊失敗:', error)
@@ -135,7 +134,7 @@ export default function CustomerServicePage() {
   }
 
   // ============================================
-  // 🆕 載入客服評分統計
+  //  載入客服評分統計
   // ============================================
   const loadAgentRating = async () => {
     if (!user?.id) return
@@ -152,7 +151,6 @@ export default function CustomerServicePage() {
 
       if (data.success) {
         setAgentRating(data.rating)
-        console.log(' 客服評分已更新:', data.rating)
       }
     } catch (error) {
       console.error(' 載入客服評分失敗:', error)
@@ -167,16 +165,14 @@ export default function CustomerServicePage() {
 
     // 新聊天室建立
     socket.on('new_room_created', (data) => {
-      console.log('🆕 新聊天室:', data)
       loadRooms() // 重新載入列表
-      loadStats() // 🆕 更新統計資訊
+      loadStats() //  更新統計資訊
     })
 
     // 聊天室狀態更新
     socket.on('room_status_updated', (data) => {
-      console.log('🔄 聊天室狀態更新:', data)
       loadRooms()
-      loadStats() // 🆕 更新統計資訊
+      loadStats() //  更新統計資訊
     })
 
     return () => {
@@ -201,9 +197,8 @@ export default function CustomerServicePage() {
       const data = await response.json()
 
       if (data.success) {
-        console.log(' 接單成功:', roomId)
         loadRooms()
-        loadStats() // 🆕 更新統計資訊
+        loadStats() //  更新統計資訊
         setSelectedRoom(data.room)
       } else {
         notify(data.message || '接單失敗', 'error')
@@ -243,9 +238,8 @@ export default function CustomerServicePage() {
       const data = await response.json()
 
       if (data.success) {
-        console.log(' 關閉成功:', roomId)
         loadRooms()
-        loadStats() // 🆕 更新統計資訊
+        loadStats() //  更新統計資訊
         if (selectedRoom?.id === roomId) {
           setSelectedRoom(null)
         }
@@ -303,10 +297,10 @@ export default function CustomerServicePage() {
                 )}
               </span>
               <span>客服人員：{user?.nickname}</span>
-              {/* 🆕 滿意度評分顯示 */}
+              {/*  滿意度評分顯示 */}
               {agentRating.total_ratings > 0 && (
                 <span className="flex items-center gap-1 text-sm">
-                  <span className="text-yellow-500">⭐</span>
+                  <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                   <span className="font-semibold text-yellow-600">
                     {agentRating.avg_rating.toFixed(1)}
                   </span>

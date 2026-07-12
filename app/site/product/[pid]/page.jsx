@@ -71,12 +71,8 @@ function ProductDetailContent({ productId }) {
     // 獲取推薦商品 (使用同類別商品)
     const fetchRelatedProducts = async () => {
       if (!product?.product_id || !product?.category_id) {
-        console.log(' 沒有商品資訊,無法獲取推薦商品')
         return
       }
-
-      console.log('🔄 開始獲取推薦商品,當前商品 ID:', product.product_id)
-      console.log('🔄 當前商品類別 ID:', product.category_id)
 
       try {
         const API_URL =
@@ -84,14 +80,11 @@ function ProductDetailContent({ productId }) {
 
         // 方法1: 使用同類別商品 API
         const url = `${API_URL}/api/products?category=${product.category_id}&limit=8`
-        console.log('📡 API URL:', url)
 
         const response = await fetch(url)
-        console.log('📥 API 回應狀態:', response.status)
 
         if (response.ok) {
           const data = await response.json()
-          console.log(' 獲取商品成功:', data)
 
           // 過濾掉當前商品,取前 8 個
           let products = Array.isArray(data)
@@ -101,7 +94,6 @@ function ProductDetailContent({ productId }) {
             .filter((p) => p.product_id !== product.product_id)
             .slice(0, 8)
 
-          console.log(' 過濾後的推薦商品數量:', products.length)
           setRelatedProducts(products)
         } else {
           console.warn(' API 回應不成功:', response.status)
@@ -232,7 +224,6 @@ function ProductDetailContent({ productId }) {
       )}
 
       {/* 取得推薦商品列表後 */}
-      {console.log('🎨 渲染階段 - relatedProducts:', relatedProducts)}
 
       {relatedProducts && relatedProducts.length > 0 ? (
         <div className="container mx-auto px-6 py-10">

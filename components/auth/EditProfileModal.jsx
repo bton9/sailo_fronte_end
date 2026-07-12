@@ -86,7 +86,7 @@ export default function EditProfileModal({
   // 密碼強度狀態 (0: 無, 1: 弱, 2: 中等, 3: 強, 4: 非常強)
   const [passwordStrength, setPasswordStrength] = useState(0)
 
-  // 🆕 監聽 initialMode 變化，自動切換模式
+  //  監聽 initialMode 變化，自動切換模式
   useEffect(() => {
     if (isOpen && initialMode !== 'menu') {
       setMode(initialMode)
@@ -126,7 +126,7 @@ export default function EditProfileModal({
     // 當 modal 關閉時重置初始化狀態
     if (!isOpen) {
       setHasInitialized(false)
-      // 🆕 關閉時重置模式為 menu
+      //  關閉時重置模式為 menu
       setMode('menu')
     }
   }, [isOpen, user, hasInitialized])
@@ -317,13 +317,10 @@ export default function EditProfileModal({
       // 呼叫後端 API 更新暱稱
       const data = await userAPI.updateNickname(nicknameForm.nickname)
 
-      console.log(' API 回應:', data) // 除錯用
-
       if (data.success) {
         // 更新本地使用者資料
         updateUser({ nickname: nicknameForm.nickname })
         setSuccess('暱稱更新成功！')
-        console.log(' 成功訊息已設定:', '暱稱更新成功！') // 除錯用
 
         // 2秒後返回選單（不清除成功訊息，讓使用者看到）
         setTimeout(() => {
@@ -374,13 +371,10 @@ export default function EditProfileModal({
       // 呼叫後端 API 更新個人資料
       const data = await userAPI.updateProfile(profileForm)
 
-      console.log(' API 回應:', data) // 除錯用
-
       if (data.success) {
         // 更新本地使用者資料
         updateUser(profileForm)
         setSuccess('個人資料更新成功！')
-        console.log(' 成功訊息已設定:', '個人資料更新成功！') // 除錯用
 
         // 2秒後返回選單（不清除成功訊息，讓使用者看到）
         setTimeout(() => {
@@ -447,11 +441,8 @@ export default function EditProfileModal({
       // 呼叫後端 API 更新密碼
       const data = await userAPI.updatePassword(passwordForm)
 
-      console.log(' API 回應:', data) // 除錯用
-
       if (data.success) {
         setSuccess('密碼更新成功！')
-        console.log(' 成功訊息已設定:', '密碼更新成功！') // 除錯用
 
         // 清空密碼表單
         setPasswordForm({
@@ -624,7 +615,7 @@ export default function EditProfileModal({
   // ============ 渲染 UI ============
   return (
     <>
-      {/* 🎉 成功訊息 Toast - 固定在畫面最上層 */}
+      {/* 成功訊息 Toast - 固定在畫面最上層 */}
       {success && (
         <div className="fixed top-0 left-0 right-0 z-[9999] flex justify-center pt-6 px-4 pointer-events-none">
           <div className="animate-[slideDown_0.3s_ease-out] pointer-events-auto">
@@ -648,7 +639,7 @@ export default function EditProfileModal({
         </div>
       )}
 
-      {/* 🔴 錯誤訊息 Toast - 固定在畫面最上層 */}
+      {/* 錯誤訊息 Toast - 固定在畫面最上層 */}
       {error && (
         <div className="fixed top-0 left-0 right-0 z-[9999] flex justify-center pt-6 px-4 pointer-events-none">
           <div className="animate-[slideDown_0.3s_ease-out] pointer-events-auto">
@@ -738,7 +729,7 @@ export default function EditProfileModal({
                       預設頭像來源:
                       https://ik.imagekit.io/crjen7iza/avatars/avatarxxx01.png
                     */}
-                    <div className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center">
+                    <div className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center bg-gray-200">
                       {user && getAvatarUrl(user.avatar, true) ? (
                         <img
                           src={getAvatarUrl(user.avatar, true)}
@@ -752,9 +743,9 @@ export default function EditProfileModal({
                           }}
                         />
                       ) : null}
-                      {/* 未登入或圖片載入失敗時的後備表情符號 */}
+                      {/* 未登入或圖片載入失敗時的後備圖示 */}
                       <span
-                        className="text-white text-4xl"
+                        className="text-gray-400"
                         style={{
                           display:
                             user && getAvatarUrl(user.avatar, true)
@@ -762,7 +753,7 @@ export default function EditProfileModal({
                               : 'flex',
                         }}
                       >
-                        😊
+                        <User className="w-12 h-12" />
                       </span>
                     </div>
 
@@ -1476,7 +1467,7 @@ export default function EditProfileModal({
                     {/* 步驟說明 */}
                     <div className="bg-[#f6f6f6] border border-blue-200  p-4">
                       <h3 className="font-semibold text-blue-900 mb-2">
-                        📱 設定步驟
+                        設定步驟
                       </h3>
                       <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
                         <li>下載 Google Authenticator App</li>
@@ -1504,7 +1495,7 @@ export default function EditProfileModal({
                     {backupCodes.length > 0 && (
                       <div className="bg-[#f6f6f6] border border-[#cfc3b1]  p-4">
                         <h4 className="font-semibold text-[#1e1e1e] mb-2">
-                          🔑 備用碼 (請妥善保存)
+                          備用碼 (請妥善保存)
                         </h4>
                         <p className="text-xs text-[#3e3e3e] mb-3">
                           當您無法使用 Authenticator 時,可使用備用碼登入
@@ -1684,9 +1675,7 @@ export default function EditProfileModal({
       <AvatarUploadModal
         isOpen={isAvatarModalOpen}
         onClose={() => setIsAvatarModalOpen(false)}
-        onSuccess={(newAvatarUrl) => {
-          console.log(' 頭像更新成功:', newAvatarUrl)
-        }}
+        onSuccess={(newAvatarUrl) => {}}
         currentAvatar={user?.avatar}
       />
 

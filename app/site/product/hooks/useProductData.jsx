@@ -21,8 +21,6 @@ export function useProductData(productId) {
           process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
         const url = `${API_URL}/api/products/${productId}`
 
-        console.log('Fetching product from:', url)
-
         const response = await fetch(url)
 
         if (!response.ok) {
@@ -30,7 +28,6 @@ export function useProductData(productId) {
         }
 
         const result = await response.json()
-        console.log('Product data:', result)
 
         if (result.success && result.data) {
           setProduct(result.data)

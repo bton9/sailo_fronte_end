@@ -64,7 +64,6 @@
 
 ###  其他功能
 - 即時客服聊天室（Socket.io）
-- AI 聊天助手（Ollama）
 - 商品購物車與結帳（綠界金流）
 - 旅遊部落格（文章、留言、追蹤）
 - 打包清單（含天氣卡）
@@ -93,7 +92,6 @@
 | JWT + Google OAuth | 身份驗證 |
 | Socket.io | 即時通訊 |
 | ImageKit | 圖片儲存服務 |
-| Ollama | AI 聊天模型 |
 
 ---
 
@@ -148,7 +146,7 @@ cd sailo
 npm i
 
 # 3. 設定環境變數
-cp .env.example .env
+cp .env.example .env.local
 # 填入對應的 API 設定（見下方說明）
 
 # 4. 啟動開發伺服器
@@ -169,9 +167,19 @@ npm run dev
 
 ##  環境變數
 
-前端本身不需要額外的 `.env` 設定，所有環境變數均設定於後端（[sailo_backend](https://github.com/bton9/sailo_backend)）。
+前端需要設定 `.env.local`，範例請見專案根目錄的 `.env.example`：
 
-請參考後端 repo 的 `.env.example` 進行設定。
+```bash
+cp .env.example .env.local
+```
+
+| 變數 | 說明 |
+|------|------|
+| `NEXT_PUBLIC_API_URL` | 後端 API 網址 |
+| `NEXT_PUBLIC_SOCKET_URL` | Socket.io 伺服器網址 |
+| `BACKEND_ORIGIN` | Server-side 轉發請求用的後端網址 |
+
+後端另有一組獨立的環境變數，請參考 [sailo_backend](https://github.com/bton9/sailo_backend) repo 的 `.env.example` 進行設定。
 
 ---
 

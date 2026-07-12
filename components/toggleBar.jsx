@@ -314,7 +314,6 @@ const ToggleBar = ({
 
   useEffect(() => {
     if (initialTripId && isOpen) {
-      console.log('🎯 自動打開行程詳細頁，tripId:', initialTripId)
       setViewingTripId(initialTripId)
       setCurrentView('detail')
     }
@@ -322,7 +321,6 @@ const ToggleBar = ({
 
   useEffect(() => {
     if (!isOpen) {
-      console.log('🔄 ToggleBar 關閉，重置為列表頁')
       setCurrentView('list')
       setViewingTripId(null)
       setShowPlaceSearch(false)
@@ -367,21 +365,16 @@ const ToggleBar = ({
 
     setLoading(true)
     try {
-      console.log('🔍 開始載入行程...', { userId })
 
       const response = await getUserTrips(userId)
-      console.log('📦 API 回應:', response)
 
       if (response.success && response.data) {
-        console.log(' 載入成功:', response.data.length, '個行程')
 
         const favResponse = await getUserFavorites(userId)
-        console.log('💝 收藏 API 回應:', favResponse)
 
         let favoriteIds = new Set()
         if (favResponse.success && favResponse.data) {
           favoriteIds = new Set(favResponse.data.map((fav) => fav.trip_id))
-          console.log('💝 收藏的行程 ID:', Array.from(favoriteIds))
         }
 
         const tripsWithFavorites = response.data.map((trip) => ({
@@ -496,21 +489,9 @@ const ToggleBar = ({
   const handleFavorite = async (schedule) => {
     const isFavorited = favorites.has(schedule.trip_id)
 
-    console.log('💝 收藏操作:', {
-      tripId: schedule.trip_id,
-      tripName: schedule.trip_name,
-      currentStatus: isFavorited,
-      action: isFavorited ? '取消收藏' : '加入收藏',
-    })
-
     try {
       if (isFavorited) {
-        console.log('🔄 呼叫 removeFavorite:', {
-          userId,
-          tripId: schedule.trip_id,
-        })
         const response = await removeFavorite(userId, schedule.trip_id)
-        console.log('📦 removeFavorite 回應:', response)
 
         if (response.success) {
           setFavorites((prev) => {
@@ -534,12 +515,7 @@ const ToggleBar = ({
           throw new Error(response.message || '取消收藏失敗')
         }
       } else {
-        console.log('🔄 呼叫 addFavorite:', {
-          userId,
-          tripId: schedule.trip_id,
-        })
         const response = await addFavorite(userId, schedule.trip_id)
-        console.log('📦 addFavorite 回應:', response)
 
         if (
           response.success ||
@@ -580,17 +556,14 @@ const ToggleBar = ({
   }
 
   const handleView = (schedule) => {
-    console.log('點擊行程卡片:', schedule.trip_id)
     setViewingTripId(schedule.trip_id)
     setCurrentView('detail')
   }
   const handleEdit = (schedule) => {
-    console.log('編輯行程:', schedule)
     setEditingTrip(schedule)
     setCurrentView('settings')
   }
   const handleBackToList = () => {
-    console.log('返回行程列表')
     setViewingTripId(null)
     setShowPlaceSearch(false)
     setCurrentView('list')
@@ -608,7 +581,6 @@ const ToggleBar = ({
   }
 
   const handleAddPlace = (tripDayId) => {
-    console.log('🎯 點擊新增景點按鈕，trip_day_id:', tripDayId)
     setSelectedTripDayId(tripDayId)
     setShowPlaceSearch(true)
   }
@@ -619,17 +591,6 @@ const ToggleBar = ({
     placeCategory,
     placeImage
   ) => {
-    console.log('=== 開始處理景點選擇 ===')
-    console.log('1️⃣ 接收到的參數:')
-    console.log('  - placeId:', placeId, typeof placeId)
-    console.log('  - placeName:', placeName, typeof placeName)
-    console.log('  - placeCategory:', placeCategory, typeof placeCategory)
-    console.log('  - placeImage:', placeImage, typeof placeImage)
-    console.log(
-      '  - selectedTripDayId:',
-      selectedTripDayId,
-      typeof selectedTripDayId
-    )
 
     if (!selectedTripDayId) {
       showSuccess('請先選擇要加入的日期')
@@ -652,24 +613,13 @@ const ToggleBar = ({
         end_time: null,
       }
 
-      console.log('2️⃣ 準備發送的資料:')
-      console.log('  - placeData:', JSON.stringify(placeData, null, 2))
-      console.log('  - tripDayId:', selectedTripDayId)
-
       Object.entries(placeData).forEach(([key, value]) => {
-        console.log(`  - ${key}:`, value, `(type: ${typeof value})`)
         if (value === undefined) {
           console.error(` 警告: ${key} 的值是 undefined!`)
         }
       })
 
-      console.log('3️⃣ 準備呼叫 addPlaceToDay...')
       const response = await addPlaceToDay(selectedTripDayId, placeData)
-
-      console.log(
-        '4️⃣ addPlaceToDay 完整回應:',
-        JSON.stringify(response, null, 2)
-      )
 
       if (response.success) {
         showSuccess(`已將 ${placeName} 加入行程！`)
@@ -691,7 +641,6 @@ const ToggleBar = ({
     }
   }
   const handleRemovePlace = async (tripItemId) => {
-    console.log('🗑️ 移除景點:', tripItemId)
     await loadTrips()
   }
 

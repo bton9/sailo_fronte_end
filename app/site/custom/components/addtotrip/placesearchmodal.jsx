@@ -85,8 +85,6 @@ export default function PlaceSearchModal({
       const response = await fetch(url)
       const data = await response.json()
 
-      console.log('搜尋結果:', data)
-
       if (data.success && data.data) {
         setPlaces(data.data)
       } else {

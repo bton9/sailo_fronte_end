@@ -61,7 +61,7 @@ export default function ShippingMethod({ selected, onChange }) {
       </div>
 
       <div className="mt-4 rounded-lg bg-blue-50 p-3 text-sm text-blue-700">
-        💡 滿 NT$ 1,000 免運費
+        滿 NT$ 1,000 免運費
       </div>
     </div>
   )

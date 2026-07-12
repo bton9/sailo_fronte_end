@@ -26,7 +26,7 @@ import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  
 import ConfirmModal from '@/components/confirmModal'
 
 function BlogListPageContent() {
-  const { user } = useAuth() // 🔐 使用 AuthContext
+  const { user } = useAuth() // 使用 AuthContext
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -590,7 +590,6 @@ function BlogListPageContent() {
         })
       } else {
         //  是自己的行程，直接跳轉編輯
-        console.log('✏️ 編輯自己的行程:', tripId)
         //  改用 sessionStorage 傳遞
         sessionStorage.setItem('openTripId', tripId)
         router.push('/site/custom')
@@ -641,13 +640,11 @@ function BlogListPageContent() {
           break
 
         case 'copyItinerary':
-          console.log('🔄 複製別人的行程:', data)
 
           const copyResult = await copyItinerary(data)
 
           if (copyResult.success) {
             const newTripId = copyResult.data.trip_id
-            console.log(' 行程複製成功，新行程 ID:', newTripId)
 
             //  顯示成功 Modal（特殊樣式）
             setConfirmModal({
@@ -685,7 +682,6 @@ function BlogListPageContent() {
   }
 
   const handlePlaceCardClick = (placeId) => {
-    console.log('🎯 開啟景點 Modal:', placeId)
     setSelectedPlaceId(placeId)
     setShowPlaceModal(true)
   }

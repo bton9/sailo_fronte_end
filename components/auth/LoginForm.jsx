@@ -19,7 +19,7 @@ import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { isValidEmail } from '@/utils/validation'
 import { AiOutlineGoogle } from 'react-icons/ai'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, AlertCircle } from 'lucide-react'
 
 export default function LoginForm({
   onSuccess,
@@ -145,7 +145,7 @@ export default function LoginForm({
       {/* 全域錯誤訊息 */}
       {generalError && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg flex items-center gap-2 mb-4">
-          <span className="text-xl"></span>
+          <AlertCircle className="w-5 h-5 shrink-0" />
           <span className="text-sm">{generalError}</span>
         </div>
       )}
@@ -276,7 +276,7 @@ export default function LoginForm({
       >
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
-            <span className="animate-spin">⏳</span>
+            <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
             登入中...
           </span>
         ) : (
@@ -350,8 +350,6 @@ export default function LoginForm({
 
       // 將重導向路徑編碼並傳遞給後端
       const redirectParam = encodeURIComponent(currentPath)
-
-      console.log('🔄 Google 登入 - 當前路徑:', currentPath)
 
       // 導向後端 Google OAuth 端點，並帶上 redirect 參數
       // 後端會在 OAuth 完成後導回此路徑

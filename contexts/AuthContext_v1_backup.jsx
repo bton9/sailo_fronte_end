@@ -246,7 +246,7 @@ export function AuthProvider({ children }) {
       return newUser
     })
 
-    // 🔥 修正：更新使用者資料時，同時設定為已登入狀態
+    // 修正：更新使用者資料時，同時設定為已登入狀態
     // 這對 Google 登入等外部登入方式特別重要
     setIsAuthenticated(true)
   }, [])

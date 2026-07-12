@@ -157,8 +157,6 @@ export function useAddToTrip({
         sort_order: currentItemsCount + 1,
       }
 
-      console.log('送出資料:', placeData)
-
       // 呼叫 API
       const result = await tripApi.addPlaceToDay(selectedTripDayId, placeData)
 

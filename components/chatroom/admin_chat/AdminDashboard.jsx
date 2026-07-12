@@ -242,8 +242,8 @@ export default function AdminDashboard({ stats, onRefresh }) {
 
       {/* 提示資訊 */}
       <div className="mt-4 text-xs text-gray-500 flex items-center gap-4">
-        <span>💡 自動刷新間隔: 30 秒</span>
-        <span>📊 資料來源: MySQL 即時查詢</span>
+        <span>自動刷新間隔: 30 秒</span>
+        <span>資料來源: MySQL 即時查詢</span>
         {currentStats.waiting > 5 && (
           <span className="text-yellow-600 font-semibold">
             等待中聊天室較多，請注意處理

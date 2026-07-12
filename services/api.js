@@ -50,7 +50,6 @@ async function apiRequest(endpoint, options = {}) {
         response = await fetch(url, config)
       } else {
         // Token 刷新失敗，拋出錯誤
-        console.log('Token 已過期，請重新登入')
       }
     }
 
@@ -66,7 +65,6 @@ async function apiRequest(endpoint, options = {}) {
     const data = await response.json()
 
     if (!response.ok) {
-      console.log(data.message || 'API request failed')
     }
 
     return data
@@ -95,7 +93,6 @@ async function refreshToken() {
     })
 
     if (response.ok) {
-      console.log(' Token 刷新成功')
       return true
     } else {
       console.warn(' Token 刷新失敗')

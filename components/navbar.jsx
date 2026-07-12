@@ -40,13 +40,11 @@ export default function Navbar() {
       setShowLogoutConfirm(true)
     } else {
       // 未登入 -> 開啟登入視窗
-      // 🔧 使用函數式更新，檢查視窗是否已開啟
+      //  使用函數式更新，檢查視窗是否已開啟
       setShowLoginModal((currentShowModal) => {
         if (!currentShowModal) {
-          console.log(' [Navbar] 開啟登入視窗')
           return true
         } else {
-          console.log(' [Navbar] 登入視窗已開啟，跳過重複開啟')
           return currentShowModal
         }
       })
@@ -79,7 +77,6 @@ export default function Navbar() {
    */
   const handleLoginSuccess = (user) => {
     setShowLoginModal(false)
-    console.log('登入成功:', user)
   }
 
   /**

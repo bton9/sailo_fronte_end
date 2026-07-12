@@ -97,7 +97,7 @@ export default function OrderSummary({
 
       {/* 安全提示 */}
       <div className="mt-4 text-center text-xs text-gray-500">
-        🔒 您的付款資訊將受到保護
+        您的付款資訊將受到保護
       </div>
     </div>
   )

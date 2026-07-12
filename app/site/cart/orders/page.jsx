@@ -35,8 +35,6 @@ export default function OrdersPage() {
         const userId = user.user_id || user.id
         const response = await orderAPI.getUserOrders(userId, status)
 
-        console.log('📦 Orders API Response:', response)
-
         if (response.success) {
           //  FIXED: Backend returns { success: true, data: { orders: [...], total: n } }
           const ordersData = Array.isArray(response.data?.orders)
@@ -45,7 +43,6 @@ export default function OrdersPage() {
               ? response.data
               : []
 
-          console.log(' Orders loaded:', ordersData)
           setOrders(ordersData)
         } else {
           console.warn(' API returned success: false')

@@ -21,7 +21,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Camera, X, Upload, Trash2, Check } from 'lucide-react'
+import { Camera, X, Upload, Trash2, Check, User } from 'lucide-react'
 import { userAPI } from '@/services/api'
 import { useAuth } from '@/contexts/AuthContext'
 import { useConfirm } from '@/contexts/ConfirmContext'
@@ -250,7 +250,7 @@ export default function AvatarUploadModal({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="text-white text-5xl"></span>
+                <User className="w-12 h-12 text-gray-300" />
               )}
             </div>
           </div>

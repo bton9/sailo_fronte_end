@@ -1,5 +1,5 @@
 'use client'
-import '@/app/globals.css' // 🌟 確保在這裡導入全域 CSS 🌟
+import '@/app/globals.css' // 確保在這裡導入全域 CSS
 import SideMenu from '@/components/sidebar'
 import AuthGuard from '@/components/auth/AuthGuard'
 import { useAuth } from '@/contexts/AuthContext'

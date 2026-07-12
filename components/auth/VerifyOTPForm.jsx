@@ -28,6 +28,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { AlertCircle } from 'lucide-react'
 import { authAPI } from '@/services/api'
 import { useNotify } from '@/contexts/NotificationContext'
 
@@ -146,7 +147,6 @@ export default function VerifyOTPForm({ email, onSuccess, onBack }) {
 
       if (data.success && data.verified) {
         // 驗證成功 - 切換到重設密碼頁面
-        console.log(' OTP 驗證成功')
         onSuccess && onSuccess(email, otpString)
       } else {
         // 驗證失敗
@@ -213,7 +213,7 @@ export default function VerifyOTPForm({ email, onSuccess, onBack }) {
           }`}
         >
           <span className="text-sm font-semibold">
-            ⏰ 剩餘時間：{formatTime(countdown)}
+            剩餘時間：{formatTime(countdown)}
           </span>
         </div>
       </div>
@@ -221,7 +221,7 @@ export default function VerifyOTPForm({ email, onSuccess, onBack }) {
       {/* 錯誤訊息 */}
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 flex items-center gap-2">
-          <span className="text-xl"></span>
+          <AlertCircle className="w-5 h-5 shrink-0" />
           <span>{error}</span>
         </div>
       )}
@@ -255,7 +255,7 @@ export default function VerifyOTPForm({ email, onSuccess, onBack }) {
       {/* 提示訊息 */}
       <div className="bg-primary-500/10 p-4">
         <p className="text-sm text-gray-700">
-          <strong>💡 提示：</strong>
+          <strong>提示：</strong>
         </p>
         <ul className="mt-2 space-y-1 text-sm text-gray-600">
           <li>• 驗證碼有效期為 10 分鐘</li>

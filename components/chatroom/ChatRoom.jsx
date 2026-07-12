@@ -53,7 +53,7 @@ export default function ChatRoom({ isOpen = false, onClose }) {
 
   /**
    * 處理關閉聊天室
-   * ✨ v1.7.0: 簡化邏輯，CSS Transition 自動處理動畫
+   * v1.7.0: 簡化邏輯，CSS Transition 自動處理動畫
    */
   const handleClose = () => {
     if (onClose) {
@@ -178,20 +178,20 @@ export default function ChatRoom({ isOpen = false, onClose }) {
     })
   }
 
-  // ✨ v1.7.0: 不使用條件渲染，讓 CSS transition 可以正常運作
+  // v1.7.0: 不使用條件渲染，讓 CSS transition 可以正常運作
   // （參考 sidebar，sidebar 也是一直渲染，只用 translate 控制）
 
   return (
     <>
       {/* ============ 遮罩層 ============ */}
-      {/* ✨ v1.7.0: 簡單的條件渲染（完全參考 sidebar）*/}
+      {/* v1.7.0: 簡單的條件渲染（完全參考 sidebar）*/}
       {isOpen && (
         <div className="fixed inset-0 bg-black/30 z-40" onClick={handleClose} />
       )}
 
       {/* ============ 聊天室容器 ============ */}
       {/* 
-        ✨ v1.7.0: 使用 CSS Transition + Transform（完全參考 sidebar）
+        v1.7.0: 使用 CSS Transition + Transform（完全參考 sidebar）
         
         核心概念：
         - 元件始終渲染，使用 CSS transition 控制動畫
@@ -225,7 +225,7 @@ export default function ChatRoom({ isOpen = false, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* ============ 標題列 ============ */}
-        {/* 🎨 v1.6.0: 移除漸層，改用純色 primary-500 */}
+        {/* v1.6.0: 移除漸層，改用純色 primary-500 */}
         <div className="bg-primary-500 text-white p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <MessageCircle size={24} />
@@ -234,7 +234,7 @@ export default function ChatRoom({ isOpen = false, onClose }) {
               <p className="text-xs opacity-80">線上客服為您服務</p>
             </div>
           </div>
-          {/* 🔧 v1.6.0: 關閉按鈕改用 handleClose (含縮回動畫) */}
+          {/*  v1.6.0: 關閉按鈕改用 handleClose (含縮回動畫) */}
           <button
             onClick={handleClose}
             className="p-2 hover:bg-primary-600 rounded-full transition-colors"

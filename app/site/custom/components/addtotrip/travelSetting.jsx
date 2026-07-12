@@ -44,7 +44,6 @@ export default function ItinerarySettings({
   const userId = user?.id
   useEffect(() => {
     if (isEditMode && editingTrip) {
-      console.log('進入編輯模式，載入資料:', editingTrip)
       setItineraryName(editingTrip.trip_name || '')
       setStartDate(editingTrip.start_date?.split('T')[0] || '')
       setEndDate(editingTrip.end_date?.split('T')[0] || '')
@@ -153,13 +152,10 @@ export default function ItinerarySettings({
         tripData.location_id = null
       }
 
-      console.log(isEditMode ? '更新行程資料:' : '建立行程資料:', tripData)
-
       let response
       if (isEditMode) {
         response = await updateTrip(editingTrip.trip_id, tripData)
         if (response.success) {
-          console.log('行程更新成功:', response.data)
           // 清空表單
           resetForm()
           showSuccess('行程已更新！')
@@ -167,7 +163,6 @@ export default function ItinerarySettings({
       } else {
         response = await createTrip(tripData)
         if (response.success) {
-          console.log('行程建立成功:', response.data)
           // 清空表單
           resetForm()
           showSuccess(

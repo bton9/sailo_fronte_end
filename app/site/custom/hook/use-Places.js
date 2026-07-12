@@ -60,8 +60,6 @@ export function usePlaces({ itemsPerPage = 30 } = {}) {
       setCities(uniqueCities)
       setFilteredPlaces(allPlaces)
       isInitializedRef.current = true
-      console.log('載入景點數量:', allPlaces.length)
-      console.log('城市列表:', uniqueCities)
     }
   }, [allPlaces])
 
@@ -91,7 +89,6 @@ export function usePlaces({ itemsPerPage = 30 } = {}) {
   const loadMore = useCallback(() => {
     if (hasMore && !isLoadingMore) {
       setVisibleCount((prev) => prev + itemsPerPage)
-      console.log('載入更多，當前顯示:', visibleCount + itemsPerPage)
     }
   }, [hasMore, isLoadingMore, itemsPerPage, visibleCount])
 
@@ -104,7 +101,6 @@ export function usePlaces({ itemsPerPage = 30 } = {}) {
       observerRef.current = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting && hasMore) {
-            console.log('觸發器進入視窗，載入更多...')
             loadMore()
           }
         },
@@ -114,7 +110,6 @@ export function usePlaces({ itemsPerPage = 30 } = {}) {
       )
 
       if (node) {
-        console.log('綁定觸發器到元素')
         observerRef.current.observe(node)
       }
     },
@@ -126,7 +121,6 @@ export function usePlaces({ itemsPerPage = 30 } = {}) {
     setCurrentPage(1)
     setVisibleCount(itemsPerPage)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    console.log('重置到第一頁')
   }, [itemsPerPage])
 
   // 清理 Observer

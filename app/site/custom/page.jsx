@@ -37,7 +37,6 @@ function App() {
     const openTripId = sessionStorage.getItem('openTripId')
     
     if (openTripId) {
-      console.log('偵測到 sessionStorage 中的 tripId:', openTripId)
       setTargetTripId(Number(openTripId))
       setIsToggleBarOpen(true)
       

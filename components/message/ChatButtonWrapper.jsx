@@ -29,7 +29,6 @@ export default function ChatButtonWrapper() {
    * 開啟聊天室
    */
   const handleChatOpen = () => {
-    console.log('🔔 開啟客服聊天室')
     setIsChatOpen(true)
     setUnreadCount(0) // 清除未讀數量
   }
@@ -38,11 +37,10 @@ export default function ChatButtonWrapper() {
    * 關閉聊天室
    */
   const handleChatClose = () => {
-    console.log('🚪 關閉客服聊天室')
     setIsChatOpen(false)
   }
 
-  // 🔐 未登入不顯示聊天按鈕
+  // 未登入不顯示聊天按鈕
   if (!isAuthenticated) {
     return null
   }

@@ -30,16 +30,6 @@ export default function UserProfileWidget({
     profileUser && (!currentUser || profileUser.id !== currentUser.id)
 
   //  加入除錯日誌
-  console.log('🔍 UserProfileWidget Debug:', {
-    currentUser,
-    profileUser,
-    isHomePage,
-    isLoggedIn,
-    isOwnProfile,
-    isOthersProfile,
-    'profileUser.id': profileUser?.id,
-    'currentUser.id': currentUser?.id,
-  })
 
   // 決定要顯示的使用者資料
   const displayUser = profileUser || currentUser
@@ -50,11 +40,6 @@ export default function UserProfileWidget({
   const showFollowButton = isOthersProfile
 
   //  加入除錯日誌
-  console.log('🔍 Display Logic:', {
-    showStats,
-    showViewButtons,
-    showFollowButton,
-  })
 
   // 處理搜尋
   const handleSearchKeyDown = (e) => {
@@ -125,7 +110,6 @@ export default function UserProfileWidget({
         {showFollowButton && (
           <button
             onClick={() => {
-              console.log('🔍 追蹤按鈕被點擊')
               if (!currentUser) {
                 notify('請先登入', 'error')
                 return

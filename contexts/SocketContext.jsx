@@ -63,20 +63,16 @@ export function SocketProvider({ children }) {
   const connect = useCallback(async () => {
     // 若已連線或正在連線,不重複連線
     if (socketRef.current?.connected || isConnecting) {
-      console.log(' Socket 已連線或正在連線中')
       return
     }
 
     // 必須在登入狀態下才能連線
     if (!isAuthenticated) {
-      console.log(' 使用者未登入,無法建立 Socket 連線')
       return
     }
 
     try {
       setIsConnecting(true)
-
-      console.log('🔌 正在建立 Socket 連線...')
 
       // ============================================
       // 建立 Socket.IO 客戶端連線
@@ -103,7 +99,6 @@ export function SocketProvider({ children }) {
 
       // 連線成功
       newSocket.on('connect', () => {
-        console.log(' Socket 連線成功:', newSocket.id)
         setIsConnected(true)
         setIsConnecting(false)
       })
@@ -117,12 +112,10 @@ export function SocketProvider({ children }) {
 
       // 斷線
       newSocket.on('disconnect', (reason) => {
-        console.log('🔌 Socket 斷線:', reason)
         setIsConnected(false)
 
         // 若是因為 Token 過期斷線,嘗試重新取得 Token 並重連
         if (reason === 'io server disconnect') {
-          console.log(' 伺服器主動斷線 (可能是 Token 過期),嘗試重新連線...')
           setTimeout(() => {
             if (isAuthenticated) {
               connect() // 重新連線
@@ -138,7 +131,6 @@ export function SocketProvider({ children }) {
 
       // 收到伺服器確認連線訊息
       newSocket.on('connected', (data) => {
-        console.log(' 收到伺服器連線確認:', data)
       })
 
       // ============================================
@@ -150,14 +142,13 @@ export function SocketProvider({ children }) {
       console.error(' 建立 Socket 連線時發生錯誤:', error)
       setIsConnecting(false)
     }
-  }, [isAuthenticated]) // 🔑 移除 getAccessToken 和 isConnecting 依賴
+  }, [isAuthenticated]) // 移除 getAccessToken 和 isConnecting 依賴
 
   /**
    * 斷開 Socket 連線
    */
   const disconnect = useCallback(() => {
     if (socketRef.current) {
-      console.log('🔌 正在斷開 Socket 連線...')
       socketRef.current.disconnect()
       socketRef.current = null
       setSocket(null)
@@ -171,16 +162,14 @@ export function SocketProvider({ children }) {
   useEffect(() => {
     // 當使用者登入時,自動建立 Socket 連線
     if (isAuthenticated && !socketRef.current) {
-      console.log('👤 使用者已登入,自動建立 Socket 連線')
       connect()
     }
 
     // 當使用者登出時,自動斷開 Socket 連線
     if (!isAuthenticated && socketRef.current) {
-      console.log('👤 使用者已登出,自動斷開 Socket 連線')
       disconnect()
     }
-  }, [isAuthenticated]) // 🔑 只依賴 isAuthenticated
+  }, [isAuthenticated]) // 只依賴 isAuthenticated
 
   // ============================================
   // 元件卸載時清理
@@ -188,12 +177,11 @@ export function SocketProvider({ children }) {
   useEffect(() => {
     return () => {
       if (socketRef.current) {
-        console.log('🧹 元件卸載,斷開 Socket 連線')
         socketRef.current.disconnect()
         socketRef.current = null
       }
     }
-  }, []) // 🔑 只在元件卸載時執行
+  }, []) // 只在元件卸載時執行
 
   // ============================================
   // Context Value
