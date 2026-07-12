@@ -10,8 +10,8 @@
  * 動畫列表:
  * 1. slideUp - 從底部滑入 (手機版開啟)
  * 2. slideLeft - 從右側滑入 (桌面版開啟)
- * 3. slideDownOut - 縮回底部 (手機版關閉) 🌟 v1.6.0 新增
- * 4. slideRightOut - 縮回右側 (桌面版關閉) 🌟 v1.6.0 新增
+ * 3. slideDownOut - 縮回底部 (手機版關閉) v1.6.0 新增
+ * 4. slideRightOut - 縮回右側 (桌面版關閉) v1.6.0 新增
  */
 
 @layer chatroom {

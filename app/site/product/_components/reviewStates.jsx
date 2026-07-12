@@ -64,7 +64,6 @@ export function LoginPrompt({ onLoginClick }) {
     e.preventDefault()
 
     if (!user) {
-      console.log(' [LoginPrompt] 開啟登入視窗')
       setShowLoginModal(true)
     }
   }

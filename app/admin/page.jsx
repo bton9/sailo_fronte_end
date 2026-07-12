@@ -33,11 +33,6 @@ import {
   BarChart3,
   Settings,
   Package,
-  TrendingUp,
-  AlertCircle,
-  CheckCircle,
-  Clock,
-  DollarSign,
 } from 'lucide-react'
 
 export default function AdminDashboard() {
@@ -59,22 +54,32 @@ export default function AdminDashboard() {
 
   /**
    * 載入統計資料
-   *
-   * TODO: 未來需要實作的 API
-   * - GET /api/v2/admin/stats - 取得統計資料
    */
   useEffect(() => {
     const loadStats = async () => {
       try {
-        // 載入客服統計資料
-        const csResponse = await fetch(
-          `${API_BASE_URL}/api/customer-service/admin/stats`,
-          {
+        const [statsResponse, csResponse] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/v2/admin/stats`, {
             credentials: 'include', // 自動帶上 httpOnly cookie
-          }
-        )
+          }),
+          fetch(`${API_BASE_URL}/api/customer-service/admin/stats`, {
+            credentials: 'include',
+          }),
+        ])
 
-        let pendingSupport = 8 // 預設值
+        let totalUsers = 0
+        let totalOrders = 0
+        let totalProducts = 0
+        let pendingSupport = 0
+
+        if (statsResponse.ok) {
+          const statsData = await statsResponse.json()
+          if (statsData.success) {
+            totalUsers = statsData.stats.totalUsers || 0
+            totalOrders = statsData.stats.totalOrders || 0
+            totalProducts = statsData.stats.totalProducts || 0
+          }
+        }
 
         if (csResponse.ok) {
           const csData = await csResponse.json()
@@ -84,27 +89,14 @@ export default function AdminDashboard() {
           }
         }
 
-        // TODO: 呼叫其他後端 API 取得統計資料
-        // const response = await fetch(`${API_BASE_URL}/api/v2/admin/stats`, {
-        //   credentials: 'include',
-        // })
-        // const data = await response.json()
-
-        // 目前使用模擬資料（客服資料為真實）
-        setStats({
-          totalUsers: 128,
-          totalOrders: 45,
-          totalProducts: 32,
-          pendingSupport: pendingSupport,
-        })
+        setStats({ totalUsers, totalOrders, totalProducts, pendingSupport })
         setIsLoading(false)
       } catch (error) {
         console.error('載入統計資料失敗:', error)
-        // 發生錯誤時使用預設值
         setStats({
-          totalUsers: 128,
-          totalOrders: 45,
-          totalProducts: 32,
+          totalUsers: 0,
+          totalOrders: 0,
+          totalProducts: 0,
           pendingSupport: 0,
         })
         setIsLoading(false)
@@ -126,8 +118,6 @@ export default function AdminDashboard() {
       color: 'bg-blue-500',
       bgColor: 'bg-blue-50',
       textColor: 'text-blue-600',
-      trend: '+12%',
-      trendUp: true,
     },
     {
       id: 'orders',
@@ -137,8 +127,6 @@ export default function AdminDashboard() {
       color: 'bg-green-500',
       bgColor: 'bg-green-50',
       textColor: 'text-green-600',
-      trend: '+8%',
-      trendUp: true,
     },
     {
       id: 'products',
@@ -148,8 +136,6 @@ export default function AdminDashboard() {
       color: 'bg-purple-500',
       bgColor: 'bg-purple-50',
       textColor: 'text-purple-600',
-      trend: '+3',
-      trendUp: true,
     },
     {
       id: 'support',
@@ -159,8 +145,6 @@ export default function AdminDashboard() {
       color: 'bg-orange-500',
       bgColor: 'bg-orange-50',
       textColor: 'text-orange-600',
-      trend: '-2',
-      trendUp: false,
     },
   ]
 
@@ -194,7 +178,7 @@ export default function AdminDashboard() {
       color: 'bg-purple-500',
       href: '/admin/orders',
       badge: null,
-      status: 'active',
+      status: 'coming-soon',
     },
     {
       id: 'user-management',
@@ -204,7 +188,7 @@ export default function AdminDashboard() {
       color: 'bg-orange-500',
       href: '/admin/users',
       badge: null,
-      status: 'active',
+      status: 'coming-soon',
     },
     {
       id: 'analytics',
@@ -224,7 +208,7 @@ export default function AdminDashboard() {
       color: 'bg-gray-500',
       href: '/admin/settings',
       badge: null,
-      status: 'active',
+      status: 'coming-soon',
     },
   ]
 
@@ -263,7 +247,7 @@ export default function AdminDashboard() {
             管理者儀表板
           </h1>
           <p className="text-gray-600">
-            歡迎回來，{user?.nickname || user?.email} 👋
+            歡迎回來，{user?.nickname || user?.email}
           </p>
         </div>
 
@@ -276,20 +260,10 @@ export default function AdminDashboard() {
                 key={card.id}
                 className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
               >
-                {/* 圖示與趨勢 */}
+                {/* 圖示 */}
                 <div className="flex items-center justify-between mb-4">
                   <div className={`p-3 rounded-lg ${card.bgColor}`}>
                     <IconComponent className={`h-6 w-6 ${card.textColor}`} />
-                  </div>
-                  <div
-                    className={`flex items-center gap-1 text-sm ${
-                      card.trendUp ? 'text-green-600' : 'text-red-600'
-                    }`}
-                  >
-                    <TrendingUp
-                      className={`h-4 w-4 ${!card.trendUp && 'rotate-180'}`}
-                    />
-                    <span className="font-medium">{card.trend}</span>
                   </div>
                 </div>
 
@@ -386,7 +360,6 @@ export default function AdminDashboard() {
         <div className="mt-8 bg-white rounded-xl shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">最近活動</h2>
           <div className="space-y-4">
-            {/* TODO: 未來可以顯示最近的訂單、客服訊息等 */}
             <p className="text-gray-500 text-center py-8">暫無活動紀錄</p>
           </div>
         </div>

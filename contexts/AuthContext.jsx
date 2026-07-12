@@ -66,20 +66,10 @@ export function AuthProvider({ children }) {
       // 呼叫後端驗證 API (會自動從 httpOnly cookie 讀取 token)
       const data = await authAPI.verify()
 
-      console.log('🔍 AuthContext - verify API 返回:', data)
-      console.log('🔍 AuthContext - data.user:', data.user)
-      console.log(
-        '🔍 AuthContext - data.user keys:',
-        data.user ? Object.keys(data.user) : 'no user'
-      )
-
       if (data.valid && data.user) {
         setUser(data.user)
         setIsAuthenticated(true)
         accessTokenRef.current = data.accessToken || null
-        console.log(' 使用者已登入:', data.user.email)
-        console.log(' user.user_id:', data.user.user_id)
-        console.log(' user.id:', data.user.id)
       } else {
         setUser(null)
         setIsAuthenticated(false)
@@ -117,8 +107,6 @@ export function AuthProvider({ children }) {
         setUser(data.user)
         setIsAuthenticated(true)
         accessTokenRef.current = data.accessToken || null
-
-        console.log(' 登入成功:', data.user.email)
 
         return {
           success: true,
@@ -184,7 +172,6 @@ export function AuthProvider({ children }) {
   const logout = useCallback(async () => {
     try {
       await authAPI.logout()
-      console.log(' 登出成功')
     } catch (error) {
       console.error(' 登出 API 呼叫失敗:', error)
     } finally {
@@ -226,7 +213,6 @@ export function AuthProvider({ children }) {
   const refreshToken = useCallback(async () => {
     try {
       await authAPI.refresh()
-      console.log(' Token 已自動刷新')
       return true
     } catch (error) {
       console.error(' Token 刷新失敗:', error)
@@ -250,7 +236,6 @@ export function AuthProvider({ children }) {
 
     const interval = setInterval(
       async () => {
-        console.log('🔄 檢查 Token 狀態...')
         await refreshToken()
       },
       10 * 60 * 1000

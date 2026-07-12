@@ -304,9 +304,6 @@ export async function searchProductsLoadmore(
     const [productsResult] = await pool.execute(productsQuery, productsParams)
     const [hasMoreResult] = await pool.execute(hasMoreQuery, hasMoreParams)
 
-    console.log(productsResult, productsQuery)
-    console.log(hasMoreResult, hasMoreQuery)
-
     // 如果需要分塊，則進行分塊處理
     let items = productsResult
     if (chunkSize > 0 && productsResult.length > 0) {

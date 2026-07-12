@@ -56,14 +56,14 @@ export default function FloatingChatButton({
    * 1. 每次載入都回到預設位置 (右下角) - 不記憶位置
    * 2. 確保位置在可視範圍內
    *
-   * 🔧 修改紀錄:
+   *  修改紀錄:
    * - 移除 sessionStorage 位置記憶功能
    * - 每次重新登入都回到右下角預設位置
    */
   useEffect(() => {
     setIsMounted(true)
 
-    // 🌟 每次載入都設定為預設位置 (右下角)
+    // 每次載入都設定為預設位置 (右下角)
     setDefaultPosition()
   }, [])
 
@@ -178,7 +178,7 @@ export default function FloatingChatButton({
 
     setPosition(finalPosition)
 
-    // 🔧 不再儲存位置，每次登入都回到預設位置
+    //  不再儲存位置，每次登入都回到預設位置
     // sessionStorage.setItem('chatButtonPosition', JSON.stringify(finalPosition))
   }
 
@@ -190,14 +190,12 @@ export default function FloatingChatButton({
   const handleClick = (e) => {
     // 如果有移動過 (拖曳),不觸發點擊
     if (hasMoved) {
-      console.log('🚫 拖曳操作,不開啟聊天室')
       e.preventDefault()
       e.stopPropagation()
       return
     }
 
     // 只有真正的點擊才開啟聊天室
-    console.log('🔔 點擊按鈕,開啟聊天室')
     if (onChatOpen) {
       onChatOpen()
     }
@@ -271,7 +269,7 @@ export default function FloatingChatButton({
   return (
     <>
       {/* ============ 浮動聊天按鈕 ============ */}
-      {/* 🔧 v1.6.0: 移除漸層，改用純色 primary-500 */}
+      {/*  v1.6.0: 移除漸層，改用純色 primary-500 */}
       <button
         ref={buttonRef}
         onMouseDown={handleDragStart}

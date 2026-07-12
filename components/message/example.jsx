@@ -49,7 +49,6 @@ export function Example3_WithClickHandler() {
   const [isChatOpen, setIsChatOpen] = useState(false)
 
   const handleChatOpen = () => {
-    console.log('開啟聊天室')
     setIsChatOpen(true)
     // TODO: 在這裡開啟聊天視窗元件
   }

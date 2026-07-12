@@ -30,7 +30,6 @@ export default function CartSidebar({ isOpen, onClose }) {
   //  UPDATED: 當側邊欄打開時，重新載入購物車
   useEffect(() => {
     if (isOpen) {
-      console.log('🛒 SideCart opened, fetching cart from database...')
       fetchCart()
     }
   }, [isOpen, fetchCart])
@@ -38,7 +37,6 @@ export default function CartSidebar({ isOpen, onClose }) {
   //  UPDATED: 監聽購物車更新事件
   useEffect(() => {
     const handleCartUpdate = () => {
-      console.log('🔄 Cart updated event received, refreshing...')
       fetchCart()
     }
 

@@ -32,7 +32,7 @@ function ProfilePageContent() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false) // 下拉選單開關狀態
   const [isClosing, setIsClosing] = useState(false) // 控制收合動畫狀態
   const [isEditModalOpen, setIsEditModalOpen] = useState(false) // 編輯彈窗開關狀態
-  const [editModalMode, setEditModalMode] = useState('menu') // 🆕 控制編輯彈窗的初始模式
+  const [editModalMode, setEditModalMode] = useState('menu') //  控制編輯彈窗的初始模式
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false) // 頭像上傳彈窗開關狀態
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
@@ -42,16 +42,11 @@ function ProfilePageContent() {
   const API_BASE_URL =
     process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
-  // 🆕 處理 URL 參數 (例如從 AI 聊天跳轉過來)
+  //  處理 URL 參數 (例如從 AI 聊天跳轉過來)
   useEffect(() => {
     const tab = searchParams.get('tab')
-    console.log('🔍 [MemberCenter] URL 參數:', {
-      tab,
-      allParams: Object.fromEntries(searchParams.entries()),
-    })
 
     if (tab === 'password') {
-      console.log(' [MemberCenter] 偵測到 tab=password，開啟密碼修改彈窗')
       // 打開編輯彈窗並設定為密碼修改模式
       setEditModalMode('password')
       setIsEditModalOpen(true)
@@ -173,17 +168,13 @@ function ProfilePageContent() {
   useEffect(() => {
     // 如果未登入，設定延遲跳轉
     if (!isAuthenticated) {
-      console.log(` 未登入，${REDIRECT_DELAY / 1000} 秒後跳轉至首頁`)
-
       const redirectTimer = setTimeout(() => {
-        console.log('⏰ 執行跳轉至首頁')
         router.push('/')
       }, REDIRECT_DELAY)
 
       // 清理函式：取消跳轉計時器
       return () => {
         clearTimeout(redirectTimer)
-        console.log('✓ 已取消跳轉計時器')
       }
     }
   }, [isAuthenticated, router])
@@ -450,12 +441,11 @@ function ProfilePageContent() {
         initialMode={editModalMode}
         onClose={() => {
           setIsEditModalOpen(false)
-          setEditModalMode('menu') // 🆕 關閉時重置為 menu 模式
+          setEditModalMode('menu') //  關閉時重置為 menu 模式
         }}
         onSuccess={() => {
           setIsEditModalOpen(false)
-          setEditModalMode('menu') // 🆕 成功後重置為 menu 模式
-          console.log(' 個人資料更新成功')
+          setEditModalMode('menu') //  成功後重置為 menu 模式
         }}
       />
       {/* 登出確認視窗 */}

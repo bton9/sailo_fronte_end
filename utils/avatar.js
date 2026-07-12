@@ -175,7 +175,7 @@ export const AVATAR_DISPLAY_CONFIG = {
   defaultAvatarUrl: DEFAULT_AVATAR_URL,
 
   // 預設表情符號（作為後備選項）
-  defaultEmoji: '😊',
+  defaultEmoji: '',
 
   // 漸層背景顏色（Tailwind CSS 類別）
   gradientClasses: 'bg-gradient-to-br from-purple-400 to-pink-400',

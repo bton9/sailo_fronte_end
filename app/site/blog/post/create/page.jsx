@@ -23,7 +23,7 @@ import * as FaIcons from 'react-icons/fa6'
 import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  新增
 
 function CreatePostPageContent() {
-  const { user } = useAuth() // 🔐 使用 AuthContext
+  const { user } = useAuth() // 使用 AuthContext
   const notify = useNotify()
   const confirmAction = useConfirm()
   const router = useRouter()
@@ -57,12 +57,6 @@ function CreatePostPageContent() {
     const initialize = async () => {
       try {
         //  調試日誌
-        console.log('🔍 CreatePost - user 物件:', user)
-        console.log('🔍 CreatePost - user.id:', user?.id)
-        console.log(
-          '🔍 CreatePost - user keys:',
-          user ? Object.keys(user) : 'user is null'
-        )
 
         // 1. 檢查登入狀態 (使用 AuthContext)
         if (!user) {
@@ -138,7 +132,6 @@ function CreatePostPageContent() {
           const itinerariesResult = await getUserItineraries(user.id)
           setUserItineraries(itinerariesResult.data.itineraries || [])
         } catch (error) {
-          console.log('載入行程失敗（可能使用者沒有行程）:', error)
           setUserItineraries([])
         }
         //  5. 載入景點列表
@@ -146,7 +139,6 @@ function CreatePostPageContent() {
           const placesResult = await getPlaces()
           setUserPlaces(placesResult.data || [])
         } catch (error) {
-          console.log('載入景點失敗:', error)
           setUserPlaces([])
         }
 
@@ -158,7 +150,6 @@ function CreatePostPageContent() {
           const data = await response.json()
           setLocations(data.success ? data.data : [])
         } catch (error) {
-          console.log('載入地區失敗:', error)
           setLocations([])
         }
       } catch (error) {
@@ -181,7 +172,6 @@ function CreatePostPageContent() {
 
   //  新增：處理景點卡片點擊
   const handlePlaceCardClick = (placeId) => {
-    console.log('🎯 開啟景點 Modal:', placeId)
     setSelectedPlaceId(placeId)
     setShowPlaceModal(true)
   }
@@ -190,10 +180,6 @@ function CreatePostPageContent() {
   const handleSubmit = async (formData) => {
     try {
       setIsSubmitting(true)
-
-      console.log('📋 CreatePostPage: 收到表單資料')
-      console.log('📋 formData:', formData)
-      console.log('📋 formData.deletedPhotoIds:', formData.deletedPhotoIds)
 
       let allImageUrls = [...(formData.existingImageUrls || [])]
 
@@ -235,22 +221,16 @@ function CreatePostPageContent() {
       if (isEditMode) {
         await updatePost(editPostId, postData)
 
-        console.log('🗑️ 編輯模式：準備刪除圖片')
-        console.log('🗑️ formData.deletedPhotoIds:', formData.deletedPhotoIds)
-
         //  1. 刪除被移除的圖片（直接使用 formData）
         if (formData.deletedPhotoIds && formData.deletedPhotoIds.length > 0) {
           for (const photoId of formData.deletedPhotoIds) {
-            console.log('🗑️ 正在刪除圖片:', photoId)
             try {
               const result = await deletePhoto(photoId)
-              console.log(' 刪除成功:', result)
             } catch (error) {
               console.error(` 刪除圖片 ${photoId} 失敗:`, error)
             }
           }
         } else {
-          console.log(' 沒有要刪除的圖片')
         }
 
         //  2. 新增新上傳的圖片

@@ -58,10 +58,10 @@ export default function CustomerChat({ isOpen = false, onClose }) {
   const [showHistory, setShowHistory] = useState(false) // 是否顯示歷史記錄
   const [selectedHistoryRoom, setSelectedHistoryRoom] = useState(null) // 選中的歷史聊天室
   const [showHistoryView, setShowHistoryView] = useState(false) // 是否顯示歷史訊息檢視
-  const [isRoomClosed, setIsRoomClosed] = useState(false) // 🆕 聊天室是否已被客服關閉
-  const [showOldMessages, setShowOldMessages] = useState(false) // 🆕 v3.2.0: 是否顯示舊訊息 (超過3分鐘)
+  const [isRoomClosed, setIsRoomClosed] = useState(false) //  聊天室是否已被客服關閉
+  const [showOldMessages, setShowOldMessages] = useState(false) //  v3.2.0: 是否顯示舊訊息 (超過3分鐘)
 
-  // 🆕 評分系統 state
+  //  評分系統 state
   const [showRatingModal, setShowRatingModal] = useState(false) // 是否顯示評分彈窗
   const [ratingRoomId, setRatingRoomId] = useState(null) // 要評分的聊天室 ID
   const [ratingAgentName, setRatingAgentName] = useState('客服人員') // 客服人員名稱
@@ -151,7 +151,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         const data = await response.json()
 
         if (data.success) {
-          // 🆕 v3.2.0: 從 AI 轉接時,只顯示 3 分鐘內的 AI 訊息
+          //  v3.2.0: 從 AI 轉接時,只顯示 3 分鐘內的 AI 訊息
           const threeMinutesAgo = new Date(Date.now() - 3 * 60 * 1000)
 
           const filteredMessages = data.messages.map((msg) => {
@@ -197,11 +197,9 @@ export default function CustomerChat({ isOpen = false, onClose }) {
   // ============================================
   useEffect(() => {
     if (socket && room && isOpen) {
-      console.log('🔌 加入聊天室:', room.id)
       socket.emit('join_room', { roomId: room.id })
 
       return () => {
-        console.log('🔌 離開聊天室:', room.id)
         socket.emit('leave_room', { roomId: room.id })
       }
     }
@@ -215,7 +213,6 @@ export default function CustomerChat({ isOpen = false, onClose }) {
 
     // 收到新訊息
     const handleNewMessage = (message) => {
-      console.log('💬 收到新訊息:', message)
       setMessages((prev) => [...prev, message])
       setTimeout(scrollToBottom, 100)
 
@@ -242,7 +239,6 @@ export default function CustomerChat({ isOpen = false, onClose }) {
 
     // 訊息已讀
     const handleMessagesRead = (data) => {
-      console.log('👁️ 訊息已讀:', data)
       setMessages((prev) =>
         prev.map((msg) =>
           data.messageIds.includes(msg.id) ? { ...msg, is_read: 1 } : msg
@@ -250,9 +246,8 @@ export default function CustomerChat({ isOpen = false, onClose }) {
       )
     }
 
-    // 🆕 聊天室被關閉
+    //  聊天室被關閉
     const handleRoomClosed = (data) => {
-      console.log('🔒 聊天室已被客服關閉:', data)
       setIsRoomClosed(true)
 
       // 顯示系統訊息
@@ -273,13 +268,13 @@ export default function CustomerChat({ isOpen = false, onClose }) {
     socket.on('new_message', handleNewMessage)
     socket.on('user_typing', handleUserTyping)
     socket.on('messages_read', handleMessagesRead)
-    socket.on('room_closed', handleRoomClosed) // 🆕 監聽聊天室關閉事件
+    socket.on('room_closed', handleRoomClosed) //  監聽聊天室關閉事件
 
     return () => {
       socket.off('new_message', handleNewMessage)
       socket.off('user_typing', handleUserTyping)
       socket.off('messages_read', handleMessagesRead)
-      socket.off('room_closed', handleRoomClosed) // 🆕 清除監聽
+      socket.off('room_closed', handleRoomClosed) //  清除監聽
     }
   }, [socket, room, user, scrollToBottom])
 
@@ -299,13 +294,11 @@ export default function CustomerChat({ isOpen = false, onClose }) {
       try {
         let targetRoom = room
 
-        // 🔧 不要手動新增訊息，等 WebSocket 返回
+        //  不要手動新增訊息，等 WebSocket 返回
         // 原因: handleNewMessage 會自動新增，避免重複
 
         // 情況 A: 如果沒有聊天室（第一次發送訊息），建立新聊天室
         if (!room && !isRoomClosed) {
-          console.log('📝 第一次發送訊息，建立聊天室...')
-
           const response = await fetch(
             `${API_URL}/api/customer-service/rooms`,
             {
@@ -335,8 +328,6 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         }
         // 情況 B: 聊天室已關閉，建立新聊天室
         else if (isRoomClosed && room) {
-          console.log('📝 聊天室已關閉，建立新聊天室...')
-
           const response = await fetch(
             `${API_URL}/api/customer-service/rooms`,
             {
@@ -381,8 +372,6 @@ export default function CustomerChat({ isOpen = false, onClose }) {
             message: userMessageText.trim(),
             messageType: 'text',
           })
-
-          console.log(' 訊息已發送:', userMessageText)
         } else {
           throw new Error('WebSocket 未連接或聊天室不存在')
         }
@@ -471,13 +460,11 @@ export default function CustomerChat({ isOpen = false, onClose }) {
   }, [])
 
   // ============================================
-  // 🆕 事件: 提交客服評分
+  //  事件: 提交客服評分
   // ============================================
   const handleSubmitRating = useCallback(
     async (rating, comment) => {
       try {
-        console.log('⭐ 提交評分:', { roomId: ratingRoomId, rating, comment })
-
         const response = await fetch(
           `${API_URL}/api/customer-service/rooms/${ratingRoomId}/rating`,
           {
@@ -491,7 +478,6 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         const data = await response.json()
 
         if (data.success) {
-          console.log(' 評分提交成功')
           //   alert('感謝您的評分！')
           setShowRatingModal(false)
           setRatingRoomId(null)
@@ -524,14 +510,12 @@ export default function CustomerChat({ isOpen = false, onClose }) {
   }, [messages, scrollToBottom])
 
   // ============================================
-  // 🆕 WebSocket: 監聽聊天室關閉事件
+  //  WebSocket: 監聽聊天室關閉事件
   // ============================================
   useEffect(() => {
     if (!socket || !isConnected) return
 
     const handleRoomClosed = (data) => {
-      console.log('📢 收到聊天室關閉通知:', data)
-
       // 設定聊天室已關閉狀態
       setIsRoomClosed(true)
 
@@ -600,7 +584,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
 
       {/* ============ 聊天室容器 ============ */}
       {/*
-        ✨ 參考 ChatRoom v1.7.0: 使用 CSS Transition + Transform
+        參考 ChatRoom v1.7.0: 使用 CSS Transition + Transform
         - 元件始終渲染，使用 CSS transition 控制動畫
         - 使用 transform 改變位置（不觸發重排）
         - 手機版：translate-y（上下滑動）
@@ -620,8 +604,8 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* ============ 標題列 ============ */}
-        {/* 🎨 參考 ChatRoom: 純色 primary-500 背景 */}
-        {/* 🆕 v3.0.0: 支援 AI/人工模式切換顯示 */}
+        {/* 參考 ChatRoom: 純色 primary-500 背景 */}
+        {/*  v3.0.0: 支援 AI/人工模式切換顯示 */}
         <div className="bg-primary-500 text-white p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <User size={24} />
@@ -668,7 +652,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
             </div>
           ) : (
             <div className="space-y-4">
-              {/* 🆕 v3.2.0: 舊訊息摺疊提示 */}
+              {/*  v3.2.0: 舊訊息摺疊提示 */}
               {(() => {
                 const oldMessages = messages.filter((msg) => msg.isOldMessage)
                 const hasOldMessages = oldMessages.length > 0
@@ -704,7 +688,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
               })()}
 
               {messages.map((msg) => {
-                // 🆕 v3.2.0: 如果是舊訊息且未展開,跳過渲染
+                //  v3.2.0: 如果是舊訊息且未展開,跳過渲染
                 if (msg.isOldMessage && !showOldMessages) {
                   return null
                 }
@@ -813,7 +797,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
 
         {/* ============ 輸入框 ============ */}
         <div className="p-4 bg-white border-t border-gray-200">
-          {/* 🆕 聊天室已關閉提示 */}
+          {/*  聊天室已關閉提示 */}
           {isRoomClosed && (
             <div className="mb-3 p-3 bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm">
               <div className="flex items-center gap-2">
@@ -929,7 +913,7 @@ export default function CustomerChat({ isOpen = false, onClose }) {
         roomData={selectedHistoryRoom}
       />
 
-      {/* ============ 🆕 客服評分彈窗 ============ */}
+      {/* ============  客服評分彈窗 ============ */}
       <RatingModal
         isOpen={showRatingModal}
         roomId={ratingRoomId}

@@ -5,19 +5,21 @@
 
 'use client'
 
+import { CreditCard, Banknote } from 'lucide-react'
+
 export default function PaymentMethod({ selected, onChange }) {
   const methods = [
     {
       id: 'ecpay',
       name: 'ECPay 線上付款',
       description: '信用卡 / ATM / 超商代碼',
-      icon: '💳',
+      icon: CreditCard,
     },
     {
       id: 'cod',
       name: '貨到付款',
       description: '收到商品後付款',
-      icon: '💰',
+      icon: Banknote,
     },
   ]
 
@@ -44,7 +46,9 @@ export default function PaymentMethod({ selected, onChange }) {
                 onChange={(e) => onChange(e.target.value)}
                 className="h-5 w-5 accent-primary-500"
               />
-              <div className="text-2xl">{method.icon}</div>
+              <div className="text-primary-500">
+                <method.icon className="h-6 w-6" />
+              </div>
               <div>
                 <div className="font-medium text-gray-800">{method.name}</div>
                 <div className="text-sm text-gray-600">

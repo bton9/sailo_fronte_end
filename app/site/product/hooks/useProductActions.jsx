@@ -24,24 +24,19 @@ export function useProductActions(product) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   /**
-   * 🔍 檢查收藏狀態
+   * 檢查收藏狀態
    */
   useEffect(() => {
     const checkFavoriteStatus = async () => {
-      console.log('🔍 [useProductActions] 檢查收藏狀態...')
-      console.log('🔍 [useProductActions] isAuthenticated:', isAuthenticated)
-      console.log('🔍 [useProductActions] user:', user)
 
       try {
         if (!isAuthenticated || !user || !product?.product_id) {
-          console.log(' [useProductActions] 未登入或缺少資料，跳過檢查')
           setIsCheckingFavorite(false)
           return
         }
 
         // 從 Context 取得 userId
         const userId = user.user_id || user.id
-        console.log('👤 [useProductActions] 取得的 userId:', userId)
 
         if (!userId) {
           console.error(' [useProductActions] user 物件中沒有 user_id 或 id')
@@ -50,20 +45,15 @@ export function useProductActions(product) {
         }
 
         const apiUrl = `${API_URL}/api/products/${product.product_id}/favorite/check?userId=${userId}`
-        console.log('📤 [useProductActions] 檢查收藏狀態 API:', apiUrl)
 
         const response = await fetch(apiUrl, {
           credentials: 'include', // 重要：攜帶 httpOnly cookies
         })
 
         const result = await response.json()
-        console.log('📥 [useProductActions] 收藏狀態回應:', result)
 
         if (result.success) {
           setIsWishlisted(result.isFavorite)
-          console.log(
-            ` [useProductActions] 收藏狀態: ${result.isFavorite ? '已收藏' : '未收藏'}`
-          )
         }
       } catch (error) {
         console.error(' [useProductActions] 檢查收藏狀態失敗:', error)
@@ -76,13 +66,11 @@ export function useProductActions(product) {
   }, [product?.product_id, API_URL, user, isAuthenticated])
 
   /**
-   * ❤️ 切換收藏狀態
+   * 切換收藏狀態
    */
   const handleWishlist = async () => {
-    console.log('❤️ [useProductActions] 點擊收藏按鈕')
 
     if (isTogglingFavorite) {
-      console.log('⏳ [useProductActions] 正在處理中，忽略點擊')
       return
     }
 
@@ -91,7 +79,6 @@ export function useProductActions(product) {
 
       // 檢查是否登入
       if (!isAuthenticated || !user) {
-        console.log(' [useProductActions] 使用者未登入')
         showToast({
           title: '請先登入',
           description: '登入後才能使用收藏功能',
@@ -103,7 +90,6 @@ export function useProductActions(product) {
 
       // 從 Context 取得 userId
       const userId = user.user_id || user.id
-      console.log('👤 [useProductActions] 取得的 userId:', userId)
 
       if (!userId) {
         console.error(' [useProductActions] user 物件中沒有 user_id 或 id')
@@ -118,10 +104,6 @@ export function useProductActions(product) {
       const apiUrl = `${API_URL}/api/products/${product.product_id}/favorite`
       const requestBody = { userId }
 
-      console.log('📤 [useProductActions] 發送 API 請求:')
-      console.log('  URL:', apiUrl)
-      console.log('  Body:', requestBody)
-
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -131,17 +113,10 @@ export function useProductActions(product) {
         credentials: 'include', // 重要：攜帶 httpOnly cookies
       })
 
-      console.log('📥 [useProductActions] API 回應狀態:', response.status)
-
       const result = await response.json()
-      console.log('📥 [useProductActions] API 回應內容:', result)
 
       if (result.success) {
         setIsWishlisted(result.isFavorite)
-        console.log(
-          ' [useProductActions] 收藏操作成功! 新狀態:',
-          result.isFavorite
-        )
 
         showToast({
           title: result.isFavorite ? '已加入收藏' : '已取消收藏',
@@ -163,7 +138,7 @@ export function useProductActions(product) {
   }
 
   /**
-   * 🛒 加入購物車
+   * 加入購物車
    */
   const handleAddToCart = async (quantity = 1) => {
     if (product.stock_quantity <= 0) {
@@ -177,7 +152,6 @@ export function useProductActions(product) {
 
     //  UPDATED: 檢查登入狀態
     if (!isAuthenticated || !user) {
-      console.log(' [useProductActions] 使用者未登入')
       showToast({
         title: '請先登入',
         description: '登入後即可加入購物車',
@@ -189,10 +163,7 @@ export function useProductActions(product) {
 
     try {
       //  UPDATED: 使用 CartContext 加入購物車（儲存到資料庫）
-      console.log('📤 [useProductActions] 呼叫 CartContext.addToCart')
       const result = await addToCartDB(product.product_id, parseInt(quantity))
-
-      console.log('📥 [useProductActions] CartContext 回應:', result)
 
       if (result.success) {
         showToast({
@@ -216,7 +187,7 @@ export function useProductActions(product) {
   }
 
   /**
-   * 📤 分享商品
+   * 分享商品
    */
   const handleShare = async () => {
     if (isSharing) return

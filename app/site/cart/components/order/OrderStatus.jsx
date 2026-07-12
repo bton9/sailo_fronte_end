@@ -15,17 +15,17 @@ export default function OrderStatus({ status }) {
     processing: {
       label: '處理中',
       color: 'bg-blue-100 text-blue-700 border-blue-200',
-      icon: '📦',
+      icon: '',
     },
     shipped: {
       label: '配送中',
       color: 'bg-purple-100 text-purple-700 border-purple-200',
-      icon: '🚚',
+      icon: '',
     },
     delivered: {
       label: '已送達',
       color: 'bg-green-100 text-green-600 border-green-200',
-      icon: '🎉',
+      icon: '',
     },
     cancelled: {
       label: '已取消',

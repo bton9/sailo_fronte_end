@@ -277,10 +277,8 @@ export default function TripWeatherCard({ city }) {
    */
   useEffect(() => {
     const fetchWeather = async () => {
-      console.log('🔍 fetchWeather called with city:', city)
 
       if (!city || !city.trim()) {
-        console.log(' No city provided')
         setLoading(false)
         return
       }
@@ -296,13 +294,10 @@ export default function TripWeatherCard({ city }) {
 
       try {
         const englishCityName = translateCityName(city)
-        console.log('🌍 Translated city name:', englishCityName)
 
         const apiUrl = `${BASE_URL}?q=${encodeURIComponent(englishCityName)}&appid=${API_KEY}&units=metric&lang=zh_tw`
-        console.log('🔗 API URL:', apiUrl.replace(API_KEY, 'API_KEY_HIDDEN'))
 
         const response = await fetch(apiUrl)
-        console.log('📡 Response status:', response.status, response.statusText)
 
         if (!response.ok) {
           const errorData = await response.json()
@@ -313,7 +308,6 @@ export default function TripWeatherCard({ city }) {
         }
 
         const data = await response.json()
-        console.log(' Weather data received:', data)
 
         const weatherInfo = {
           city: data.name,
@@ -323,7 +317,6 @@ export default function TripWeatherCard({ city }) {
         }
 
         setWeather(weatherInfo)
-        console.log(' Weather state updated:', weatherInfo)
 
         //  Emit event with weather data
         window.dispatchEvent(
@@ -332,7 +325,6 @@ export default function TripWeatherCard({ city }) {
           })
         )
 
-        console.log(' Weather event dispatched')
       } catch (err) {
         console.error(' Weather fetch error:', err)
         setError(err.message || '無法取得天氣資料')
@@ -361,7 +353,7 @@ export default function TripWeatherCard({ city }) {
       <div className="relative w-full h-[280px] rounded-3xl overflow-hidden bg-primary-300">
         <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm">
           <div className="text-white text-center">
-            <p className="text-lg mb-2">😕 無法取得天氣資料</p>
+            <p className="text-lg mb-2">無法取得天氣資料</p>
             <p className="text-sm opacity-80">請確認城市名稱是否正確</p>
           </div>
         </div>

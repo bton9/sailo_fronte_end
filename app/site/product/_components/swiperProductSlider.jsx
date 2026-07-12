@@ -45,7 +45,6 @@ export default function SwiperProduct({
     if (!autoFetch || externalProducts) return
 
     const fetchProducts = async () => {
-      console.log('🔄 [SwiperProduct] 開始獲取推薦商品')
       setIsLoading(true)
 
       try {
@@ -54,14 +53,11 @@ export default function SwiperProduct({
 
         // 獲取更多商品以便隨機選取
         const url = `${API_URL}/api/products?limit=20`
-        console.log('📡 [SwiperProduct] API URL:', url)
 
         const response = await fetch(url)
-        console.log('📥 [SwiperProduct] API 回應狀態:', response.status)
 
         if (response.ok) {
           const data = await response.json()
-          console.log(' [SwiperProduct] 獲取商品成功:', data)
 
           // 解析商品列表
           let fetchedProducts = Array.isArray(data)
@@ -72,10 +68,6 @@ export default function SwiperProduct({
           const shuffled = fetchedProducts.sort(() => 0.5 - Math.random())
           const randomProducts = shuffled.slice(0, 12)
 
-          console.log(
-            ' [SwiperProduct] 隨機選取的推薦商品數量:',
-            randomProducts.length
-          )
           setInternalProducts(randomProducts)
         } else {
           console.warn(' [SwiperProduct] API 回應不成功:', response.status)

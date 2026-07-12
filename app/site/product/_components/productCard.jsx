@@ -31,7 +31,7 @@ const ProductCard = ({
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   /**
-   * 🔍 組件載入時檢查收藏狀態
+   * 組件載入時檢查收藏狀態
    */
   useEffect(() => {
     const checkFavoriteStatus = async () => {
@@ -57,7 +57,6 @@ const ProductCard = ({
           const result = await response.json()
           if (result.success) {
             setIsFavorite(result.isFavorite)
-            console.log(`🔍 商品 ${id} 收藏狀態:`, result.isFavorite)
           }
         }
       } catch (error) {
@@ -78,14 +77,12 @@ const ProductCard = ({
 
     // 檢查是否登入
     if (!isAuthenticated || !user) {
-      console.log(' 使用者未登入，開啟登入視窗')
       setShowLoginModal(true)
       return
     }
 
     // 從 Context 取得 userId
     const userId = user.user_id || user.id
-    console.log('👤 從 Context 取得 userId:', userId)
 
     if (!userId) {
       console.error(' user 物件中沒有 user_id 或 id')
@@ -105,10 +102,6 @@ const ProductCard = ({
       const apiUrl = `${API_URL}/api/products/${id}/favorite`
       const requestBody = { userId }
 
-      console.log('📤 發送收藏 API:')
-      console.log('  URL:', apiUrl)
-      console.log('  Body:', requestBody)
-
       // 呼叫 API
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -119,10 +112,7 @@ const ProductCard = ({
         credentials: 'include',
       })
 
-      console.log('📥 API 回應狀態:', response.status)
-
       const result = await response.json()
-      console.log('📥 API 回應內容:', result)
 
       if (!response.ok || !result.success) {
         throw new Error(result.error || '操作失敗')
@@ -130,7 +120,6 @@ const ProductCard = ({
 
       // 使用 API 返回的實際狀態
       setIsFavorite(result.isFavorite)
-      console.log(' 收藏操作成功! 新狀態:', result.isFavorite)
 
       // 呼叫父組件的回調函式（如果有的話）
       if (onFavoriteToggle) {

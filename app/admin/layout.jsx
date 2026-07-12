@@ -18,6 +18,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { ShieldAlert } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useNotify } from '@/contexts/NotificationContext'
 import AuthGuard from '@/components/auth/AuthGuard'
@@ -72,7 +73,9 @@ export default function AdminLayout({ children }) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-center bg-white p-8 rounded-lg shadow-lg max-w-md">
-          <div className="text-6xl mb-4">🚫</div>
+          <div className="flex justify-center mb-4">
+            <ShieldAlert className="w-16 h-16 text-red-500" />
+          </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">權限不足</h1>
           <p className="text-gray-600 mb-6">您沒有權限訪問管理者頁面</p>
           <button

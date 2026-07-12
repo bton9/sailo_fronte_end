@@ -41,15 +41,13 @@ export function CartProvider({ children }) {
    * 載入購物車
    */
   const loadCart = useCallback(async () => {
-    // 🔥 等待 Auth 載入完成
+    // 等待 Auth 載入完成
     if (authLoading) {
-      console.log('🛒 CartContext: Auth 尚未載入完成，等待中...')
       return
     }
 
     // 未登入時清空購物車
     if (!isAuthenticated) {
-      console.log('🛒 CartContext: 未登入，清空購物車')
       setCartItems([])
       setSummary({
         subtotal: 0,
@@ -65,21 +63,15 @@ export function CartProvider({ children }) {
       setLoading(true)
       setError(null)
 
-      console.log('🛒 CartContext: 開始載入購物車')
-
       const response = await cartAPI.getCart()
 
-      console.log('🛒 CartContext: API 回應:', response)
-      console.log('🛒 CartContext: 商品數量:', response.items?.length)
-
       if (response.items && response.items.length > 0) {
-        console.log('🛒 CartContext: 第一個商品（原始）:', response.items[0])
       }
 
       if (response.success) {
         const items = response.items || []
 
-        // 🔥 適配後端 snake_case 欄位
+        // 適配後端 snake_case 欄位
         const transformedItems = items.map((item) => {
           const transformed = {
             id: item.id,
@@ -96,7 +88,6 @@ export function CartProvider({ children }) {
           }
 
           if (items.indexOf(item) === 0) {
-            console.log('🛒 CartContext: 轉換後的第一個商品:', transformed)
           }
 
           return transformed
@@ -113,10 +104,6 @@ export function CartProvider({ children }) {
             transformedItems.reduce((sum, item) => sum + item.quantity, 0),
         })
 
-        console.log(
-          ' CartContext: 購物車載入成功，商品數:',
-          transformedItems.length
-        )
       } else {
         throw new Error(response.message || '載入購物車失敗')
       }
@@ -148,8 +135,6 @@ export function CartProvider({ children }) {
       try {
         setLoading(true)
         setError(null)
-
-        console.log('🛒 CartContext: 加入商品到購物車', { productId, quantity })
 
         // 不需要傳 userId，後端從 JWT 取得
         const response = await cartAPI.addToCart(productId, quantity)
@@ -269,13 +254,8 @@ export function CartProvider({ children }) {
     }
   }, [isAuthenticated])
 
-  // 🔥 當登入狀態改變時，載入購物車
+  // 當登入狀態改變時，載入購物車
   useEffect(() => {
-    console.log('🛒 CartContext: useEffect 觸發', {
-      authLoading,
-      isAuthenticated,
-      user,
-    })
 
     loadCart()
   }, [loadCart, authLoading, isAuthenticated, user])

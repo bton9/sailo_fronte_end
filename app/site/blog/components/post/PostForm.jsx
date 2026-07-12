@@ -163,7 +163,6 @@ export default function PostForm({
 
   //  修改：處理景點卡片點擊
   const handlePlaceCardClickInternal = (placeId) => {
-    console.log('🎯 PostForm 點擊景點卡片:', placeId)
     if (onPlaceCardClick) {
       onPlaceCardClick(placeId)
     } else {
@@ -173,7 +172,6 @@ export default function PostForm({
 
   //  新增：處理行程卡片點擊（跳轉編輯）
   const handleItineraryCardClick = (tripId) => {
-    console.log('🎯 PostForm 點擊行程卡片，跳轉編輯:', tripId)
 
     // 使用 sessionStorage 傳遞
     sessionStorage.setItem('openTripId', tripId)
@@ -479,7 +477,7 @@ export default function PostForm({
                                   {place.rating && (
                                     <>
                                       <span>•</span>
-                                      <span>⭐ {place.rating.toFixed(1)}</span>
+                                      <span>{place.rating.toFixed(1)}</span>
                                     </>
                                   )}
                                 </div>

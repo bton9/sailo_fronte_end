@@ -295,8 +295,6 @@ export const updatePlaceOrder = async (tripItemId, sortOrder) => {
  */
 export const addFavorite = async (userId, tripId) => {
   try {
-    console.log('addFavorite 呼叫:', { userId, tripId })
-    console.log('API URL:', FAVORITE_BASE_URL)
 
     const response = await fetch(FAVORITE_BASE_URL, {
       method: 'POST',
@@ -310,9 +308,7 @@ export const addFavorite = async (userId, tripId) => {
       }),
     })
 
-    console.log('Response status:', response.status)
     const result = await handleResponse(response)
-    console.log('addFavorite 成功:', result)
 
     return result
   } catch (error) {
@@ -335,11 +331,9 @@ export const addFavorite = async (userId, tripId) => {
  */
 export const removeFavorite = async (userId, tripId) => {
   try {
-    console.log('removeFavorite 呼叫:', { userId, tripId })
 
     // 方案 1: 使用 URL 參數 (推薦,符合 RESTful)
     const url = `${FAVORITE_BASE_URL}/${userId}/${tripId}`
-    console.log('DELETE URL:', url)
 
     const response = await fetch(url, {
       method: 'DELETE',
@@ -350,9 +344,7 @@ export const removeFavorite = async (userId, tripId) => {
       //DELETE 通常不帶 body
     })
 
-    console.log('Response status:', response.status)
     const result = await handleResponse(response)
-    console.log('removeFavorite 成功:', result)
 
     return result
 

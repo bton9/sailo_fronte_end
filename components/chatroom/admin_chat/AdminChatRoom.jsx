@@ -116,11 +116,9 @@ export default function AdminChatRoom({ room, onClose, onRoomUpdate }) {
   useEffect(() => {
     if (!socket || !room) return
 
-    console.log('🔌 客服加入聊天室:', room.id)
     socket.emit('join_room', { roomId: room.id })
 
     return () => {
-      console.log('🔌 客服離開聊天室:', room.id)
       socket.emit('leave_room', { roomId: room.id })
     }
   }, [socket, room])
@@ -132,7 +130,6 @@ export default function AdminChatRoom({ room, onClose, onRoomUpdate }) {
     if (!socket || !room) return
 
     const handleNewMessage = (message) => {
-      console.log('💬 客服收到新訊息:', message)
       setMessages((prev) => [...prev, message])
       setTimeout(scrollToBottom, 100)
 
@@ -146,7 +143,6 @@ export default function AdminChatRoom({ room, onClose, onRoomUpdate }) {
     }
 
     const handleMessagesRead = (data) => {
-      console.log('👁️ 訊息已讀:', data)
       setMessages((prev) =>
         prev.map((msg) =>
           data.messageIds.includes(msg.id) ? { ...msg, is_read: 1 } : msg
@@ -228,7 +224,7 @@ export default function AdminChatRoom({ room, onClose, onRoomUpdate }) {
             {/* AI 轉接標記 */}
             {room.source === 'ai_transfer' && (
               <div className="mt-2 inline-block px-2 py-1 bg-blue-100 text-blue-700 text-xs">
-                🤖 AI 轉接
+                AI 轉接
                 {room.transfer_context && (
                   <span className="ml-2 text-gray-600">
                     （{room.transfer_context}）

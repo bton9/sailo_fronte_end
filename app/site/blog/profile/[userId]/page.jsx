@@ -29,7 +29,7 @@ import PlaceDetail from '@/app/site/custom/components/location/PlaceDetail' //  
 import * as FaIcons from 'react-icons/fa6'
 
 function ProfilePageContent() {
-  const { user } = useAuth() // 🔐 使用 AuthContext
+  const { user } = useAuth() // 使用 AuthContext
   const notify = useNotify()
   const confirmAction = useConfirm()
 
@@ -127,7 +127,6 @@ function ProfilePageContent() {
 
         // 2. 載入使用者資料
         const userStatsResult = await getUserStats(userId)
-        console.log('📝 取得的 profileUser:', userStatsResult.data.user)
         setProfileUser(userStatsResult.data.user)
         setStats(userStatsResult.data.stats)
 
@@ -495,14 +494,12 @@ function ProfilePageContent() {
 
       if (!isOwnTrip) {
         //  不是自己的行程，先複製
-        console.log('🔄 複製別人的行程:', tripId)
 
         // 呼叫 Blog 的複製行程 API
         const copyResult = await copyItinerary(tripId)
 
         if (copyResult.success) {
           const newTripId = copyResult.data.trip_id
-          console.log(' 行程複製成功，新行程 ID:', newTripId)
           notify('已將行程複製到您的行程列表！', 'success')
 
           //  改用 sessionStorage 傳遞
@@ -513,7 +510,6 @@ function ProfilePageContent() {
         }
       } else {
         //  是自己的行程，直接跳轉編輯
-        console.log('✏️ 編輯自己的行程:', tripId)
         //  改用 sessionStorage 傳遞
         sessionStorage.setItem('openTripId', tripId)
         router.push('/site/custom')
@@ -526,7 +522,6 @@ function ProfilePageContent() {
 
   //  加入這個函式 (在 handleItineraryClick 後面)
   const handlePlaceCardClick = (placeId) => {
-    console.log('🎯 開啟景點 Modal:', placeId)
     setSelectedPlaceId(placeId)
     setShowPlaceModal(true)
   }

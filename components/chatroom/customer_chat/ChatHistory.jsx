@@ -245,7 +245,7 @@ export default function ChatHistory({ isOpen = false, onClose, onSelectRoom }) {
                     {lastMessage && (
                       <p className="text-sm text-gray-700 line-clamp-2">
                         {lastMessage.message_type === 'image'
-                          ? '📷 圖片訊息'
+                          ? '圖片訊息'
                           : lastMessage.message}
                       </p>
                     )}

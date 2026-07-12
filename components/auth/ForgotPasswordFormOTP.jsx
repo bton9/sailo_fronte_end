@@ -25,6 +25,7 @@
 'use client'
 
 import { useState } from 'react'
+import { AlertCircle } from 'lucide-react'
 import { isValidEmail } from '@/utils/validation'
 import { authAPI } from '@/services/api'
 
@@ -79,7 +80,6 @@ export default function ForgotPasswordFormOTP({ onSwitchToVerifyOTP, onBack }) {
 
       if (data.success) {
         // 發送成功 - 切換到 OTP 驗證頁面
-        console.log(' OTP 已發送到:', email)
         onSwitchToVerifyOTP && onSwitchToVerifyOTP(email)
       } else {
         // 發送失敗
@@ -107,7 +107,7 @@ export default function ForgotPasswordFormOTP({ onSwitchToVerifyOTP, onBack }) {
       {/* 錯誤訊息 */}
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2">
-          <span className="text-xl"></span>
+          <AlertCircle className="w-5 h-5 shrink-0" />
           <span>{error}</span>
         </div>
       )}
@@ -137,7 +137,7 @@ export default function ForgotPasswordFormOTP({ onSwitchToVerifyOTP, onBack }) {
       {/* 提示訊息 */}
       <div className="bg-primary-500/10 p-4">
         <p className="text-sm text-gray-700">
-          <strong>💡 提示：</strong>
+          <strong>提示：</strong>
         </p>
         <ul className="mt-2 space-y-1 text-sm text-gray-600">
           <li>• 我們將發送 6 位數驗證碼到您的信箱</li>
@@ -158,7 +158,7 @@ export default function ForgotPasswordFormOTP({ onSwitchToVerifyOTP, onBack }) {
       >
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
-            <span className="animate-spin">⏳</span>
+            <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
             發送中...
           </span>
         ) : (

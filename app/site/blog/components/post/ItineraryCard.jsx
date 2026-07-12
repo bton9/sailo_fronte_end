@@ -47,10 +47,8 @@ export default function ItineraryCard({
       onClick(isPlace ? place.place_id : itinerary.trip_id)
     } else if (isPlace) {
       // 景點：開啟 Modal（待實作）
-      console.log('🎯 點擊景點卡片:', place.place_id)
     } else {
       // 行程：跳轉編輯
-      console.log('🎯 點擊行程卡片:', itinerary.trip_id)
       sessionStorage.setItem('openTripId', itinerary.trip_id)
       router.push('/site/custom')
     }

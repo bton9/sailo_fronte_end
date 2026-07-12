@@ -20,6 +20,7 @@
 
 import { useEffect, useRef, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { CheckCircle2, XCircle } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { authAPI } from '@/services/api'
 
@@ -130,8 +131,6 @@ function AuthCallbackContent() {
       // 從 URL 參數讀取重導向路徑（後端可能傳遞）
       const redirectTo = searchParams.get('redirect') || '/site/membercenter'
 
-      console.log('🔄 準備重導向到:', redirectTo)
-
       // 延遲 1 秒後導向
       setTimeout(() => {
         router.push(redirectTo)
@@ -171,7 +170,7 @@ function AuthCallbackContent() {
             {/* 成功圖示 */}
             <div className="flex justify-center">
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center animate-bounce">
-                <span className="text-5xl"></span>
+                <CheckCircle2 className="w-10 h-10 text-green-600" />
               </div>
             </div>
 
@@ -191,7 +190,7 @@ function AuthCallbackContent() {
             {/* 錯誤圖示 */}
             <div className="flex justify-center">
               <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center">
-                <span className="text-5xl"></span>
+                <XCircle className="w-10 h-10 text-red-600" />
               </div>
             </div>
 

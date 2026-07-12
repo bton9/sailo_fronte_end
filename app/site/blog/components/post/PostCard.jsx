@@ -33,22 +33,10 @@ export default function PostCard({
 
   //  除錯：檢查 props
   useEffect(() => {
-    console.log('🔍 PostCard 接收的 props:', {
-      postId: post.post_id,
-      currentUserId,
-      showFollowButton,
-      authorUserId: post.author?.user_id,
-      isFollowing: post.user_interaction?.is_following_author,
-    })
   }, [post, currentUserId, showFollowButton])
 
   //  加入這段除錯（在 useEffect 區塊前面）
   useEffect(() => {
-    console.log('🔍 PostCard - Post 資料:', post)
-    console.log('🔍 PostCard - Post.place:', post.place)
-    console.log('🔍 PostCard - Post.itinerary:', post.itinerary)
-    console.log('🔍 PostCard - Post.trip_id:', post.trip_id)
-    console.log('🔍 PostCard - Post.place_id:', post.place_id)
   }, [post])
 
   // 點擊外部關閉選單
@@ -110,21 +98,18 @@ export default function PostCard({
 
   //  修改：處理行程卡片點擊
   const handleItineraryCardClick = (tripId) => {
-    console.log('🎯 PostCard 行程卡片點擊:', tripId)
     // 直接觸發父元件的 onItineraryClick（它會處理複製和跳轉）
     onItineraryClick(tripId)
   }
 
   //  修改：處理行程卡片的複製按鈕
   const handleItineraryCopy = (tripId) => {
-    console.log('🎯 PostCard 複製按鈕點擊:', tripId)
     // 直接觸發父元件的 onItineraryClick（它會處理複製和跳轉）
     onItineraryClick(tripId)
   }
 
   //  新增：處理景點卡片點擊
   const handlePlaceCardClickInternal = (placeId) => {
-    console.log('🎯 PostCard 點擊景點卡片:', placeId)
     if (onPlaceCardClick) {
       onPlaceCardClick(placeId)
     }

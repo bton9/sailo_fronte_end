@@ -149,7 +149,6 @@ export default function ImageUploader({ roomId, onClose, onImageUploaded }) {
         setUploadProgress(100)
 
         if (data.success) {
-          console.log(' 圖片上傳成功:', data)
 
           // 回傳上傳結果給父元件
           onImageUploaded({

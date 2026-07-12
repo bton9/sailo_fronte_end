@@ -67,21 +67,18 @@ export default function PostDetail({
 
   //  修改：處理行程卡片點擊
   const handleItineraryCardClick = (tripId) => {
-    console.log('🎯 PostDetail 行程卡片點擊:', tripId)
     // 直接觸發父元件的 onItineraryClick（它會處理複製和跳轉）
     onItineraryClick(tripId)
   }
 
   //  修改：處理行程卡片的複製按鈕
   const handleItineraryCopy = (tripId) => {
-    console.log('🎯 PostDetail 複製按鈕點擊:', tripId)
     // 直接觸發父元件的 onItineraryClick（它會處理複製和跳轉）
     onItineraryClick(tripId)
   }
 
   //  加入這個新函式（放在 handleItineraryCopy 後面）
   const handlePlaceCardClickInternal = (placeId) => {
-    console.log('🎯 PostDetail 點擊景點卡片:', placeId)
     if (onPlaceCardClick) {
       onPlaceCardClick(placeId)
     }

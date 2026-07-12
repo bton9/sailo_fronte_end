@@ -24,6 +24,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { checkPasswordStrength } from '@/utils/password'
 import { authAPI } from '@/services/api'
 
@@ -173,7 +174,7 @@ export default function ResetPasswordForm({ token, onSuccess }) {
         {/* 成功圖示 */}
         <div className="flex justify-center">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center animate-bounce">
-            <span className="text-5xl">🎉</span>
+            <CheckCircle2 className="w-10 h-10 text-green-600" />
           </div>
         </div>
 
@@ -212,7 +213,7 @@ export default function ResetPasswordForm({ token, onSuccess }) {
       {/* 錯誤訊息 */}
       {generalError && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2">
-          <span className="text-xl"></span>
+          <AlertCircle className="w-5 h-5 shrink-0" />
           <span>{generalError}</span>
         </div>
       )}
@@ -245,7 +246,11 @@ export default function ResetPasswordForm({ token, onSuccess }) {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
           >
-            {showPassword ? '👁️' : '👁️‍🗨️'}
+            {showPassword ? (
+              <Eye className="w-5 h-5" />
+            ) : (
+              <EyeOff className="w-5 h-5" />
+            )}
           </button>
         </div>
         {errors.newPassword && (
@@ -303,7 +308,11 @@ export default function ResetPasswordForm({ token, onSuccess }) {
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
           >
-            {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
+            {showConfirmPassword ? (
+              <Eye className="w-5 h-5" />
+            ) : (
+              <EyeOff className="w-5 h-5" />
+            )}
           </button>
         </div>
         {errors.confirmPassword && (
@@ -314,7 +323,7 @@ export default function ResetPasswordForm({ token, onSuccess }) {
       {/* 提示訊息 */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <p className="text-sm text-gray-700">
-          <strong>💡 密碼要求：</strong>
+          <strong>密碼要求：</strong>
         </p>
         <ul className="mt-2 space-y-1 text-sm text-gray-600">
           <li>• 至少 8 個字元</li>
@@ -335,7 +344,7 @@ export default function ResetPasswordForm({ token, onSuccess }) {
       >
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
-            <span className="animate-spin">⏳</span>
+            <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
             重置中...
           </span>
         ) : (

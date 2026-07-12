@@ -23,6 +23,7 @@
 'use client'
 
 import { useState } from 'react'
+import { AlertCircle, CheckCircle2 } from 'lucide-react'
 import { isValidEmail } from '@/utils/validation'
 import { authAPI } from '@/services/api'
 
@@ -98,7 +99,7 @@ export default function ForgotPasswordForm({ onBack }) {
         {/* 成功圖示 */}
         <div className="flex justify-center">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-            <span className="text-5xl"></span>
+            <CheckCircle2 className="w-10 h-10 text-green-600" />
           </div>
         </div>
 
@@ -112,7 +113,7 @@ export default function ForgotPasswordForm({ onBack }) {
         {/* 提示訊息 */}
         <div className="bg-blue-50 border border-blue-200 p-4 text-left">
           <p className="text-sm text-gray-700">
-            <strong>📧 請檢查您的信箱</strong>
+            <strong>請檢查您的信箱</strong>
           </p>
           <ul className="mt-2 space-y-1 text-sm text-gray-600">
             <li>• 郵件可能需要幾分鐘才會送達</li>
@@ -159,7 +160,7 @@ export default function ForgotPasswordForm({ onBack }) {
       {/* 錯誤訊息 */}
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2">
-          <span className="text-xl"></span>
+          <AlertCircle className="w-5 h-5 shrink-0" />
           <span>{error}</span>
         </div>
       )}
@@ -199,7 +200,7 @@ export default function ForgotPasswordForm({ onBack }) {
       >
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
-            <span className="animate-spin">⏳</span>
+            <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
             發送中...
           </span>
         ) : (

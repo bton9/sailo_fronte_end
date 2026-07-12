@@ -153,9 +153,7 @@ export default function TripDetail({
         setLoading(true)
         setError(null)
 
-        console.log('載入行程詳細:', tripId)
         const result = await tripApi.getTripDetail(tripId)
-        console.log('取得資料:', result)
 
         // 正確解析後端回應的資料結構
         if (result.success && result.data) {
@@ -193,19 +191,14 @@ export default function TripDetail({
     setConfirmModal({ isOpen: false, tripItemId: null })
 
     try {
-      console.log('開始刪除景點 ID:', tripItemId)
 
       // 直接呼叫 API，不需要透過 props
       const deleteResult = await tripApi.removePlaceFromTrip(tripItemId)
-
-      console.log('刪除結果:', deleteResult)
 
       // 檢查後端回應
       if (deleteResult.success === false) {
         throw new Error(deleteResult.message || '刪除失敗')
       }
-
-      console.log('刪除成功，重新載入資料')
 
       // 重新載入整個行程資料
       const result = await tripApi.getTripDetail(tripId)
@@ -213,7 +206,6 @@ export default function TripDetail({
       if (result.success && result.data) {
         setTrip(result.data.trip)
         setDays(result.data.days || [])
-        console.log('資料已更新')
       }
 
       // 顯示 Toast

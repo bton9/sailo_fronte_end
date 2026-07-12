@@ -25,6 +25,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
+import { Sparkles } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import LoginModal from './LoginModal'
 import WaveLoading from '@/components/waveLoading'
@@ -48,18 +49,9 @@ export default function AuthGuard({
 
   // ============ 延遲顯示登入彈窗的邏輯 ============
   useEffect(() => {
-    console.log('🔄 [AuthGuard] useEffect 執行', {
-      isAuthenticated,
-      isLoading,
-      hasManuallyOpened: hasManuallyOpenedRef.current,
-      hasInitialized: hasInitializedRef.current,
-      showCountdown,
-      countdown,
-    })
 
     // 如果已登入或正在載入，重置所有狀態
     if (isAuthenticated || isLoading) {
-      console.log(' [AuthGuard] 已登入或載入中，重置所有狀態')
       // 只在需要時才更新狀態，避免不必要的渲染
       if (showLoginModal) {
         setShowLoginModal(false)
@@ -76,14 +68,12 @@ export default function AuthGuard({
       return
     }
 
-    // ⭐ 關鍵：如果已經手動開啟或已初始化，直接返回，不執行任何操作
+    // 關鍵：如果已經手動開啟或已初始化，直接返回，不執行任何操作
     if (hasManuallyOpenedRef.current || hasInitializedRef.current) {
-      console.log('⏹️ [AuthGuard] 已手動開啟或已初始化，不執行任何操作')
       return
     }
 
     // 未登入且未初始化時，開始倒數計時（只執行一次）
-    console.log('▶️ [AuthGuard] 開始初始化倒數計時器')
     hasInitializedRef.current = true
     setShowCountdown(true)
     setCountdown(delaySeconds)
@@ -92,19 +82,15 @@ export default function AuthGuard({
     countdownIntervalRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          // ⭐ 關鍵修正：檢查是否已手動開啟或視窗已開啟，避免重複開啟
+          // 關鍵修正：檢查是否已手動開啟或視窗已開啟，避免重複開啟
           if (hasManuallyOpenedRef.current) {
-            console.log('⏹️ [AuthGuard] 計時器回調：已手動開啟，取消自動彈出')
             clearInterval(countdownIntervalRef.current)
             countdownIntervalRef.current = null
             return 0
           }
 
-          console.log('⏰ [AuthGuard] 倒數結束，準備顯示登入彈窗')
-
           // 使用 setTimeout 確保在下一個事件循環中執行
           setTimeout(() => {
-            console.log('🚀 [AuthGuard] 執行開啟登入視窗')
             setShowLoginModal(true)
             setShowCountdown(false)
           }, 0)
@@ -119,7 +105,6 @@ export default function AuthGuard({
 
     // 清理函數：當元件卸載或依賴項改變時，清除計時器
     return () => {
-      console.log('🧹 [AuthGuard] 清理函數執行')
       if (countdownIntervalRef.current) {
         clearInterval(countdownIntervalRef.current)
         countdownIntervalRef.current = null
@@ -138,11 +123,9 @@ export default function AuthGuard({
    */
   useEffect(() => {
     if (showLoginModal && !isAuthenticated) {
-      console.log('🔔 [AuthGuard] 偵測到登入視窗開啟（可能來自外部）')
 
       // 停止倒數計時器
       if (countdownIntervalRef.current) {
-        console.log('🛑 [AuthGuard] 停止倒數計時器')
         clearInterval(countdownIntervalRef.current)
         countdownIntervalRef.current = null
       }
@@ -153,9 +136,6 @@ export default function AuthGuard({
       // 標記為已手動開啟，防止倒數結束後再次開啟
       hasManuallyOpenedRef.current = true
 
-      console.log(' [AuthGuard] 已處理外部開啟，防止重複彈出', {
-        hasManuallyOpened: hasManuallyOpenedRef.current,
-      })
     }
   }, [showLoginModal, isAuthenticated])
 
@@ -176,12 +156,12 @@ export default function AuthGuard({
             <div className="bg-primary-300 text-white py-4 px-6 shadow-lg">
               <div className="max-w-7xl px-10 mx-auto flex items-center justify-between">
                 {/* 
-                  💬 提示訊息區塊
+                  提示訊息區塊
                   包含：警告圖示 + 主標題 + 副標題 + 倒數秒數
                 */}
                 <div className="flex items-center gap-3">
-                  {/* 動態警告圖示 (使用 pulse 動畫吸引注意) */}
-                  <div className="animate-pulse text-2xl"></div>
+                  {/* 動態圖示 (使用 pulse 動畫吸引注意) */}
+                  <Sparkles className="w-6 h-6 animate-pulse" />
 
                   <div>
                     {/* 主標題：顯示倒數秒數 */}
@@ -195,18 +175,9 @@ export default function AuthGuard({
                 </div>
                 <button
                   onClick={() => {
-                    console.log('🖱️ [AuthGuard] 點擊立即登入按鈕', {
-                      before: {
-                        hasManuallyOpened: hasManuallyOpenedRef.current,
-                        hasInitialized: hasInitializedRef.current,
-                        showCountdown,
-                        countdown,
-                      },
-                    })
 
                     // 立即清除計時器
                     if (countdownIntervalRef.current) {
-                      console.log('🛑 [AuthGuard] 清除計時器')
                       clearInterval(countdownIntervalRef.current)
                       countdownIntervalRef.current = null
                     }
@@ -217,12 +188,6 @@ export default function AuthGuard({
                     hasManuallyOpenedRef.current = true // 設定手動開啟標記
                     hasInitializedRef.current = true // 確保已標記為已初始化
 
-                    console.log(' [AuthGuard] 設定完成', {
-                      after: {
-                        hasManuallyOpened: hasManuallyOpenedRef.current,
-                        hasInitialized: hasInitializedRef.current,
-                      },
-                    })
                   }}
                   className="bg-white text-secondary-900 hover:bg-secondary-900 hover:text-white px-6 py-2 font-semibold transition-all"
                 >
@@ -237,7 +202,7 @@ export default function AuthGuard({
           isOpen={showLoginModal}
           onClose={() => {}} // 空函數，因為不允許關閉
           onSuccess={() => setShowLoginModal(false)} // 登入成功後關閉彈窗
-          allowClose={false} // 🔒 不允許關閉，必須登入
+          allowClose={false} // 不允許關閉，必須登入
         />
       </>
     )

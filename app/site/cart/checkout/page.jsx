@@ -71,10 +71,10 @@ export default function CheckoutPage() {
     try {
       setSubmitting(true)
 
-      // 🔥 確保 userId 是數字
+      // 確保 userId 是數字
       const userId = parseInt(user.userId || user.id || user.user_id)
 
-      // 🔥 組合完整地址（適配後端格式）
+      // 組合完整地址（適配後端格式）
       const fullAddress =
         [
           shippingInfo.zipCode,
@@ -98,7 +98,7 @@ export default function CheckoutPage() {
           phone: shippingInfo.phone, // ← 後端驗證
           email: shippingInfo.email, // ← 後端驗證
           address: fullAddress, // ← 組合後的完整地址
-          // 🔥 也可以保留原始欄位給後端使用
+          // 也可以保留原始欄位給後端使用
           zipCode: shippingInfo.zipCode,
           city: shippingInfo.city,
           district: shippingInfo.district,
@@ -108,11 +108,7 @@ export default function CheckoutPage() {
         paymentMethod: paymentMethod,
       }
 
-      console.log('📦 準備送出訂單:', orderData)
-
       const response = await orderAPI.createOrder(orderData)
-
-      console.log(' 訂單回應:', response)
 
       if (response.success) {
         const { orderId } = response.data

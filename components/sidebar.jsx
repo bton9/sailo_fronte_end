@@ -91,10 +91,8 @@ const SideMenu = () => {
     } else {
       setShowLoginModal((currentShowModal) => {
         if (!currentShowModal) {
-          console.log(' [Sidebar] 開啟登入視窗')
           return true
         } else {
-          console.log(' [Sidebar] 登入視窗已開啟，跳過重複開啟')
           return currentShowModal
         }
       })
@@ -118,7 +116,6 @@ const SideMenu = () => {
 
   const handleLoginSuccess = (user) => {
     setShowLoginModal(false)
-    console.log('登入成功:', user)
   }
 
   const handleCloseLoginModal = () => {
@@ -246,7 +243,7 @@ const SideMenu = () => {
                 <span className="text-md text-primary-500 transition-all duration-500">
                   {item.subLabel}
                 </span>
-                {/* 🌟 核心：整行 Underline 效果 (從左到右畫出) 🌟 */}
+                {/* 核心：整行 Underline 效果 (從左到右畫出) */}
                 <span className="absolute left-10 top-10 bottom-0 w-0 h-[2px] bg-gray-500 transition-all duration-700 group-hover:w-[350px]"></span>
               </div>
             </Link>
@@ -256,7 +253,7 @@ const SideMenu = () => {
         {/* 底部登入/登出按鈕 */}
         <div className="w-full px-15 pb-10 mt-auto">
           {user ? (
-            // 🌟 已登入狀態: 左側顯示「您好，XXX」，右側顯示「登出」 🌟
+            // 已登入狀態: 左側顯示「您好，XXX」，右側顯示「登出」
             <div className="flex items-center justify-between w-full">
               {/* 左側: 歡迎訊息 */}
               <div className="flex items-center gap-2 text-gray-800 text-md font-bold">
@@ -281,7 +278,7 @@ const SideMenu = () => {
               </button>
             </div>
           ) : (
-            // 🌟 未登入狀態: 點擊按鈕進入登入/註冊 🌟
+            // 未登入狀態: 點擊按鈕進入登入/註冊
             <div className="flex justify-end w-full">
               <button
                 onClick={handleAuthClick}
