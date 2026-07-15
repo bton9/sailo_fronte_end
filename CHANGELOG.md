@@ -111,12 +111,65 @@
 ## [0.7.2] - 2025-11-19
 
 - 修改樣式顏色
+
 ## [0.7.3] - 2025-11-30
+
 在MapWithMenu新增註解
 
 ## [0.8.0] - 2025-12-03
+
 新增leaflet地圖導航功能
 新增景點評論功能
 
 ## [0.8.1] - 2025-12-03
+
 新增地圖標記動畫功能
+
+## [0.8.2] - 2026-06-14
+
+- README 更新，補上專案截圖與說明文字
+- 新增/整理 docs/images 專案截圖檔案
+
+## [0.8.3] - 2026-07-06
+
+- 刪除 test/ 資料夾內測試檔案
+- 刪除死路由 app/site/custom/trip、app/site/custom/[tid]
+- 刪除孤兒死碼元件 favoriteslist.jsx、mytripslist.jsx、travelApp.jsx、travelList.jsx
+- 新增行程景點拖曳排序功能，重構 addtotrip、location、map 相關元件與 hooks
+
+## [0.8.4] - 2026-07-07
+
+- window.alert / confirm 全站改用統一的 toast 通知樣式
+- 新增行程搜尋功能
+
+## [0.8.5] - 2026-07-08
+
+- 移除 AI 客服（Ollama），客服聊天改直接轉真人
+- 修正兩個造成 Vercel build 失敗的 import 路徑錯誤
+- 修正 9 個頁面缺少 Suspense 邊界導致 build 失敗的問題
+- 手機版關閉按鈕位置調整，修正地圖頁面景點管理功能 bug
+
+## [0.8.6] - 2026-07-09
+
+- Google 登入改用 /exchange 交換 cookie 流程，取代原本直接轉址設 cookie 的方式（修正 Safari 阻擋第三方 cookie 導致登入失敗的問題）
+- 修正景點收藏清單重複發送 /api/favorites API 的問題，改成父層統一抓取一次再往下傳給卡片
+- AuthContext 新增記憶體內 accessTokenRef，SocketContext 建立連線時正確帶上 token
+
+## [0.9.0] - 2026-07-10
+
+- Admin 儀表板改接真實數據：後端新增 adminController.js + adminRoutes.js（GET /api/v2/admin/stats，COUNT users/orders/products），前端 admin/page.jsx 改打這支 API，取代原本寫死的 128/45/32
+- 移除 admin/page.jsx 沒有依據的假趨勢數字（+12%、+8%、+3、-2）與 3 處 TODO 註解
+- 修正 admin/page.jsx 訂單管理、會員管理、系統設定三張卡片誤標 active 導致點擊 404 的問題，改成 coming-soon
+
+## [0.9.1] - 2026-07-11
+
+- 前後端各新增 .env.example，修正 .gitignore 讓範例檔可以被提交
+- README 移除已下架的 AI 客服（Ollama）描述，補上正確的環境變數說明與安裝指令
+- 前端 53 個檔案、後端 19 個檔案清除除錯用 console.log 與孤立空格殘留
+
+## [0.9.2] - 2026-07-12
+
+- 前後端全面清除 emoji（前端 41 檔、後端 19 檔），保留 ★✓✕ 等功能性符號
+- 修正清 emoji 造成的圖示 regression：密碼顯示/隱藏按鈕、loading 轉圈、頭像後備圖示、登入提示圖示、OAuth 成功/失敗圖示、客服評分星星、地圖定位圖示、付款方式圖示，改用 lucide-react 圖示元件
+- 修正 admin/layout.jsx 清理過程誤將權限不足畫面的圖示換成英文字「No」的 bug，改為 ShieldAlert 圖示
+- 前端 build、後端語法檢查與啟動測試皆驗證通過
